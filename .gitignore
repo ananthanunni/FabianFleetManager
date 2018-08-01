@@ -1,0 +1,4 @@
+FleetManagerWeb/bin/**/*
+packages/*
+FleetManagerWeb/obj/**/*
+.vs/

@@ -1,0 +1,39 @@
+@model FleetManagerWeb.Models.ClsFleetMakes
+@{
+    ViewBag.Title = "Fleet Makes";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+ }
+@using (Html.BeginForm("FleetMakes", "FleetMakes", FormMethod.Post, new { @id = "frmFleetMakes", @class = "form_validation_ttip well stdform" }))
+{
+
+    <div class="panel panel-grey">
+        <div class="panel-heading">
+            @ViewBag.Title
+        </div>
+
+        <div class="panel-body pan">
+            <div class="row-fluid">
+                @Html.HiddenFor(m => m.hdniFrame)
+                @Html.HiddenFor(m => m.lgId)
+            </div>
+            <div class="row form-group">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Fleet Makes Name <span class="f_req">*</span>
+                        </label>
+                        @Html.TextBoxFor(m => m.strFleetMakesName, new { @class = "span11 required alphanumwithspc form-control", @maxlength = "15", @tabindex = "2", @next = "btnSubmit" })
+                    </div>
+
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-12">
+                    <input class="btn btn-inverse btn-primary" id="btnSubmit" name="inputSubmit" type="submit" value="Save" tabindex="3" title='Save Fleet Makes' />
+                    <input class="btn btn-green cancel" id="btnCancel" name="inputCancel" type="button" value="Cancel" tabindex="4" title='Cancel Fleet Makes' />
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<script src="~/Scripts/Utility/FleetMakes.js"></script>

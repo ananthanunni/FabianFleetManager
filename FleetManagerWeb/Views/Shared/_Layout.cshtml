@@ -1,0 +1,229 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="~/Content/Custom/images/icons/favicon.ico">
+    <link rel="apple-touch-icon" href="~/Content/Custom/images/icons/favicon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="~/Content/Custom/images/icons/favicon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="~/Content/Custom/images/icons/favicon-114x114.png">
+
+    @*@Styles.Render("~/Content/Style/css")*@
+
+    <!--Loading bootstrap css-->
+    <link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,700">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600,300' rel='stylesheet' type='text/css'>
+    <link type="text/css" rel="stylesheet" href="~/Content/Custom/vendors/jquery-ui-1.10.4.custom/css/ui-lightness/jquery-ui-1.10.4.custom.min.css">
+    <link type="text/css" rel="stylesheet" href="~/Content/Custom/vendors/font-awesome/css/font-awesome.min.css">
+    <link type="text/css" rel="stylesheet" href="~/Scripts/Library/chosen/chosen.css">
+    <link type="text/css" rel="stylesheet" href="~/Scripts/Library/uniform/uniform.default.css">
+    <link type="text/css" rel="stylesheet" href="~/Content/Custom/vendors/bootstrap/css/bootstrap.min.css">
+
+    <!--LOADING STYLESHEET FOR PAGE-->
+    <!--Loading style vendors-->
+    <link type="text/css" rel="stylesheet" href="~/Content/Custom/vendors/animate.css/animate.css">
+    <link type="text/css" rel="stylesheet" href="~/Content/Custom/vendors/jquery-pace/pace.css">
+    <link type="text/css" rel="stylesheet" href="~/Content/Custom/vendors/iCheck/skins/all.css">
+    <link type="text/css" rel="stylesheet" href="~/Content/Custom/vendors/jquery-news-ticker/jquery.news-ticker.css">
+    <link type="text/css" rel="stylesheet" href="~/Content/Custom/vendors/bootstrap-colorpicker/css/colorpicker.css">
+    <link type="text/css" rel="stylesheet" href="~/Content/Custom/vendors/bootstrap-datepicker/css/datepicker.css">
+    <link type="text/css" rel="stylesheet" href="~/Content/Custom/vendors/bootstrap-daterangepicker/daterangepicker-bs3.css">
+    <link type="text/css" rel="stylesheet" href="~/Content/Custom/vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css">
+    <link type="text/css" rel="stylesheet" href="~/Content/Custom/vendors/bootstrap-timepicker/css/bootstrap-timepicker.min.css">
+    <link type="text/css" rel="stylesheet" href="~/Content/Custom/vendors/bootstrap-clockface/css/clockface.css">
+    <link type="text/css" rel="stylesheet" href="~/Content/Custom/vendors/bootstrap-switch/css/bootstrap-switch.css">
+    <!--JQGrid CSS-->
+    <link type="text/css" rel="stylesheet" href="~/Content/Style/ui.jqgrid.css">
+    <link type="text/css" rel="stylesheet" href="~/Scripts/Library/jAlert/jquery.alerts.css">
+
+    <!--Loading style-->
+    <link type="text/css" rel="stylesheet" href="~/Content/Custom/css/pink-violet.css" />
+    <link type="text/css" rel="stylesheet" href="~/Content/Style/menustyles.css" />
+    <link type="text/css" rel="stylesheet" href="~/Content/Custom/css/style-responsive.css">
+</head>
+<body id="Body" class="left-side-collapsed">
+    @Scripts.Render("~/Scripts/Js")
+    <!--loading bootstrap js-->
+    <script src="~/Scripts/Library/DateTimePicker/bootstrap-datepicker.min.js"></script>
+    <script src="~/Content/Custom/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+    <script src="~/Content/Custom/vendors/moment/moment.js"></script>
+    <script src="~/Content/Custom/vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="~/Scripts/Library/DateTimePicker/bootstrap-timepicker.min.js"></script>
+    <script src="~/Content/Custom/vendors/bootstrap-clockface/js/clockface.js"></script>
+    <script src="~/Content/Custom/vendors/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
+    <script src="~/Content/Custom/vendors/bootstrap-switch/js/bootstrap-switch.min.js"></script>
+    <script src="~/Content/Custom/vendors/jquery-maskedinput/jquery-maskedinput.js"></script>
+    <script src="~/Content/Custom/js/form-components.js"></script>
+    <!--loading bootstrap js-->
+    <script src="~/Content/Custom/vendors/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/Content/Custom/vendors/bootstrap-hover-dropdown/bootstrap-hover-dropdown.js"></script>
+    <script src="~/Content/Custom/js/html5shiv.js"></script>
+    <script src="~/Content/Custom/js/respond.min.js"></script>
+    <script src="~/Content/Custom/vendors/metisMenu/jquery.metisMenu.js"></script>
+    <script src="~/Content/Custom/vendors/slimScroll/jquery.slimscroll.js"></script>
+    <script src="~/Content/Custom/vendors/jquery-cookie/jquery.cookie.js"></script>
+    <script src="~/Content/Custom/vendors/iCheck/icheck.min.js"></script>
+    <script src="~/Content/Custom/vendors/iCheck/custom.min.js"></script>
+    @*<script src="~/Content/Custom/vendors/jquery-news-ticker/jquery.news-ticker.js"></script>*@
+    <script src="~/Content/Custom/js/jquery.menu.js"></script>
+    <script src="~/Content/Custom/vendors/jquery-pace/pace.min.js"></script>
+    <script src="~/Content/Custom/vendors/holder/holder.js"></script>
+    <script src="~/Content/Custom/vendors/responsive-tabs/responsive-tabs.js"></script>
+    <!--CORE JAVASCRIPT-->
+    <script src="~/Content/Custom/js/main.js"></script>
+
+    @if (Request.QueryString["iFrame"] == null && ViewData["iFrame"] == null)
+    {
+        <header>
+            @Html.Partial("_Header")
+        </header>
+        <script>
+            $(document).ready(function () {
+                $("#divChangePassword").dialog({
+                    bgiframe: true, autoOpen: false, modal: true, width: 280,
+                    close: function () {
+                        $("#txtCurrentPwd").val('');
+                        $("#txtNewPwd").val('');
+                        $("#txtConfirmPwd").val('');
+                    }
+                });
+                $("#aChangePassword").click(function () {
+                    $("#divChangePassword").dialog('open');
+                    return false;
+                });
+                $("#btnSignIn").click(function () {
+                    var CurrentPwd = $("#txtCurrentPwd").val();
+                    var NewPwd = $("#txtNewPwd").val();
+                    var ConfirmPwd = $("#txtConfirmPwd").val();
+                    if (CurrentPwd == '') {
+                        jAlert("Please Enter Current Password.", 'txtCurrentPwd');
+                        return false;
+                    }
+                    else if (NewPwd == '') {
+                        $("#").focus();
+                        jAlert("Please Enter New Password.", "txtNewPwd");
+                        return false;
+                    }
+                    if (NewPwd != ConfirmPwd) {
+                        jAlert("New Password And Confirm Password Does Not Match.", "txtNewPwd");
+                        return false;
+                    }
+                    jQuery.post("/Home/ChangePassword/", { strCurrentPwd: CurrentPwd, strNewPwd: NewPwd }, function (data) {
+                        if (data.toString() != "") {
+                            if (data.toString() == "Success") {
+                                jAlert("Password Changed Successfully.");
+                                $("#divChangePassword").dialog('close');
+                                document.getElementById('popup_ok').focus();
+                            }
+                            else if (data.toString() == "CurrentWrong") {
+                                jAlert("Current Password Does Not Match.", 'txtCurrentPwd');
+                            }
+                            return false;
+                        }
+                    });
+                    return false;
+
+                });
+            });
+        </script>
+    }
+    else
+    {
+        <style type="text/css">
+            .mastericn {
+                display: none !important;
+                visibility: hidden !important;
+            }
+
+            .select-addnew .col-md-10 {
+                width: 100%;
+            }
+
+            .left-side-collapsed #page-wrapper {
+                margin: 0;
+                min-height: initial;
+                padding: 0 !important;
+            }
+        </style>
+    }
+    <!--BEGIN PAGE WRAPPER-->
+    <div id="page-wrapper">
+        <div id="loading_layer" style="display: none; position: absolute; left: 50%; top: 50%; z-index: 9999">
+            <img src="../../Content/Image/ajax_loader.gif" alt="" />
+        </div>
+        <div class="main_rightp">
+            @RenderBody()
+        </div>
+        <input type="hidden" id="hdnMessage" value="@ViewData["Message"]" />
+        <input type="hidden" id="hdnRedirectMsg" value="@ViewData["RedirectMsg"]" />
+        <input type="hidden" id="hdnSuccess" value="@ViewData["Success"]" />
+        <input type="hidden" id="hdnVehicleTrackingReportStatus" value="@ViewData["VehicleTrackingReportStatus"]" />
+        @if (Request.QueryString["iFrame"] == null && ViewData["iFrame"] == null)
+        {
+            <!--BEGIN FOOTER-->
+            <div id="footer">
+            </div>
+            <!--END FOOTER-->
+
+            <div id="divChangePassword" style="display: none;" title="Change Password">
+                <div class="login_box">
+                    @using (Html.BeginForm("Login", "Home", FormMethod.Post, new { @id = "LoginForm", @autocomplete = "off" }))
+                    {
+                        <div class="cnt_b">
+                            <div class="formRow">
+                                <div class="input-prepend">
+                                    <span class="add-on"><i class="icon-lock"></i></span>
+                                    <input type="password" id="txtCurrentPwd" name="txtCurrentPwd" class="form-control" placeholder="Current Password" value="" title="Current Password" autocomplete="off" next="txtNewPwd" />
+                                </div>
+                            </div>
+                            <div class="formRow">
+                                <div class="input-prepend">
+                                    <span class="add-on"><i class="icon-lock"></i></span>
+                                    <input type="password" id="txtNewPwd" name="txtCurrentPwd" class="form-control" placeholder="New Password" value="" title="New Password" autocomplete="off" next="txtConfirmPwd" />
+                                </div>
+                            </div>
+                            <div class="formRow">
+                                <div class="input-prepend">
+                                    <span class="add-on"><i class="icon-lock"></i></span>
+                                    <input type="password" id="txtConfirmPwd" name="txtCurrentPwd" class="form-control" placeholder="Confirm Password" value="" title="Confirm Password" autocomplete="off" next="btnSignIn" />
+                                </div>
+                            </div>
+                            <div class="formRow">
+                                <div class="input-prepend">
+                                    <span class="add-on"><i class="icon-lock"></i></span>
+                                </div>
+                            </div>
+                            <div class="formRow clearfix">
+                                <div class="input-prepend">
+                                    <button class="btn btn-green pull-right" type="submit" id="btnSignIn">Save</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+    <!--END PAGE WRAPPER-->
+    <!-- sidebar -->
+    <div id="divDialog" style="display: none;">
+    </div>
+    @using (Html.BeginForm("ExportToCSVPDF", "Common", FormMethod.Post, new { @id = "exl-rpt" }))
+    {
+        @Html.Hidden("blCSVPDF")
+        @Html.Hidden("strTableName")
+        @Html.Hidden("strSearchValue")
+    }
+    @using (Html.BeginForm("VehicleNumber", "VehicleTracking", FormMethod.Post, new { @id = "frmVehicleNumber" }))
+    {
+        @Html.Hidden("VehicleNumber")
+    }
+</body>
+</html>

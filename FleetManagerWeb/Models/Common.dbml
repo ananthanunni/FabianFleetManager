@@ -1,0 +1,258 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="SVLL_ETS" Class="CommonDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Table Name="dbo.AAAAConfigSettings" Member="AAAAConfigSettings">
+    <Type Name="AAAAConfigSetting">
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="KeyName" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="KeyValue" Type="System.String" DbType="NVarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="KeyDescription" Type="System.String" DbType="NVarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="Module" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="CreatedOn" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="CreatedBy" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="UpdatedOn" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="UpdatedBy" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="DeletedOn" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="DeletedBy" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.RolePermissions" Member="RolePermissions">
+    <Type Name="RolePermission">
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="RoleId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="PageId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="View_Right" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="Add_Right" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="Edit_Right" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="Delete_Right" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="Export_Right" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="CreatedOn" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="CreatedBy" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="UpdatedOn" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="UpdatedBy" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="DeletedOn" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="DeletedBy" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Function Name="dbo.GetPagePermission" Method="GetPagePermission">
+    <Parameter Name="PageId" Parameter="pageId" Type="System.Int64" DbType="BigInt" />
+    <Parameter Name="UserId" Parameter="userId" Type="System.Int64" DbType="BigInt" />
+    <Parameter Name="RoleId" Parameter="roleId" Type="System.Int64" DbType="BigInt" />
+    <ElementType Name="GetPagePermissionResult">
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="PageId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="RoleId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="ModuleName" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="PageName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="DispalyName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="View_Right" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="Add_Right" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="Edit_Right" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="Delete_Right" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="Export_Right" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsActive" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.BranchWiseVehicle" Method="BranchWiseVehicle">
+    <Parameter Name="UserId" Parameter="userId" Type="System.Int64" DbType="BigInt" />
+    <ElementType Name="BranchWiseVehicleResult">
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="BranchName" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="VehicleCount" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.InsertOrUpdateUserVehicleSubStatus" Method="InsertOrUpdateUserVehicleSubStatus">
+    <Parameter Name="SubStatusIds" Parameter="subStatusIds" Type="System.String" DbType="NVarChar(MAX)" />
+    <Parameter Name="UserId" Parameter="userId" Type="System.Int64" DbType="BigInt" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.UserWiseVehicleSubStatus" Method="UserWiseVehicleSubStatus">
+    <Parameter Name="UserId" Parameter="userId" Type="System.Int64" DbType="BigInt" />
+    <Parameter Name="StatusId1" Parameter="statusId1" Type="System.Int64" DbType="BigInt" />
+    <Parameter Name="StatusId2" Parameter="statusId2" Type="System.Int64" DbType="BigInt" />
+    <ElementType Name="UserWiseVehicleSubStatusResult">
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="VehicleSubStatusName" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="UserId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="VehicleStatusName" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.CustomerWiseVehicleTransitCount" Method="CustomerWiseVehicleTransitCount">
+    <Parameter Name="UserId" Parameter="userId" Type="System.Int64" DbType="BigInt" />
+    <Parameter Name="CustomerId" Parameter="customerId" Type="System.Int64" DbType="BigInt" />
+    <ElementType Name="CustomerWiseVehicleTransitCountResult">
+      <Column Name="OnTime" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="LateTransit" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.CustomerWiseVehicle" Method="CustomerWiseVehicle">
+    <Parameter Name="UserId" Parameter="userId" Type="System.Int64" DbType="BigInt" />
+    <ElementType Name="CustomerWiseVehicleResult">
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="CustomerName" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="VehicleCount" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.BranchWiseVehicleStatusCount" Method="BranchWiseVehicleStatusCount">
+    <Parameter Name="UserId" Parameter="userId" Type="System.Int64" DbType="BigInt" />
+    <Parameter Name="StatusId" Parameter="statusId" Type="System.Int64" DbType="BigInt" />
+    <Parameter Name="FromDate" Parameter="fromDate" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="ToDate" Parameter="toDate" Type="System.String" DbType="NVarChar(50)" />
+    <ElementType Name="BranchWiseVehicleStatusCountResult">
+      <Column Name="VehicleSubStatusName" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="VehicleStatusCount" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="VehicleSubStatusId" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="BranchId" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.SearchVehicleTrackingHistoryByBranchAndSubStatudId" Method="SearchVehicleTrackingHistoryByBranchAndSubStatudId">
+    <Parameter Name="BrachId" Parameter="brachId" Type="System.Int64" DbType="BigInt" />
+    <Parameter Name="VehicleSubStauId" Parameter="vehicleSubStauId" Type="System.Int64" DbType="BigInt" />
+    <Parameter Name="Rows" Parameter="rows" Type="System.Int32" DbType="Int" />
+    <Parameter Name="Page" Parameter="page" Type="System.Int32" DbType="Int" />
+    <Parameter Name="Search" Parameter="search" Type="System.String" DbType="NVarChar(500)" />
+    <Parameter Name="Sort" Parameter="sort" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="FromDate" Parameter="fromDate" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="ToDate" Parameter="toDate" Type="System.String" DbType="NVarChar(50)" />
+    <ElementType Name="SearchVehicleTrackingHistoryByBranchAndSubStatudIdResult">
+      <Column Name="RowNum" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TrackingInfo" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="VehicleNumber" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="VTId" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="VTDId" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="FormatType" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="TrackedDate" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="TrackedTime" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="LoadingDate" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="Customer_Party" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="TLocation" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="FLocation" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="ETLocation" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="VehicleStatus" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="PLocation" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="TravelledDistance" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="BalanceDistance" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="TransitDate" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="TransitDays" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="ExtendTransitDate" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="ExtendTransitTime" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="ReportingDate" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="UnloadingDate" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="TP_TBB" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="TRANSIT" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="LrNumber" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="InvoiceNumber" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="Material" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="BranchName" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="UserName" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="UrgentTransit" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="TotalKmAsPerOperator" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="TotalKmAsPerGMAP" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="TotalKmAsPerContract" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="LoadingBranch" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="ContactPerson" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="ContactNumber" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="BillingBranch" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="DispatchRemarks" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="Total" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.CustomerWiseVehicleStatusCount" Method="CustomerWiseVehicleStatusCount">
+    <Parameter Name="UserId" Parameter="userId" Type="System.Int64" DbType="BigInt" />
+    <Parameter Name="StatusId" Parameter="statusId" Type="System.Int64" DbType="BigInt" />
+    <Parameter Name="FromDate" Parameter="fromDate" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="ToDate" Parameter="toDate" Type="System.String" DbType="NVarChar(50)" />
+    <ElementType Name="CustomerWiseVehicleStatusCountResult">
+      <Column Name="VehicleSubStatusName" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="VehicleStatusCount" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="VehicleSubStatusId" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="CustomerId" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.SearchVehicleTrackingHistoryByCustomerAndSubStatudId" Method="SearchVehicleTrackingHistoryByCustomerAndSubStatudId">
+    <Parameter Name="CustomerId" Parameter="customerId" Type="System.Int64" DbType="BigInt" />
+    <Parameter Name="VehicleSubStauId" Parameter="vehicleSubStauId" Type="System.Int64" DbType="BigInt" />
+    <Parameter Name="Rows" Parameter="rows" Type="System.Int32" DbType="Int" />
+    <Parameter Name="Page" Parameter="page" Type="System.Int32" DbType="Int" />
+    <Parameter Name="Search" Parameter="search" Type="System.String" DbType="NVarChar(500)" />
+    <Parameter Name="Sort" Parameter="sort" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="FromDate" Parameter="fromDate" Type="System.String" DbType="NVarChar(50)" />
+    <Parameter Name="ToDate" Parameter="toDate" Type="System.String" DbType="NVarChar(50)" />
+    <ElementType Name="SearchVehicleTrackingHistoryByCustomerAndSubStatudIdResult">
+      <Column Name="RowNum" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TrackingInfo" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="VehicleNumber" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="VTId" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="VTDId" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="FormatType" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="TrackedDate" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="TrackedTime" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="LoadingDate" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="Customer_Party" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="TLocation" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="FLocation" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="ETLocation" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="VehicleStatus" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="PLocation" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="TravelledDistance" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="BalanceDistance" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="TransitDate" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="TransitDays" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="ExtendTransitDate" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="ExtendTransitTime" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="ReportingDate" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="UnloadingDate" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="TP_TBB" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="TRANSIT" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="LrNumber" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="InvoiceNumber" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="Material" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="BranchName" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="UserName" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="UrgentTransit" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="TotalKmAsPerOperator" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="TotalKmAsPerGMAP" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="TotalKmAsPerContract" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="LoadingBranch" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="ContactPerson" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="ContactNumber" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="BillingBranch" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="DispatchRemarks" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="Total" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.BranchWiseVehicleTransitCount" Method="BranchWiseVehicleTransitCount">
+    <Parameter Name="UserId" Parameter="userId" Type="System.Int64" DbType="BigInt" />
+    <Parameter Name="BranchId" Parameter="branchId" Type="System.Int64" DbType="BigInt" />
+    <Parameter Name="FromDate" Parameter="fromDate" Type="System.String" DbType="NVarChar(100)" />
+    <Parameter Name="ToDate" Parameter="toDate" Type="System.String" DbType="NVarChar(100)" />
+    <ElementType Name="BranchWiseVehicleTransitCountResult">
+      <Column Name="OnTime" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="LateTransit" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.GetBellCounter" Method="GetBellCounter">
+    <Parameter Name="UserId" Parameter="userId" Type="System.Int64" DbType="BigInt" />
+    <ElementType Name="GetBellCounterResult">
+      <Column Name="PageUrl" Type="System.String" DbType="NVarChar(501)" CanBeNull="true" />
+      <Column Name="PageName" Type="System.String" DbType="NVarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="Controller" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="RecoredId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="Remarks" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="dayComment" Type="System.String" DbType="VarChar(42)" CanBeNull="true" />
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.InsertOrUpdateBellCounter" Method="InsertOrUpdateBellCounter">
+    <Parameter Name="Id" Parameter="id" Type="System.Int64" DbType="BigInt" />
+    <Parameter Name="UserId" Parameter="userId" Type="System.Int64" DbType="BigInt" />
+    <Parameter Name="Action" Parameter="action" Type="System.String" DbType="NVarChar(MAX)" />
+    <Parameter Name="RecoredId" Parameter="recoredId" Type="System.Int64" DbType="BigInt" />
+    <Parameter Name="Controller" Parameter="controller" Type="System.String" DbType="NVarChar(MAX)" />
+    <Parameter Name="PageName" Parameter="pageName" Type="System.String" DbType="NVarChar(MAX)" />
+    <Parameter Name="Flag" Parameter="flag" Type="System.Boolean" DbType="Bit" />
+    <Parameter Name="CreatedBy" Parameter="createdBy" Type="System.Int64" DbType="BigInt" />
+    <Parameter Name="Remarks" Parameter="remarks" Type="System.String" DbType="NVarChar(200)" />
+    <Return Type="System.Int32" />
+  </Function>
+</Database>

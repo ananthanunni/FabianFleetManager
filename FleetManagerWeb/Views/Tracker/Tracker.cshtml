@@ -1,0 +1,161 @@
+@model FleetManagerWeb.Models.ClsTracker
+@{
+    ViewBag.Title = "Tracker";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("Tracker", "Tracker", FormMethod.Post, new { @id = "frmTracker", @class = "form_validation_ttip well stdform" }))
+{
+
+    <div class="panel panel-grey">
+        <div class="panel-heading">
+            @ViewBag.Title
+        </div>
+
+        <div class="panel-body pan">
+            <div class="row-fluid">
+                @Html.HiddenFor(m => m.hdniFrame)
+                @Html.HiddenFor(m => m.inId)
+            </div>
+            <div class="row form-group">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Trip Start <span class="f_req">*</span>
+                        </label>
+                        @Html.TextBoxFor(m => m.strTripStart, new { @class = "span11 required date form-control", @maxlength = "12", @tabindex = "2", @next = "btnSubmit" })
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Trip End <span class="f_req">*</span>
+                        </label>
+                        @Html.TextBoxFor(m => m.strTripEnd, new { @class = "span11 required date form-control", @maxlength = "12", @tabindex = "2", @next = "btnSubmit" })
+                    </div>
+
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Location Start <span class="f_req">*</span>
+                        </label>
+                        @Html.TextBoxFor(m => m.strLocationStart, new { @class = "span11 required alphanumwithspc form-control", @maxlength = "100", @tabindex = "2", @next = "btnSubmit" })
+                    </div>
+
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Location End <span class="f_req">*</span>
+                        </label>
+                        @Html.TextBoxFor(m => m.strLocationEnd, new { @class = "span11 required alphanumwithspc form-control", @maxlength = "100", @tabindex = "2", @next = "btnSubmit" })
+                    </div>
+
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Reason Remarks <span class="f_req">*</span>
+                        </label>
+                        @Html.TextBoxFor(m => m.strReasonRemarks, new { @class = "span11 required alphanumwithspc form-control", @maxlength = "200", @tabindex = "3", @next = "btnSubmit" })
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">
+                            KM Start <span class="f_req">*</span>
+                        </label>
+                        @Html.TextBoxFor(m => m.inKmStart, new { @class = "span11 required numwospc form-control", @maxlength = "10", @tabindex = "3", @next = "btnSubmit" })
+                    </div>
+
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">
+                            KM End <span class="f_req">*</span>
+                        </label>
+                        @Html.TextBoxFor(m => m.inKmEnd, new { @class = "span11 required numwospc form-control", @maxlength = "10", @tabindex = "3", @next = "btnSubmit" })
+                    </div>
+
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">
+                            KM Driven <span class="f_req">*</span>
+                        </label>
+                        @Html.TextBoxFor(m => m.inKmDriven, new { @class = "span11 required numwospc form-control", @maxlength = "10", @tabindex = "3", @next = "btnSubmit" })
+                    </div>
+
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Fuel Start <span class="f_req">*</span>
+                        </label>
+                        @Html.TextBoxFor(m => m.inFuelStart, new { @class = "span11 required numwospc form-control", @maxlength = "10", @tabindex = "4", @next = "btnSubmit" })
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Fuel End <span class="f_req">*</span>
+                        </label>
+                        @Html.TextBoxFor(m => m.inFuelEnd, new { @class = "span11 required numwospc form-control", @maxlength = "10", @tabindex = "4", @next = "btnSubmit" })
+                    </div>
+
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Entry Date <span class="f_req">*</span>
+                        </label>
+                        @Html.TextBoxFor(m => m.strEntryDatetime, new { @class = "span11 required date form-control", @maxlength = "12", @tabindex = "4", @next = "btnSubmit" })
+                    </div>
+
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Entry Method <span class="f_req">*</span>
+                        </label>
+                        @Html.TextBoxFor(m => m.strEntryMethod, new { @class = "span11 required alphanumwithspc form-control", @maxlength = "1", @tabindex = "4", @next = "btnSubmit" })
+                    </div>
+
+                </div>
+            </div>
+            @*<div class="row form-group">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label col-md-12">
+                            Editable
+                        </label>
+                        <div class="col-md-10">
+                            @Html.CheckBoxFor(m => m.blEditable, new { @tabindex = "5", @next = "strEmployeeCode", @checked = "true" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label col-md-12">
+                            Active
+                        </label>
+                        <div class="col-md-10">
+                            @Html.CheckBoxFor(m => m.blActive, new { @tabindex = "5", @next = "strEmployeeCode" })
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+            <div class="row form-group">
+                <div class="col-md-12">
+                    <input class="btn btn-inverse btn-primary" id="btnSubmit" name="inputSubmit" type="submit" value="Save" tabindex="6" title='Save Tracker' />
+                    <input class="btn btn-green cancel" id="btnCancel" name="inputCancel" type="button" value="Cancel" tabindex="7" title='Cancel Tracker' />
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<script src="~/Scripts/Utility/Tracker.js"></script>

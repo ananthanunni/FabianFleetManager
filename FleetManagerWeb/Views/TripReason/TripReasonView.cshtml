@@ -1,0 +1,59 @@
+@{
+    ViewBag.Title = "Trip Reason";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    bool isAdd = Convert.ToBoolean(ViewData["blAddRights"]);
+    bool isEdit = Convert.ToBoolean(ViewData["blEditRights"]);
+    bool isDelete = Convert.ToBoolean(ViewData["blDeleteRights"]);
+    bool isExport = Convert.ToBoolean(ViewData["blExportRights"]);
+}
+@using (Html.BeginForm("TripReason", "TripReason", FormMethod.Post, new { @id = "frmTripReason", @class = "form_validation_ttip well stdform" }))
+{
+
+    <div class="panel panel-grey">
+        <div class="panel-heading">
+            @ViewBag.Title
+        </div>
+        @Html.Hidden("hfAdd", @isAdd)
+        @Html.Hidden("hfEdit", @isEdit)
+        @Html.Hidden("hfDelete", @isDelete)
+        @Html.Hidden("hfExport", @isExport)
+
+        <div class="panel-body pan">
+            <div class="row form-group">
+                <div class="col-md-3">
+                    <div class="row search-label">
+                        <label class="control-label col-md-3">
+                            Search
+                        </label>
+                        <div class="col-md-9">
+                            <input type="text" id="txtTripReasonSearch" class="form-control" tabindex="1" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-9 text-right">
+                    <label class="control-label">
+                        &nbsp;
+                    </label>
+                    @if (isAdd)
+                    {
+                        @Html.ActionLink("Add New Trip Reason", "TripReason", "TripReason", null, new { @class = "btn btn-primary" })
+                    }
+                    @if (isDelete)
+                    {
+
+                        <input class="btn btn-danger" id="btnDeleteTripReason" name="inputDelete" type="button" value="Delete Trip Reason" tabindex="3" title='Delete Trip Reason' />
+                    }
+                    
+                </div>
+            </div>
+
+            <div class="span12 user-contant">
+                <div id="dvTripReason">
+                    <table id="tblTripReason"></table>
+                    <div id="dvTripReasonFooter"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<script src="~/Scripts/Utility/TripReasonView.js"></script>

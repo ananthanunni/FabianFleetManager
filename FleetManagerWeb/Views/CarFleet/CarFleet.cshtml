@@ -1,0 +1,137 @@
+@model FleetManagerWeb.Models.ClsCarFleet
+@{
+    ViewBag.Title = "CarFleet";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("CarFleet", "CarFleet", FormMethod.Post, new { @id = "frmCarFleet", @class = "form_validation_ttip well stdform" }))
+{
+    <div class="panel panel-grey">
+        <div class="panel-heading">
+            @ViewBag.Title
+        </div>
+        <div class="panel-body pan">
+            <div class="row-fluid">
+                @Html.HiddenFor(m => m.hdniFrame)
+                @Html.HiddenFor(m => m.inId)
+            </div>
+            <div class="row form-group">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Owner ID<span class="f_req">*</span>
+                        </label>
+                        @Html.TextBoxFor(m => m.inOwner_Id, new { @class = "span11 required form-control", @maxlength = "12", @tabindex = "2", @next = "btnSubmit" })
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Code<span class="f_req">*</span>
+                        </label>
+                        @Html.TextBoxFor(m => m.strCode, new { @class = "span11 required form-control", @maxlength = "12", @tabindex = "2", @next = "btnSubmit" })
+                    </div>
+
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Registration <span class="f_req">*</span>
+                        </label>
+                        @Html.TextBoxFor(m => m.strReg, new { @class = "span11 required alphanumwithspc form-control", @maxlength = "100", @tabindex = "2", @next = "btnSubmit" })
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Description <span class="f_req">*</span>
+                        </label>
+                        @Html.TextBoxFor(m => m.strDesc, new { @class = "span11 required alphanumwithspc form-control", @maxlength = "100", @tabindex = "2", @next = "btnSubmit" })
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Last Location <span class="f_req">*</span>
+                        </label>
+                        @Html.TextBoxFor(m => m.strLast_Location, new { @class = "span11 required form-control", @maxlength = "100", @tabindex = "3", @next = "btnSubmit" })
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">
+                           Fuel Type <span class="f_req">*</span>
+                        </label>
+                        @Html.TextBoxFor(m => m.strFuel_Type, new { @class = "span11 required form-control", @maxlength = "10", @tabindex = "3", @next = "btnSubmit" })
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Last Trip<span class="f_req">*</span>
+                        </label>
+                        @Html.TextBoxFor(m => m.strLast_Trip, new { @class = "span11 required date form-control", @tabindex = "3", @next = "btnSubmit" })
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Last Km <span class="f_req">*</span>
+                        </label>
+                        @Html.TextBoxFor(m => m.inLast_Km, new { @class = "span11 required numwospc form-control", @maxlength = "10", @tabindex = "3", @next = "btnSubmit" })
+                    </div>
+                </div>
+             </div>
+             <div class="row form-group">
+                 <div class="col-md-3">
+                     <div class="row select-addnew">
+                         <label class="control-label col-md-12">
+                             Color
+                             <span class="f_req">*</span>
+                         </label>
+                         <div class="col-md-10">
+                             @Html.DropDownListFor(m => m.inColor_Id, Model.lstFleetColors, new { @class = "span11 required chosen form-control", @tabindex = "9", @next = "lgBranchId" })
+                         </div>
+                         <div class="col-md-2">
+                         </div>
+                     </div>
+                 </div>
+                 <div class="col-md-3">
+                     <div class="row select-addnew">
+                         <label class="control-label col-md-12">
+                             Make
+                             <span class="f_req">*</span>
+                         </label>
+                         <div class="col-md-10">
+                             @Html.DropDownListFor(m => m.inFleetMakes_Id, Model.lstFleetMakes, new { @class = "span11 required alphanumwithspc form-control" })
+                         </div>
+                         <div class="col-md-2">
+                         </div>
+                     </div>
+                 </div>
+                 <div class="col-md-3">
+                     <div class="row select-addnew">
+                         <label class="control-label col-md-12">
+                             Model
+                             <span class="f_req">*</span>
+                         </label>
+                         <div class="col-md-10">
+                             @Html.DropDownListFor(m => m.inFleetModels_Id, Model.lstFleetModels, new { @class = "span11 required chosen form-control", @tabindex = "9", @next = "lgBranchId" })
+                         </div>
+                         <div class="col-md-2">
+                         </div>
+                     </div>
+                 </div>
+                
+              </div>
+            <div class="row form-group">
+                <div class="col-md-12">
+                    <input class="btn btn-inverse btn-primary" id="btnSubmit" name="inputSubmit" type="submit" value="Save" tabindex="6" title='Save CarFleet' />
+                    <input class="btn btn-green cancel" id="btnCancel" name="inputCancel" type="button" value="Cancel" tabindex="7" title='Cancel CarFleet' />
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<script src="~/Scripts/Utility/CarFleet.js"></script>

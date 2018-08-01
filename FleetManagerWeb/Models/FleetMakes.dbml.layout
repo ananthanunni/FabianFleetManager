@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="FleetMakes">
+  <DataContextMoniker Name="/FleetMakesDataContext" />
+  <nestedChildShapes>
+    <classShape Id="fa814269-3d72-42bf-92d3-d67b0837316c" absoluteBounds="2.75, 1.5, 2, 2.5401025390625">
+      <DataClassMoniker Name="/FleetMakesDataContext/FleetMake" />
+      <nestedChildShapes>
+        <elementListCompartment Id="fdc1885f-4947-4779-9a94-1fbf439a177c" absoluteBounds="2.765, 1.96, 1.9700000000000002, 1.9801025390625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(3.45923076923077 : 4.0401025390625); (3.45923076923077 : 4.2901025390625); (4.05461538461539 : 4.2901025390625); (4.05461538461539 : 4.0401025390625)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/FleetMakesDataContext/FleetMake/FleetMake_FleetMake" />
+      <nodes>
+        <classShapeMoniker Id="fa814269-3d72-42bf-92d3-d67b0837316c" />
+        <classShapeMoniker Id="fa814269-3d72-42bf-92d3-d67b0837316c" />
+      </nodes>
+    </associationConnector>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

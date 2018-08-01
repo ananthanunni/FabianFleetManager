@@ -1,0 +1,56 @@
+@model FleetManagerWeb.Models.ClsRole
+@{
+    ViewBag.Title = "Role";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("Role", "Role", FormMethod.Post, new { @id = "frmRole", @class = "form_validation_ttip well stdform" }))
+{
+    <div class="panel panel-grey">
+        <div class="panel-heading">
+            @ViewBag.Title
+        </div>
+
+        <div class="panel-body pan">
+            <div class="row-fluid">
+                @Html.HiddenFor(m => m.hdniFrame)
+                @Html.HiddenFor(m => m.lgId)
+                @Html.HiddenFor(m => m.strRights)
+            </div>
+            <div class="row form-group">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Role Name <span class="f_req">*</span>
+                        </label>
+                        @Html.TextBoxFor(m => m.strRoleName, new { @class = "span11 required alphanumwithspc form-control", @maxlength = "50", @tabindex = "2", @next = "strDescription" })
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Description
+                        </label>
+                        @Html.TextBoxFor(m => m.strDescription, new { @class = "span11 required form-control", @maxlength = "100", @tabindex = "3", @next = "blAllowKilometerLimit" })
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-12">
+                    <div class="span12 user-contant">
+                        <div id="dvRolePermission">
+                            <table id="tblRolePermission"></table>
+                            <div id="dvRolePermissionFooter" style="text-align: center;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-12">
+                    <input class="btn btn-inverse btn-primary" id="btnSubmit" name="inputSubmit" type="submit" value="Save" tabindex="4" title="Save Role" />
+                    <input class="btn btn-green cancel" id="btnCancel" name="inputCancel" type="button" value="Cancel" tabindex="5" title="Cancel Role" />
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<script src="~/Scripts/Utility/Role.js"></script>

@@ -1,0 +1,62 @@
+@model FleetManagerWeb.Models.ClsUser
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Login</title>
+    @Styles.Render("~/Content/Style/login")
+</head>
+<body class="login_page">
+    <div class="login_blockm">
+        <div class="login_box">
+            @using (Html.BeginForm("Login", "Home", FormMethod.Post, new { @id = "LoginForm", @autocomplete = "off" }))
+            {
+                <div class="top_b">Fleet Management System</div>
+                <div class="home_logo">
+                </div>
+                <div id="errorInfo" class="alert alert-info alert-login">
+                </div>
+                <div class="cnt_b">
+                    <div class="formRow">
+                        <div class="input-prepend">
+                            <span class="add-on"><i class="icon-user"></i></span>
+                            @Html.TextBoxFor(m => m.strUserName, new { @placeholder = "Username", @tabindex = "1", @autocomplete = "off" })
+                        </div>
+                    </div>
+                    <div class="formRow">
+                        <div class="input-prepend">
+                            <span class="add-on"><i class="icon-lock"></i></span>
+                            @Html.PasswordFor(m => m.strPassword, new { @placeholder = "Password", @tabindex = "2", @autocomplete = "off" })
+                        </div>
+                    </div>
+                    <div class="formRow">
+                        <div class="input-prepend">
+                            <input id="blTerms" title="Accept Terms of Website Use" tabindex="3" type="checkbox" value="false">
+                            <span><a href="~/TermsCondition.html" target="_blank">Accept Terms of Website Use</a></span>
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="btm_b clearfix">
+                    <button class="btn pull-right btn-primary" type="submit" id="btnSignIn">Sign In</button>
+                </div>
+            }
+        </div>
+    </div>
+    @Scripts.Render("~/Scripts/login")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var Password = '@this.ViewBag.password';
+            if (Password != '') {
+                $("#strPassword").attr("value", Password);
+            }
+            jQuery('#blTerms')[0].style.opacity = '1';
+
+        });
+    </script>
+</body>
+</html>

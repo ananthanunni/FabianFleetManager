@@ -1,0 +1,63 @@
+@{
+    ViewBag.Title = "Fleet Models";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    bool isAdd = Convert.ToBoolean(ViewData["blAddRights"]);
+    bool isEdit = Convert.ToBoolean(ViewData["blEditRights"]);
+    bool isDelete = Convert.ToBoolean(ViewData["blDeleteRights"]);
+    bool isExport = Convert.ToBoolean(ViewData["blExportRights"]);
+ }
+@using (Html.BeginForm("FleetModels", "FleetModels", FormMethod.Post, new { @id = "frmFleetModels", @class = "form_validation_ttip well stdform" }))
+{
+
+    <div class="panel panel-grey">
+        <div class="panel-heading">
+            @ViewBag.Title
+        </div>
+        @Html.Hidden("hfAdd", @isAdd)
+        @Html.Hidden("hfEdit", @isEdit)
+        @Html.Hidden("hfDelete", @isDelete)
+        @Html.Hidden("hfExport", @isExport)
+
+        <div class="panel-body pan">
+            <div class="row form-group">
+                <div class="col-md-3">
+                    <div class="row search-label">
+                        <label class="control-label col-md-3">
+                            Search
+                        </label>
+                        <div class="col-md-9">
+                            <input type="text" id="txtFleetModelsSearch" class="form-control" tabindex="1" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-9 text-right">
+                    <label class="control-label">
+                        &nbsp;
+                    </label>
+                    @if (isAdd)
+                    {
+ @Html.ActionLink("Add New Fleet Models", "FleetModels", "FleetModels", null, new { @class = "btn btn-primary" })
+                    }
+                    @if (isDelete)
+                    {
+
+                        <input class="btn btn-danger" id="btnDeleteFleetModels" name="inputDelete" type="button" value="Delete Fleet Models" tabindex="3" title='Delete Fleet Models' />
+                    }
+                    @*@if (isExport)
+                    {
+                        <input class="btn btn-danger" id="btnExportPdf" name="inputExportPDF" type="button" value="Export to PDF" tabindex="4" title='Export to PDF' />
+                        <input class="btn btn-danger" id="btnExportCsv" name="inputExportCsv" type="button" value="Export to CSV" tabindex="5" title='Export to CSV' />
+                    }*@
+                </div>
+            </div>
+
+            <div class="span12 user-contant">
+                <div id="dvFleetModels">
+                    <table id="tblFleetModels"></table>
+                    <div id="dvFleetModelsFooter"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<script src="~/Scripts/Utility/FleetModelsView.js"></script>

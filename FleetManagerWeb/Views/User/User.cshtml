@@ -1,0 +1,123 @@
+@model FleetManagerWeb.Models.ClsUser
+@{
+    ViewBag.Title = "User";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("User", "User", FormMethod.Post, new { @id = "frmUser", @class = "form_validation_ttip well stdform" }))
+{
+    <div class="panel panel-grey">
+        <div class="panel-heading">
+            @ViewBag.Title
+        </div>
+        <div class="panel-body pan">
+            <div class="row-fluid">
+                @Html.HiddenFor(m => m.hdniFrame)
+                @Html.HiddenFor(m => m.lgId)
+            </div>
+            <div class="row form-group">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">
+                            First Name
+                <span class="f_req">*</span>
+                        </label>
+                        @Html.TextBoxFor(m => m.strFirstName, new { @class = "span11 required alphanumwithspc form-control", @maxlength = "20", @tabindex = "2", @next = "strSurName" })
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Surname
+                <span class="f_req">*</span>
+                        </label>
+                        @Html.TextBoxFor(m => m.strSurName, new { @class = "span11 required alphanumwithspc form-control", @maxlength = "20", @tabindex = "3", @next = "strMobileNo" })
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="control-label">
+                        Mobile No
+                <span class="f_req">*</span>
+                    </label>
+                    @Html.TextBoxFor(m => m.strMobileNo, new { @class = "span11 required drivernumwospc form-control Digit10", @maxlength = "10", @tabindex = "4", @next = "strEmailID" })
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Email Id
+                <span class="f_req">*</span>
+                        </label>
+                        @Html.TextBoxFor(m => m.strEmailID, new { @class = "span11 required emailid form-control", @maxlength = "50", @tabindex = "5", @next = "strUserName" })
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">
+                            User Name
+                <span class="f_req">*</span>
+                        </label>
+                        @Html.TextBoxFor(m => m.strUserName, new { @class = "span11 required form-control", @maxlength = "50", @tabindex = "6", @next = "strPassword" })
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Password
+                <span class="f_req">*</span>
+                        </label>
+                        @Html.PasswordFor(m => m.strPassword, new { @class = "span11 required form-control", @maxlength = "20", @tabindex = "7", @next = "strAddress" })
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">
+                            Address
+                        </label>
+                        @Html.TextAreaFor(m => m.strAddress, new { @class = "span11 form-control", @maxlength = "100", @tabindex = "8", @next = "lgRoleId" })
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="row select-addnew">
+                        <label class="control-label col-md-12">
+                            Role
+                <span class="f_req">*</span>
+                        </label>
+                        <div class="col-md-10">
+                            @Html.DropDownListFor(m => m.lgRoleId, Model.lstRole, new { @class = "span11 required chosen form-control", @tabindex = "9", @next = "lgBranchId" })
+                        </div>
+                        <div class="col-md-2">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label col-md-12">
+                            Is Active
+                        </label>
+                        <div class="col-md-10">
+                            @Html.CheckBoxFor(m => m.blIsActive, new { @tabindex = "11", @next = "strEmployeeCode" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row form-group">
+                <div class="col-md-12">
+                    <input class="btn btn-inverse btn-primary" id="btnSubmit" name="inputSubmit" type="submit" value="Save" tabindex="12" title="Save User" />
+                    <input class="btn btn-green cancel" id="btnCancel" name="inputCancel" type="button" value="Cancel" tabindex="13" title="Cancel User" />
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#strPassword').val('@ViewBag.Password');
+    });
+</script>
+<script src="~/Scripts/Utility/User.js"></script>

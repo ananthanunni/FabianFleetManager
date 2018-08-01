@@ -1,0 +1,62 @@
+@{
+    Layout = null;
+}
+<div>
+    <!--BEGIN THEME SETTING-->
+    <div id="theme-setting">
+        <a href="#" data-toggle="dropdown" data-step="1" data-intro="&lt;b&gt;Many styles&lt;/b&gt; and &lt;b&gt;colors&lt;/b&gt; be created for you. Let choose one and enjoy it!" data-position="left" class="btn-theme-setting"><i class="fa fa-cog"></i></a>
+        <div class="content-theme-setting">
+            <select id="cmbSetting" class="chosen"></select>
+        </div>
+    </div>
+    <!--END THEME SETTING-->
+    <!--BEGIN BACK TO TOP-->
+    <a id="totop" href="#"><i class="fa fa-angle-up"></i></a>
+    <!--END BACK TO TOP-->
+    <!--BEGIN TOPBAR-->
+    <div id="header-topbar-option-demo" class="page-header-topbar">
+        <nav id="topbar" role="navigation" style="margin-bottom: 0;" data-step="3" data-intro="&lt;b&gt;Topbar&lt;/b&gt; has other styles with live demo. Go to &lt;b&gt;Layouts-&gt;Header&amp;Topbar&lt;/b&gt; and check it out." class="navbar navbar-default navbar-static-top">
+            <div class="navbar-header">
+                <button type="button" data-toggle="collapse" data-target=".sidebar-collapse" class="navbar-toggle"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+                <a id="logo" href="~/Home/Index" class="navbar-brand"><span class="fa fa-rocket"></span><span class="logo-text"></span><span style="display: none" class="logo-text-icon">µ</span></a>
+            </div>
+            <div class="topbar-main">
+                <a id="menu-toggle" href="#" class="hidden-xs" style="display: none;"><i class="fa fa-bars"></i></a>
+                <div class="news-update-box hidden-xs" style="display: none;">
+                    <h4>Dashboard</h4>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <!--END TOPBAR-->
+    <div id="wrapper">
+        <!--BEGIN SIDEBAR MENU-->
+        <nav id="sidebar" role="navigation" data-step="2" data-intro="Template has &lt;b&gt;many navigation styles&lt;/b&gt;" data-position="right" class="navbar-static-side">
+            <div class="sidebar-collapse menu-scroll">
+                <ul id="side-menu" class="nav">
+                    <li class="user-panel">
+                        <div class="clearfix"></div>
+                    </li>
+                    <li><a href="#"><i class="fa menu-vehicle fa-fw">
+                        <div class="icon-bg bg-violet"></div>
+                    </i><span class="menu-title">Fleet</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li><a href="~/FleetMakes/FleetMakesView"><i class="fa fa-columns"></i><span class="submenu-title">Fleet Makes</span></a></li>
+                            <li><a href="~/FleetModels/FleetModelsView"><i class="fa fa-cubes"></i><span class="submenu-title">Fleet Models</span></a></li>
+                            <li><a href="~/FleetColors/FleetColorsView"><i class="fa fa-magic"></i><span class="submenu-title">Fleet Colors</span></a></li>
+                            <li><a href="~/TripReason/TripReasonView"><i class="fa fa-exclamation"></i><span class="submenu-title">Trip Reason</span></a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#"><i class="fa menu-setting fa-fw">
+                        <div class="icon-bg bg-yellow"></div>
+                    </i><span class="menu-title">Setting</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li><a href="~/User/UserView"><i class="fa fa-steam"></i><span class="submenu-title">User</span></a></li>
+                            <li><a href="~/Role/RoleView"><i class="fa fa-puzzle-piece"></i><span class="submenu-title">Role</span></a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+</div>
