@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Web.Mvc;
     using FleetManagerWeb.Common;
+    using FleetManagerWeb.Model.Common;
     using FleetManagerWeb.Models;
 
     public partial class ClsUser : DataContextEntity<UserDataContext>, IClsUser
@@ -94,7 +95,7 @@
 		}
 		catch (Exception ex)
 		{
-		    Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, mySession.Current.UserId);
+		    _logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, _mySession.UserId);
 		}
 
 		return objUserMaster;
@@ -104,7 +105,7 @@
 	  {
 		try
 		{
-		    using (objDataContext = new UserDataContext(Functions.StrConnection))
+		    using (objDataContext = GetDataContext())
 		    {
 			  DeleteUserResult result = objDataContext.DeleteUser(strUserId, lgDeletedBy, PageMaster.User).FirstOrDefault();
 			  if (result == null)
@@ -117,7 +118,7 @@
 		}
 		catch (Exception ex)
 		{
-		    Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, mySession.Current.UserId);
+		    _logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, _mySession.UserId);
 		    return null;
 		}
 	  }
@@ -127,13 +128,13 @@
 		List<SelectListItem> lstUser = new List<SelectListItem>();
 		try
 		{
-		    using (objDataContext = new UserDataContext(Functions.StrConnection))
+		    using (objDataContext = GetDataContext())
 		    {
 			  lstUser.Add(new SelectListItem { Text = "--Select--", Value = string.Empty });
 			  List<GetUserAllResult> lstUserResult = objDataContext.GetUserAll().ToList();
 			  if (lstUserResult != null && lstUserResult.Count > 0)
 			  {
-				if (mySession.Current.UserTypeId == 1 || mySession.Current.UserTypeId == 11)
+				if (_mySession.UserTypeId == 1 || _mySession.UserTypeId == 11)
 				{
 				    lstUserResult = lstUserResult.ToList();
 				}
@@ -154,7 +155,7 @@
 		}
 		catch (Exception ex)
 		{
-		    Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, mySession.Current.UserId);
+		    _logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, _mySession.UserId);
 		}
 
 		return lstUser;
@@ -165,7 +166,7 @@
 		List<SelectListItem> lstUser = new List<SelectListItem>();
 		try
 		{
-		    using (objDataContext = new UserDataContext(Functions.StrConnection))
+		    using (objDataContext = GetDataContext())
 		    {
 			  lstUser.Add(new SelectListItem { Text = "--Select--", Value = string.Empty });
 			  List<GetUserAllResult> lstUserResult = objDataContext.GetUserAll().ToList();
@@ -180,7 +181,7 @@
 		}
 		catch (Exception ex)
 		{
-		    Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, mySession.Current.UserId);
+		    _logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, _mySession.UserId);
 		}
 
 		return lstUser;
@@ -191,7 +192,7 @@
 		List<SelectListItem> lstUser = new List<SelectListItem>();
 		try
 		{
-		    using (objDataContext = new UserDataContext(Functions.StrConnection))
+		    using (objDataContext = GetDataContext())
 		    {
 			  lstUser.Add(new SelectListItem { Text = "--Select--", Value = string.Empty });
 			  List<GetAllUserTypeForDropDownResult> lstUserResult = objDataContext.GetAllUserTypeForDropDown().ToList();
@@ -206,7 +207,7 @@
 		}
 		catch (Exception ex)
 		{
-		    Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, mySession.Current.UserId);
+		    _logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, _mySession.UserId);
 		}
 
 		return lstUser;
@@ -216,12 +217,12 @@
 	  {
 		try
 		{
-		    objDataContext = new UserDataContext(Functions.StrConnection);
+		    objDataContext = GetDataContext();
 		    return objDataContext.GetBranchManagerByBranchId(lgBranchId).ToList();
 		}
 		catch (Exception ex)
 		{
-		    Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, mySession.Current.UserId);
+		    _logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, _mySession.UserId);
 		}
 
 		return null;
@@ -231,7 +232,7 @@
 	  {
 		try
 		{
-		    using (objDataContext = new UserDataContext(Functions.StrConnection))
+		    using (objDataContext = GetDataContext())
 		    {
 			  List<GetUserAllResult> lstUserAll = objDataContext.GetUserAll().ToList();
 			  return lstUserAll;
@@ -239,7 +240,7 @@
 		}
 		catch (Exception ex)
 		{
-		    Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, mySession.Current.UserId);
+		    _logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, _mySession.UserId);
 		    return null;
 		}
 	  }
@@ -249,7 +250,7 @@
 		ClsUser objClsUser = new ClsUser(objDataContext);
 		try
 		{
-		    using (objDataContext = new UserDataContext(Functions.StrConnection))
+		    using (objDataContext = GetDataContext())
 		    {
 			  var result = objDataContext.User.Where(x => x.BranchId == lgBranchId && x.UserTypeId == lgUserTypeId);
 			  if (result != null)
@@ -276,7 +277,7 @@
 		}
 		catch (Exception ex)
 		{
-		    Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, mySession.Current.UserId);
+		    _logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, _mySession.UserId);
 		}
 
 		return objClsUser;
@@ -287,7 +288,7 @@
 		ClsUser objClsUser = new ClsUser();
 		try
 		{
-		    using (objDataContext = new UserDataContext(Functions.StrConnection))
+		    using (objDataContext = GetDataContext())
 		    {
 			  GetUserByEmailIdResult item = objDataContext.GetUserByEmailId(strEmailId).FirstOrDefault();
 			  if (item != null)
@@ -303,7 +304,7 @@
 		}
 		catch (Exception ex)
 		{
-		    Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, mySession.Current.UserId);
+		    _logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, _mySession.UserId);
 		}
 
 		return objClsUser;
@@ -314,7 +315,7 @@
 		ClsUser objClsUser = new ClsUser();
 		try
 		{
-		    using (objDataContext = new UserDataContext(Functions.StrConnection))
+		    using (objDataContext = GetDataContext())
 		    {
 			  GetUserByIdResult item = objDataContext.GetUserById(lgUserId).FirstOrDefault();
 			  if (item != null)
@@ -340,7 +341,7 @@
 		}
 		catch (Exception ex)
 		{
-		    Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, mySession.Current.UserId);
+		    _logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, _mySession.UserId);
 		}
 
 		return objClsUser;
@@ -350,7 +351,7 @@
 	  {
 		try
 		{
-		    objDataContext = new UserDataContext(Functions.StrConnection);
+		    objDataContext = GetDataContext();
 		    var objResult = objDataContext.GetUserIdByUseType("Admin,Management").ToList();
 		    List<GetBranchManagerByBranchIdResult> result = new List<GetBranchManagerByBranchIdResult>();
 		    foreach (var item in objResult)
@@ -362,7 +363,7 @@
 		}
 		catch (Exception ex)
 		{
-		    Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, mySession.Current.UserId);
+		    _logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, _mySession.UserId);
 		}
 
 		return null;
@@ -372,7 +373,7 @@
 	  {
 		try
 		{
-		    using (objDataContext = new UserDataContext(Functions.StrConnection))
+		    using (objDataContext = GetDataContext())
 		    {
 			  if (objDataContext.User.Where(x => x.Id != lgUserId && x.EmailID == userEmail).Count() > 0)
 			  {
@@ -384,7 +385,7 @@
 		}
 		catch (Exception ex)
 		{
-		    Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, mySession.Current.UserId);
+		    _logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, _mySession.UserId);
 		    return false;
 		}
 	  }
@@ -393,7 +394,7 @@
 	  {
 		try
 		{
-		    using (objDataContext = new UserDataContext(Functions.StrConnection))
+		    using (objDataContext = GetDataContext())
 		    {
 			  if (objDataContext.User.Where(x => x.Id != lgUserId && x.UserName == userName).Count() > 0)
 			  {
@@ -405,7 +406,7 @@
 		}
 		catch (Exception ex)
 		{
-		    Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, mySession.Current.UserId);
+		    _logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, _mySession.UserId);
 		    return false;
 		}
 	  }
@@ -414,10 +415,10 @@
 	  {
 		try
 		{
-		    using (objDataContext = new UserDataContext(Functions.StrConnection))
+		    using (objDataContext = GetDataContext())
 		    {
 			  objSave.strPassword = objSave.strPassword.EncryptString();
-			  var result = objDataContext.InsertOrUpdateUser(objSave.lgId, 1, 1, objSave.strFirstName, objSave.strSurName, objSave.strMobileNo, objSave.strEmailID, objSave.strUserName, objSave.strPassword, objSave.strAddress, "EMP/12345", objSave.lgRoleId, objSave.blIsActive, objSave.blIsLogin, mySession.Current.UserId, PageMaster.User).FirstOrDefault();
+			  var result = objDataContext.InsertOrUpdateUser(objSave.lgId, 1, 1, objSave.strFirstName, objSave.strSurName, objSave.strMobileNo, objSave.strEmailID, objSave.strUserName, objSave.strPassword, objSave.strAddress, "EMP/12345", objSave.lgRoleId, objSave.blIsActive, objSave.blIsLogin, _mySession.UserId, PageMaster.User).FirstOrDefault();
 			  if (result != null)
 			  {
 				return result.InsertedId;
@@ -430,7 +431,7 @@
 		}
 		catch (Exception ex)
 		{
-		    Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, mySession.Current.UserId);
+		    _logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, _mySession.UserId);
 		    return 0;
 		}
 	  }
@@ -439,14 +440,14 @@
 	  {
 		try
 		{
-		    using (objDataContext = new UserDataContext(Functions.StrConnection))
+		    using (objDataContext = GetDataContext())
 		    {
 			  return objDataContext.SearchUser(inRow, inPage, strSearch, strSort).ToList();
 		    }
 		}
 		catch (Exception ex)
 		{
-		    Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, mySession.Current.UserId);
+		    _logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, _mySession.UserId);
 		    return null;
 		}
 	  }
@@ -455,7 +456,7 @@
 	  {
 		try
 		{
-		    using (objDataContext = new UserDataContext(Functions.StrConnection))
+		    using (objDataContext = GetDataContext())
 		    {
 			  User objUser = objDataContext.User.Where(n => n.UserName == strUserName && n.Password == strPassword && n.IsActive == true).FirstOrDefault();
 			  if (objUser != null)
@@ -483,7 +484,7 @@
 		}
 		catch (Exception ex)
 		{
-		    Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, mySession.Current.UserId);
+		    _logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, _mySession.UserId);
 		    return null;
 		}
 	  }

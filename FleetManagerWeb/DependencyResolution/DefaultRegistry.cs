@@ -37,7 +37,7 @@ namespace FleetManagerWeb.DependencyResolution {
 		RegisterCore();
 		RegisterDataContexts();
 		RegisterModels();
-		RegisterServices();
+		RegisterServices();		
         }
 
 	  #endregion
@@ -52,6 +52,7 @@ namespace FleetManagerWeb.DependencyResolution {
 		For<Models.IClsTripReason>().Use<Models.ClsTripReason>();
 		For<Models.IClsTracker>().Use<Models.ClsTracker>();
 		For<Models.IClsCarFleet>().Use<Models.ClsCarFleet>();
+		For<FleetManager.Model.Common.IMySession>().Use<Common.MySession>();
 	  }
 
 	  private void RegisterCore()
@@ -62,8 +63,8 @@ namespace FleetManagerWeb.DependencyResolution {
 
 	  private void RegisterDataContexts()
 	  {
-		For<Models.CommonDataContext>().Use(ctx =>
-		    new Models.CommonDataContext(ctx.GetInstance<FleetManager.Core.Configuration.IConfiguration>().ConnectionString)
+		For<FleetManager.Data.Models.CommonDataContext>().Use(ctx =>
+		    new FleetManager.Data.Models.CommonDataContext(ctx.GetInstance<FleetManager.Core.Configuration.IConfiguration>().ConnectionString)
 		);
 
 		For<Models.CarFleetDataContext>().Use(ctx =>
@@ -103,6 +104,10 @@ namespace FleetManagerWeb.DependencyResolution {
 	  {
 		For<FleetManager.Service.Interaction.IAlertTextProvider>().Use<FleetManager.Service.Interaction.AlertTextProvider>();
 		For<FleetManager.Service.Converter.IDateFormatConverter>().Use<FleetManager.Service.Converter.DateFormatConverter>();
+		For<FleetManager.Service.Auth.IPermissionChecker>().Use<FleetManager.Service.Auth.PermissionChecker>();
+		For<FleetManager.Service.Cookie.ICookieHandler>().Use<FleetManager.Service.Cookie.CookieHandler>();
+		For<FleetManager.Service.Auth.IAuthentication>().Use<FleetManager.Service.Auth.Authentication>();
+		ForSingletonOf<FleetManager.Service.Configuration.IAppConfiguration>().Use<FleetManager.Service.Configuration.AppConfiguration>();
 	  }
     }
 }

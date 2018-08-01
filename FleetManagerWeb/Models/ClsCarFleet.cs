@@ -6,6 +6,7 @@
     using System.Transactions;
     using System.Web.Mvc;
     using FleetManagerWeb.Common;
+    using FleetManagerWeb.Model.Common;
 
     public partial class ClsCarFleet : DataContextEntity<CarFleetDataContext>, IClsCarFleet
     {
@@ -37,7 +38,7 @@
         {
             try
             {
-                using (this.objDataContext = new CarFleetDataContext(Functions.StrConnection))
+                using (this.objDataContext = GetDataContext())
                 {
                     List<GetCarFleetAllResult> lstCarFleetAll = this.objDataContext.GetCarFleetAll().ToList();
                     return lstCarFleetAll;
@@ -45,7 +46,7 @@
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.CarFleet, mySession.Current.UserId);
+                _logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.CarFleet, _mySession.UserId);
                 return null;
             }
         }
@@ -54,7 +55,7 @@
             ClsCarFleet objClsCarFleet = new ClsCarFleet();
             try
             {
-                using (this.objDataContext = new CarFleetDataContext(Functions.StrConnection))
+                using (this.objDataContext = GetDataContext())
                 {
                     GetCarFleetByIdResult item = this.objDataContext.GetCarFleetById(lgCarFleetId).ToList().FirstOrDefault();
                     if (item != null)
@@ -76,7 +77,7 @@
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.CarFleet, mySession.Current.UserId);
+                _logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.CarFleet, _mySession.UserId);
             }
 
             return objClsCarFleet;
@@ -87,10 +88,10 @@
             {
                 using (TransactionScope scope = new TransactionScope())
                 {
-                    using (this.objDataContext = new CarFleetDataContext(Functions.StrConnection))
+                    using (this.objDataContext = GetDataContext())
                     {
                         var result = this.objDataContext.InsertOrUpdateCarFleet(objSave.inId,objSave.inOwner_Id, objSave.strCode, objSave.strReg, objSave.strDesc, objSave.inColor_Id, 
-                            objSave.strFuel_Type, objSave.strLast_Trip, objSave.inLast_Km, objSave.strLast_Location,objSave.inFleetModels_Id, objSave.inFleetMakes_Id, mySession.Current.UserId, PageMaster.CarFleet.ToString().intSafe(), null, null).FirstOrDefault();
+                            objSave.strFuel_Type, objSave.strLast_Trip, objSave.inLast_Km, objSave.strLast_Location,objSave.inFleetModels_Id, objSave.inFleetMakes_Id, _mySession.UserId, PageMaster.CarFleet.ToString().IntSafe(), null, null).FirstOrDefault();
 
                         if (result != null)
                         {
@@ -105,7 +106,7 @@
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.CarFleet, mySession.Current.UserId);
+                _logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.CarFleet, _mySession.UserId);
                 return 0;
             }
         }
@@ -113,7 +114,7 @@
         {
             try
             {
-                using (this.objDataContext = new CarFleetDataContext(Functions.StrConnection))
+                using (this.objDataContext = GetDataContext())
                 {
                     List<SearchCarFleetResult> lstSearchCarFleet = this.objDataContext.SearchCarFleet(inRow, inPage, strSort, strTripStartDate, strTripEndDate, strSearch).ToList();
                     return lstSearchCarFleet;
@@ -121,7 +122,7 @@
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.CarFleet, mySession.Current.UserId);
+                _logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.CarFleet, _mySession.UserId);
                 return null;
             }
         }
@@ -129,7 +130,7 @@
         {
             try
             {
-                using (this.objDataContext = new CarFleetDataContext(Functions.StrConnection))
+                using (this.objDataContext = GetDataContext())
                 {
                     DeleteCarFleetResult result = this.objDataContext.DeleteCarFleet(strCarFleetId, lgDeletedBy, PageMaster.User).FirstOrDefault();
                     if (result == null)
@@ -142,7 +143,7 @@
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, mySession.Current.UserId);
+                _logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, _mySession.UserId);
                 return null;
             }
         }

@@ -1,6 +1,7 @@
 ﻿using FleetManager.Core.Configuration;
 using FleetManager.Core.Logging;
 using FleetManagerWeb.Common;
+using FleetManagerWeb.Model.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;

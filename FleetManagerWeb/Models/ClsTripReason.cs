@@ -6,6 +6,7 @@
     using System.Transactions;
     using System.Web.Mvc;
     using FleetManagerWeb.Common;
+    using FleetManagerWeb.Model.Common;
     using FleetManagerWeb.Models;
 
     public partial class ClsTripReason : DataContextEntity<TripReasonDataContext>, IClsTripReason
@@ -29,7 +30,7 @@
             {
                 using (TransactionScope scope = new TransactionScope())
                 {
-                    using (this.objDataContext = new TripReasonDataContext(Functions.StrConnection))
+                    using (this.objDataContext =GetDataContext())
                     {
                         result = this.objDataContext.DeleteTripReason(strTripReasonIdList, lgDeletedBy, PageMaster.TripReason).ToList().FirstOrDefault();
                     }
@@ -39,7 +40,7 @@
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.TripReason, mySession.Current.UserId);
+                _logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.TripReason, _mySession.UserId);
             }
 
             return result;
@@ -50,7 +51,7 @@
             List<SelectListItem> lstTripReason = new List<SelectListItem>();
             try
             {
-                using (this.objDataContext = new TripReasonDataContext(Functions.StrConnection))
+                using (this.objDataContext =GetDataContext())
                 {
                     lstTripReason.Add(new SelectListItem { Text = "--Select--", Value = string.Empty });
                     List<GetTripReasonAllResult> lstTripReasonResult = this.objDataContext.GetTripReasonAll().ToList();
@@ -65,7 +66,7 @@
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.TripReason, mySession.Current.UserId);
+                _logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.TripReason, _mySession.UserId);
             }
 
             return lstTripReason;
@@ -75,7 +76,7 @@
         {
             try
             {
-                using (this.objDataContext = new TripReasonDataContext(Functions.StrConnection))
+                using (this.objDataContext =GetDataContext())
                 {
                     List<GetTripReasonAllResult> lstTripReasonAll = this.objDataContext.GetTripReasonAll().ToList();
                     return lstTripReasonAll;
@@ -83,7 +84,7 @@
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.TripReason, mySession.Current.UserId);
+                _logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.TripReason, _mySession.UserId);
                 return null;
             }
         }
@@ -93,7 +94,7 @@
             ClsTripReason objClsTripReason = new ClsTripReason();
             try
             {
-                using (this.objDataContext = new TripReasonDataContext(Functions.StrConnection))
+                using (this.objDataContext =GetDataContext())
                 {
                     GetTripReasonByIdResult item = this.objDataContext.GetTripReasonById(lgTripReasonId).ToList().FirstOrDefault();
                     if (item != null)
@@ -105,7 +106,7 @@
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.TripReason, mySession.Current.UserId);
+                _logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.TripReason, _mySession.UserId);
             }
 
             return objClsTripReason;
@@ -115,7 +116,7 @@
         {
             try
             {
-                using (this.objDataContext = new TripReasonDataContext(Functions.StrConnection))
+                using (this.objDataContext =GetDataContext())
                 {
                     if (this.objDataContext.TripReason.Where(x => x.Id != lgTripReasonId && x.TripReasonName == strTripReasonName && x.IsDeleted == false).Count() > 0)
                     {
@@ -127,7 +128,7 @@
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.TripReason, mySession.Current.UserId);
+                _logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.TripReason, _mySession.UserId);
                 return false;
             }
         }
@@ -138,9 +139,9 @@
             {
                 using (TransactionScope scope = new TransactionScope())
                 {
-                    using (this.objDataContext = new TripReasonDataContext(Functions.StrConnection))
+                    using (this.objDataContext =GetDataContext())
                     {
-                        var result = this.objDataContext.InsertOrUpdateTripReason(objSave.lgId, objSave.strTripReasonName, mySession.Current.UserId, PageMaster.TripReason).FirstOrDefault();
+                        var result = this.objDataContext.InsertOrUpdateTripReason(objSave.lgId, objSave.strTripReasonName, _mySession.UserId, PageMaster.TripReason).FirstOrDefault();
                         if (result != null)
                         {
                             objSave.lgId = result.InsertedId;
@@ -154,7 +155,7 @@
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.TripReason, mySession.Current.UserId);
+                _logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.TripReason, _mySession.UserId);
                 return 0;
             }
         }
@@ -163,7 +164,7 @@
         {
             try
             {
-                using (this.objDataContext = new TripReasonDataContext(Functions.StrConnection))
+                using (this.objDataContext =GetDataContext())
                 {
                     List<SearchTripReasonResult> lstSearchTripReason = this.objDataContext.SearchTripReason(inRow, inPage, strSearch, strSort).ToList();
                     return lstSearchTripReason;
@@ -171,7 +172,7 @@
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.TripReason, mySession.Current.UserId);
+                _logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.TripReason, _mySession.UserId);
                 return null;
             }
         }

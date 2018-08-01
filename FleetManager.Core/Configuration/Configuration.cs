@@ -10,24 +10,9 @@ namespace FleetManager.Core.Configuration
 {
     public class Configuration : IConfiguration
     {
-	  [Obsolete("This will be removed later during refactoring. Use FleetManager.Core.IConfiguration instead. Singleton instance is available as DI")]
-	  private static IConfiguration _instance = null;
-
 	  public Configuration()
 	  {
 		Initialize();
-		_instance = this;
-	  }
-
-	  [Obsolete("This will be removed later during refactoring. Use FleetManager.Core.IConfiguration instead. Singleton instance is available as DI")]
-	  public static IConfiguration Instance
-	  {
-		get
-		{
-		    if (_instance != null) return _instance;
-
-		    return DependencyResolver.Current.GetService<IConfiguration>();
-		}
 	  }
 
 	  public string ConnectionString { get; private set; }

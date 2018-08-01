@@ -1,5 +1,6 @@
-﻿namespace FleetManagerWeb.Common
+﻿namespace FleetManagerWeb.Model.Common
 {
+    using FleetManager.Core.Logging;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
@@ -8,6 +9,7 @@
     using System.IO;
     using System.Security.Cryptography;
     using System.Text;
+    using System.Web.Mvc;
 
     public static class Extension
     {
@@ -15,40 +17,42 @@
 
         private static readonly string StrAcceptedCharacters = "KRISH1234567891123456".ToUpper();
 
-        public static bool boolSafe(this string boolStr)
+	  private static readonly ILogger _logger;
+	  static Extension()
+	  {
+		_logger = DependencyResolver.Current.GetService<ILogger>();
+	  }
+
+        public static bool BoolSafe(this string boolStr)
         {
-            bool bl = false;
-            bool.TryParse(boolStr, out bl);
-            return bl;
+		bool.TryParse(boolStr, out bool bl);
+		return bl;
         }
 
-        public static DateTime? dateNullSafe(this string str)
+        public static DateTime? DateNullSafe(this string str)
         {
-            DateTime date;
-            if (DateTime.TryParseExact(str, Strformate, null, System.Globalization.DateTimeStyles.None, out date) == true)
-            {
-                return date;
-            }
+		if (DateTime.TryParseExact(str, Strformate, null, System.Globalization.DateTimeStyles.None, out DateTime date) == true)
+		{
+		    return date;
+		}
 
-            return null;
+		return null;
         }
 
-        public static DateTime dateSafe(this string str)
+        public static DateTime DateSafe(this string str)
         {
-            DateTime date;
-            if (DateTime.TryParseExact(str, Strformate, null, System.Globalization.DateTimeStyles.None, out date) == true)
-            {
-                return date;
-            }
+		if (DateTime.TryParseExact(str, Strformate, null, System.Globalization.DateTimeStyles.None, out DateTime date) == true)
+		{
+		    return date;
+		}
 
-            return date;
+		return date;
         }
 
-        public static decimal? decNullSafe(this string decStr)
+        public static decimal? DecNullSafe(this string decStr)
         {
-            decimal ret = 0;
-            decStr = decStr.Replace(",", string.Empty);
-            decimal.TryParse(decStr, out ret);
+		decStr = decStr.Replace(",", string.Empty);
+		decimal.TryParse(decStr, out decimal ret);
             if (ret == 0)
             {
                 return null;
@@ -86,11 +90,10 @@
             }
         }
 
-        public static decimal decSafe(this string decStr)
+        public static decimal DecSafe(this string decStr)
         {
-            decimal ret = 0;
-            decStr = decStr.Replace(",", string.Empty);
-            decimal.TryParse(decStr, out ret);
+		decStr = decStr.Replace(",", string.Empty);
+		decimal.TryParse(decStr, out decimal ret);
             return ret;
         }
 
@@ -128,16 +131,15 @@
             return CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(date, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
         }
 
-        public static int? intNullSafe(this string intStr)
+        public static int? IntNullSafe(this string intStr)
         {
             if (intStr != null)
             {
                 intStr = intStr.Replace(",", string.Empty);
             }
 
-            int ret = 0;
-            int.TryParse(intStr, out ret);
-            if (ret == 0)
+		int.TryParse(intStr, out int ret);
+		if (ret == 0)
             {
                 return null;
             }
@@ -147,16 +149,15 @@
             }
         }
 
-        public static int intSafe(this string intStr)
+        public static int IntSafe(this string intStr)
         {
             if (intStr != null)
             {
                 intStr = intStr.Replace(",", string.Empty);
             }
 
-            int ret = 0;
-            int.TryParse(intStr, out ret);
-            return ret;
+		int.TryParse(intStr, out int ret);
+		return ret;
         }
 
         public static DataTable ListToDataTable<T>(List<T> list)
@@ -192,16 +193,15 @@
             return table;
         }
 
-        public static long? longNullSafe(this string longStr)
+        public static long? LongNullSafe(this string longStr)
         {
             if (longStr != null)
             {
                 longStr = longStr.Replace(",", string.Empty);
             }
 
-            long ret = 0;
-            long.TryParse(longStr, out ret);
-            if (ret == 0)
+		long.TryParse(longStr, out long ret);
+		if (ret == 0)
             {
                 return null;
             }
@@ -211,11 +211,10 @@
             }
         }
 
-        public static long longSafe(this string longStr)
+        public static long LongSafe(this string longStr)
         {
-            long ret = 0;
-            long.TryParse(longStr, out ret);
-            return ret;
+		long.TryParse(longStr, out long ret);
+		return ret;
         }
 
         public static string MonthName(this int intMonth)
@@ -252,13 +251,13 @@
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name.ToString(), PageMaster.LgCommon);
+                _logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name.ToString(), PageMaster.LgCommon);
             }
 
             return string.Empty;
         }
 
-        public static string strSafe(this string str)
+        public static string StrSafe(this string str)
         {
             return Convert.ToString(str);
         }
@@ -284,13 +283,15 @@
 	  
         private static AesCryptoServiceProvider GetProvider(byte[] key)
         {
-            AesCryptoServiceProvider result = new AesCryptoServiceProvider();
-            result.BlockSize = 128;
-            result.KeySize = 128;
-            result.Mode = CipherMode.CBC;
-            result.Padding = PaddingMode.PKCS7;
+		AesCryptoServiceProvider result = new AesCryptoServiceProvider
+		{
+		    BlockSize = 128,
+		    KeySize = 128,
+		    Mode = CipherMode.CBC,
+		    Padding = PaddingMode.PKCS7
+		};
 
-            result.GenerateIV();
+		result.GenerateIV();
             result.IV = new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
             byte[] realKey = GetKey(key, result);

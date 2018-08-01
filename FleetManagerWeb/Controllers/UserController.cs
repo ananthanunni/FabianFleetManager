@@ -4,10 +4,14 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
+    using FleetManager.Data.Models;
+    using FleetManager.Model.Common;
     using FleetManager.Model.Interaction;
+    using FleetManager.Service.Auth;
     using FleetManager.Service.Interaction;
     using FleetManagerWeb.Common;
     using FleetManagerWeb.Controllers;
+    using FleetManagerWeb.Model.Common;
     using FleetManagerWeb.Models;
 
     public class UserController : BaseController
@@ -15,15 +19,19 @@
         /// <summary>   Zero-based index of the cls role. </summary>
         private readonly IClsRole _objiClsRole = null;
 	  private readonly IAlertTextProvider _alertTextProvider;
+	  private readonly IMySession _mySession;
+	  private readonly IPermissionChecker _permissionChecker;
 
 	  /// <summary>   Zero-based index of the cls user. </summary>
 	  private readonly IClsUser _objiClsUser = null;
 
-        public UserController(IClsUser objIClsUser, IClsRole objIClsRole, IAlertTextProvider alertTextProvider)
+        public UserController(IClsUser objIClsUser, IClsRole objIClsRole, IAlertTextProvider alertTextProvider,IMySession mySession, IPermissionChecker permissionChecker)
         {
             _objiClsUser = objIClsUser;
             _objiClsRole = objIClsRole;
 		_alertTextProvider = alertTextProvider;
+		_mySession = mySession;
+		_permissionChecker = permissionChecker;
 	  }
 
         public void BindDropDownListForUser(ClsUser objClsUser, bool blBindDropDownFromDb)
@@ -65,7 +73,7 @@
             }
             catch (Exception ex)
             {
-                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, mySession.Current.UserId);
+                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, _mySession.UserId);
                 return Json(string.Empty);
             }
         }
@@ -82,7 +90,7 @@
                 }
 
                 strUserId = strUserId.Substring(0, strUserId.Length - 1);
-                DeleteUserResult result = _objiClsUser.DeleteUser(strUserId, mySession.Current.UserId);
+                DeleteUserResult result = _objiClsUser.DeleteUser(strUserId, _mySession.UserId);
                 if (result != null && result.TotalReference == 0)
                 {
                     return Json(_alertTextProvider.AlertMessage("User", MessageType.DeleteSuccess));
@@ -96,7 +104,7 @@
             }
             catch (Exception ex)
             {
-                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, mySession.Current.UserId);
+                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, _mySession.UserId);
                 return Json(_alertTextProvider.AlertMessage("User", MessageType.DeleteFail));
             }
         }
@@ -118,7 +126,7 @@
         {
             try
             {
-                GetPagePermissionResult objPermission = Functions.CheckPagePermission(PageMaster.User);
+                GetPagePermissionResult objPermission =_permissionChecker.CheckPagePermission(PageMaster.User);
                 if (!objPermission.IsActive)
                 {
                     return RedirectToAction("Logout", "Home");
@@ -144,7 +152,7 @@
                             return RedirectToAction("PermissionRedirectPage", "Home");
                         }
 
-                        lgUserId = Request.QueryString.ToString().Decode().longSafe();
+                        lgUserId = Request.QueryString.ToString().Decode().LongSafe();
                         objClsUser = _objiClsUser.GetUserByUserId(lgUserId);
                         ViewBag.Password = objClsUser.strPassword;
                     }
@@ -159,49 +167,49 @@
 
                 #region Menu Access
                 bool blUserAccess = true, blRoleAccess = true, blTrackerAccess = true, blCarFleetAccess = true, blFleetMakesAccess = true, blFleetModelsAccess = true, blFleetColorsAccess = true, blTripReasonAccess = true;
-                objPermission = Functions.CheckPagePermission(PageMaster.User);
+                objPermission =_permissionChecker.CheckPagePermission(PageMaster.User);
                 if (!objPermission.Add_Right)
                 {
                     blUserAccess = false;
                 }
 
-                objPermission = Functions.CheckPagePermission(PageMaster.Role);
+                objPermission =_permissionChecker.CheckPagePermission(PageMaster.Role);
                 if (!objPermission.Add_Right)
                 {
                     blRoleAccess = false;
                 }
 
-                objPermission = Functions.CheckPagePermission(PageMaster.Tracker);
+                objPermission =_permissionChecker.CheckPagePermission(PageMaster.Tracker);
                 if (!objPermission.Add_Right)
                 {
                     blTrackerAccess = false;
                 }
 
-                objPermission = Functions.CheckPagePermission(PageMaster.CarFleet);
+                objPermission =_permissionChecker.CheckPagePermission(PageMaster.CarFleet);
                 if (!objPermission.Add_Right)
                 {
                     blCarFleetAccess = false;
                 }
 
-                objPermission = Functions.CheckPagePermission(PageMaster.FleetMakes);
+                objPermission =_permissionChecker.CheckPagePermission(PageMaster.FleetMakes);
                 if (!objPermission.Add_Right)
                 {
                     blFleetMakesAccess = false;
                 }
 
-                objPermission = Functions.CheckPagePermission(PageMaster.FleetModels);
+                objPermission =_permissionChecker.CheckPagePermission(PageMaster.FleetModels);
                 if (!objPermission.Add_Right)
                 {
                     blFleetModelsAccess = false;
                 }
 
-                objPermission = Functions.CheckPagePermission(PageMaster.FleetColors);
+                objPermission =_permissionChecker.CheckPagePermission(PageMaster.FleetColors);
                 if (!objPermission.Add_Right)
                 {
                     blFleetColorsAccess = false;
                 }
 
-                objPermission = Functions.CheckPagePermission(PageMaster.TripReason);
+                objPermission =_permissionChecker.CheckPagePermission(PageMaster.TripReason);
                 if (!objPermission.Add_Right)
                 {
                     blTripReasonAccess = false;
@@ -223,18 +231,18 @@
             }
             catch (Exception ex)
             {
-                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, mySession.Current.UserId);
+                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, _mySession.UserId);
                 return View();
             }
         }
 
         [HttpPost]
-        public ActionResult User(ClsUser objUser)
+        public new ActionResult User(ClsUser objUser)
         {
             try
             {
                 ////bool blEmailFlag = false;
-                GetPagePermissionResult objPermission = Functions.CheckPagePermission(PageMaster.User);
+                GetPagePermissionResult objPermission =_permissionChecker.CheckPagePermission(PageMaster.User);
                 if (!objPermission.IsActive)
                 {
                     return RedirectToAction("Logout", "Home");
@@ -305,7 +313,7 @@
             {
                 ViewData["Success"] = "0";
                 ViewData["Message"] = _alertTextProvider.AlertMessage("User", MessageType.Fail);
-                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, mySession.Current.UserId);
+                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, _mySession.UserId);
                 return View(objUser);
             }
         }
@@ -314,7 +322,7 @@
         {
             try
             {
-                GetPagePermissionResult objPermission = Functions.CheckPagePermission(PageMaster.User);
+                GetPagePermissionResult objPermission =_permissionChecker.CheckPagePermission(PageMaster.User);
                 if (!objPermission.IsActive)
                 {
                     return RedirectToAction("Logout", "Home");
@@ -332,49 +340,49 @@
 
                 #region Menu Access
                 bool blUserAccess = true, blRoleAccess = true, blTrackerAccess = true, blCarFleetAccess = true, blFleetMakesAccess = true, blFleetModelsAccess = true, blFleetColorsAccess = true, blTripReasonAccess = true;
-                objPermission = Functions.CheckPagePermission(PageMaster.User);
+                objPermission =_permissionChecker.CheckPagePermission(PageMaster.User);
                 if (!objPermission.Add_Right)
                 {
                     blUserAccess = false;
                 }
 
-                objPermission = Functions.CheckPagePermission(PageMaster.Role);
+                objPermission =_permissionChecker.CheckPagePermission(PageMaster.Role);
                 if (!objPermission.Add_Right)
                 {
                     blRoleAccess = false;
                 }
 
-                objPermission = Functions.CheckPagePermission(PageMaster.Tracker);
+                objPermission =_permissionChecker.CheckPagePermission(PageMaster.Tracker);
                 if (!objPermission.Add_Right)
                 {
                     blTrackerAccess = false;
                 }
 
-                objPermission = Functions.CheckPagePermission(PageMaster.CarFleet);
+                objPermission =_permissionChecker.CheckPagePermission(PageMaster.CarFleet);
                 if (!objPermission.Add_Right)
                 {
                     blCarFleetAccess = false;
                 }
 
-                objPermission = Functions.CheckPagePermission(PageMaster.FleetMakes);
+                objPermission =_permissionChecker.CheckPagePermission(PageMaster.FleetMakes);
                 if (!objPermission.Add_Right)
                 {
                     blFleetMakesAccess = false;
                 }
 
-                objPermission = Functions.CheckPagePermission(PageMaster.FleetModels);
+                objPermission =_permissionChecker.CheckPagePermission(PageMaster.FleetModels);
                 if (!objPermission.Add_Right)
                 {
                     blFleetModelsAccess = false;
                 }
 
-                objPermission = Functions.CheckPagePermission(PageMaster.FleetColors);
+                objPermission =_permissionChecker.CheckPagePermission(PageMaster.FleetColors);
                 if (!objPermission.Add_Right)
                 {
                     blFleetColorsAccess = false;
                 }
 
-                objPermission = Functions.CheckPagePermission(PageMaster.TripReason);
+                objPermission =_permissionChecker.CheckPagePermission(PageMaster.TripReason);
                 if (!objPermission.Add_Right)
                 {
                     blTripReasonAccess = false;
@@ -395,7 +403,7 @@
             }
             catch (Exception ex)
             {
-                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, mySession.Current.UserId);
+                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, _mySession.UserId);
                 return View();
             }
         }
@@ -483,7 +491,7 @@
             }
             catch (Exception ex)
             {
-                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, mySession.Current.UserId);
+                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, _mySession.UserId);
                 return string.Empty;
             }
         }

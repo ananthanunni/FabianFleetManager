@@ -6,67 +6,80 @@
     using System.Text;
     using System.Web.Mvc;
     using FleetManager.Core.Configuration;
+    using FleetManager.Data.Models;
+    using FleetManager.Model.Common;
+    using FleetManager.Service.Auth;
+    using FleetManager.Service.Cookie;
     using FleetManagerWeb.Common;
     using FleetManagerWeb.Controllers;
+    using FleetManagerWeb.Model.Common;
     using FleetManagerWeb.Models;
 
     public class HomeController : BaseController
     {
         private readonly IClsUser _objiClsUser = null;
+	  private readonly IPermissionChecker _permissionChecker;
+	  private readonly IMySession _mySession;
+	  private readonly ICookieHandler _cookieHandler;
+	  private readonly IAuthentication _authentication;
 
-	  public HomeController(IClsUser objIClsUser)
+	  public HomeController(IClsUser objIClsUser,IPermissionChecker permissionChecker,IMySession mySession, ICookieHandler cookieHandler,IAuthentication authentication)
 		:base()
         {
             _objiClsUser = objIClsUser;
-        }
+		_permissionChecker = permissionChecker;
+		_mySession = mySession;
+		_cookieHandler = cookieHandler;
+		_authentication = authentication;
+	  }
 
         public ActionResult Index()
         {
             #region Menu Access
             bool blUserAccess = true, blRoleAccess = true, blTrackerAccess = true, blCarFleetAccess = true, blFleetMakesAccess = true, blFleetModelsAccess = true, blFleetColorsAccess = true, blTripReasonAccess = true;
-            GetPagePermissionResult objPermission = Functions.CheckPagePermission(PageMaster.User);
+            GetPagePermissionResult objPermission = _permissionChecker.CheckPagePermission(PageMaster.User);
             if (!objPermission.Add_Right)
             {
                 blUserAccess = false;
             }
 
-            objPermission = Functions.CheckPagePermission(PageMaster.Role);
+            objPermission = _permissionChecker.CheckPagePermission(PageMaster.Role);
             if (!objPermission.Add_Right)
             {
                 blRoleAccess = false;
             }
 
-            objPermission = Functions.CheckPagePermission(PageMaster.Tracker);
+            objPermission = _permissionChecker.CheckPagePermission(PageMaster.Tracker);
             if (!objPermission.Add_Right)
             {
                 blTrackerAccess = false;
             }
 
-            objPermission = Functions.CheckPagePermission(PageMaster.CarFleet);
+            objPermission = _permissionChecker.CheckPagePermission(PageMaster.CarFleet);
             if (!objPermission.Add_Right)
             {
                 blCarFleetAccess = false;
             }
 
-            objPermission = Functions.CheckPagePermission(PageMaster.FleetMakes);
+            objPermission = _permissionChecker.CheckPagePermission(PageMaster.FleetMakes);
             if (!objPermission.Add_Right)
             {
                 blFleetMakesAccess = false;
             }
 
-            objPermission = Functions.CheckPagePermission(PageMaster.FleetModels);
+            objPermission = _permissionChecker.CheckPagePermission(PageMaster.FleetModels);
             if (!objPermission.Add_Right)
             {
                 blFleetModelsAccess = false;
             }
 
-            objPermission = Functions.CheckPagePermission(PageMaster.FleetColors);
+            objPermission = _permissionChecker.CheckPagePermission(PageMaster.FleetColors);
             if (!objPermission.Add_Right)
             {
                 blFleetColorsAccess = false;
             }
 
-            objPermission = Functions.CheckPagePermission(PageMaster.TripReason);
+            objPermission = _permissionChecker.CheckPagePermission(PageMaster.TripReason);
             if (!objPermission.Add_Right)
             {
                 blTripReasonAccess = false;
@@ -116,7 +129,7 @@
                 ClsUser objClsUser = _objiClsUser.ValidateLogin(objLogin.strUserName, objLogin.strPassword.EncryptString());
                 if (objClsUser != null)
                 {
-                    Functions.UpdateCookies(objClsUser.strUserName, objClsUser.strPassword.EncryptString(), objClsUser.lgId.ToString(), objClsUser.strFirstName + " " + objClsUser.strSurName, objLogin.blRememberMe.ToString(), objClsUser.lgRoleId.ToString(), objClsUser.lgBranchId.ToString(), objClsUser.lgUserTypeId.ToString(), "true");
+                    _cookieHandler.UpdateCookies(objClsUser.strUserName, objClsUser.strPassword.EncryptString(), objClsUser.lgId.ToString(), objClsUser.strFirstName + " " + objClsUser.strSurName, objLogin.blRememberMe.ToString(), objClsUser.lgRoleId.ToString(), objClsUser.lgBranchId.ToString(), objClsUser.lgUserTypeId.ToString(), "true");
 
                     objClsUser.blIsLogin = true;
                     _objiClsUser.SaveUser(objClsUser);
@@ -136,14 +149,14 @@
             try
             {
                 ClsUser objClsUser = _objiClsUser as ClsUser;
-                objClsUser = _objiClsUser.GetUserByUserId(mySession.Current.UserId);
+                objClsUser = _objiClsUser.GetUserByUserId(_mySession.UserId);
                 if (objClsUser != null)
                 {
                     objClsUser.blIsLogin = false;
                     _objiClsUser.SaveUser(objClsUser);
                 }
 
-                Functions.LogoutUser();
+                _authentication.LogoutUser();
                 ViewData.Clear();
                 TempData.Clear();
                 return RedirectToAction("Login");
@@ -157,7 +170,7 @@
 
         public ActionResult PermissionRedirectPage()
         {
-            if (mySession.Current.UserId == 0)
+            if (_mySession.UserId == 0)
             {
                 return RedirectToAction("Login");
             }
@@ -206,10 +219,10 @@
         {
             try
             {
-                if (mySession.Current.Password == strCurrentPwd.EncryptString())
+                if (_mySession.Password == strCurrentPwd.EncryptString())
                 {
-                    ClsUser objUser = _objiClsUser.ChangePassword(mySession.Current.UserId, strNewPwd);
-                    Functions.UpdateCookies(mySession.Current.UserName, strNewPwd.EncryptString(), mySession.Current.UserId.ToString(), mySession.Current.Fullname, mySession.Current.Rememberme, mySession.Current.RoleId.ToString(), mySession.Current.BranchId.ToString(), mySession.Current.UserTypeId.ToString(), "false");
+                    ClsUser objUser = _objiClsUser.ChangePassword(_mySession.UserId, strNewPwd);
+                    _cookieHandler.UpdateCookies(_mySession.UserName, strNewPwd.EncryptString(), _mySession.UserId.ToString(), _mySession.Fullname, _mySession.Rememberme, _mySession.RoleId.ToString(), _mySession.BranchId.ToString(), _mySession.UserTypeId.ToString(), "false");
                     return Json("Success", JsonRequestBehavior.AllowGet);
                 }
                 else

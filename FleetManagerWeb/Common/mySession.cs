@@ -1,19 +1,13 @@
 ﻿namespace FleetManagerWeb.Common
 {
+    using FleetManager.Model.Common;
+    using FleetManagerWeb.Model.Common;
     using System;
     using System.Linq;
     using System.Web;
 
-    public class mySession
+    public class MySession : IMySession
     {
-        public static mySession Current
-        {
-            get
-            {
-                return new mySession();
-            }
-        }
-
         public string StrCookiesName
         {
             get
@@ -26,11 +20,11 @@
         {
             get
             {
-                if (HttpContext.Current.Request.Cookies[this.StrCookiesName] != null)
+                if (HttpContext.Current.Request.Cookies[StrCookiesName] != null)
                 {
-                    if (!string.IsNullOrEmpty(HttpContext.Current.Request.Cookies[this.StrCookiesName].Values["branchid"]))
+                    if (!string.IsNullOrEmpty(HttpContext.Current.Request.Cookies[StrCookiesName].Values["branchid"]))
                     {
-                        return HttpContext.Current.Request.Cookies[this.StrCookiesName].Values["branchid"].ToString().intSafe();
+                        return HttpContext.Current.Request.Cookies[StrCookiesName].Values["branchid"].ToString().IntSafe();
                     }
                 }
 
@@ -42,9 +36,9 @@
         {
             get
             {
-                if (HttpContext.Current.Request.Cookies[this.StrCookiesName] != null && !string.IsNullOrEmpty(HttpContext.Current.Request.Cookies[this.StrCookiesName].Values["fullname"]))
+                if (HttpContext.Current.Request.Cookies[StrCookiesName] != null && !string.IsNullOrEmpty(HttpContext.Current.Request.Cookies[StrCookiesName].Values["fullname"]))
                 {
-                    return HttpContext.Current.Request.Cookies[this.StrCookiesName].Values["fullname"].ToString();
+                    return HttpContext.Current.Request.Cookies[StrCookiesName].Values["fullname"].ToString();
                 }
 
                 return string.Empty;
@@ -55,9 +49,9 @@
         {
             get
             {
-                if (HttpContext.Current.Request.Cookies[this.StrCookiesName] != null && !string.IsNullOrEmpty(HttpContext.Current.Request.Cookies[this.StrCookiesName].Values["password"]))
+                if (HttpContext.Current.Request.Cookies[StrCookiesName] != null && !string.IsNullOrEmpty(HttpContext.Current.Request.Cookies[StrCookiesName].Values["password"]))
                 {
-                    return HttpContext.Current.Request.Cookies[this.StrCookiesName].Values["password"].ToString();
+                    return HttpContext.Current.Request.Cookies[StrCookiesName].Values["password"].ToString();
                 }
 
                 return string.Empty;
@@ -68,9 +62,9 @@
         {
             get
             {
-                if (HttpContext.Current.Request.Cookies[this.StrCookiesName] != null && !string.IsNullOrEmpty(HttpContext.Current.Request.Cookies[this.StrCookiesName].Values["rememberme"]))
+                if (HttpContext.Current.Request.Cookies[StrCookiesName] != null && !string.IsNullOrEmpty(HttpContext.Current.Request.Cookies[StrCookiesName].Values["rememberme"]))
                 {
-                    return HttpContext.Current.Request.Cookies[this.StrCookiesName].Values["rememberme"].ToString();
+                    return HttpContext.Current.Request.Cookies[StrCookiesName].Values["rememberme"].ToString();
                 }
 
                 return string.Empty;
@@ -81,9 +75,9 @@
         {
             get
             {
-                if (HttpContext.Current.Request.Cookies[this.StrCookiesName] != null && !string.IsNullOrEmpty(HttpContext.Current.Request.Cookies[this.StrCookiesName].Values["roleid"]))
+                if (HttpContext.Current.Request.Cookies[StrCookiesName] != null && !string.IsNullOrEmpty(HttpContext.Current.Request.Cookies[StrCookiesName].Values["roleid"]))
                 {
-                    return HttpContext.Current.Request.Cookies[this.StrCookiesName].Values["roleid"].ToString().intSafe();
+                    return HttpContext.Current.Request.Cookies[StrCookiesName].Values["roleid"].ToString().IntSafe();
                 }
 
                 return 0;
@@ -94,9 +88,9 @@
         {
             get
             {
-                if (HttpContext.Current.Request.Cookies[this.StrCookiesName] != null && !string.IsNullOrEmpty(HttpContext.Current.Request.Cookies[this.StrCookiesName].Values["useronetimelogin"]))
+                if (HttpContext.Current.Request.Cookies[StrCookiesName] != null && !string.IsNullOrEmpty(HttpContext.Current.Request.Cookies[StrCookiesName].Values["useronetimelogin"]))
                 {
-                    return Convert.ToBoolean(HttpContext.Current.Request.Cookies[this.StrCookiesName].Values["useronetimelogin"].ToString());
+                    return Convert.ToBoolean(HttpContext.Current.Request.Cookies[StrCookiesName].Values["useronetimelogin"].ToString());
                 }
 
                 return false;
@@ -107,9 +101,9 @@
         {
             get
             {
-                if (HttpContext.Current.Request.Cookies[this.StrCookiesName] != null && !string.IsNullOrEmpty(HttpContext.Current.Request.Cookies[this.StrCookiesName].Values["userid"]))
+                if (HttpContext.Current.Request.Cookies[StrCookiesName] != null && !string.IsNullOrEmpty(HttpContext.Current.Request.Cookies[StrCookiesName].Values["userid"]))
                 {
-                    return HttpContext.Current.Request.Cookies[this.StrCookiesName].Values["userid"].ToString().intSafe();
+                    return HttpContext.Current.Request.Cookies[StrCookiesName].Values["userid"].ToString().IntSafe();
                 }
 
                 return 0;
@@ -120,9 +114,9 @@
         {
             get
             {
-                if (HttpContext.Current.Request.Cookies[this.StrCookiesName] != null && !string.IsNullOrEmpty(HttpContext.Current.Request.Cookies[this.StrCookiesName].Values["username"]))
+                if (HttpContext.Current.Request.Cookies[StrCookiesName] != null && !string.IsNullOrEmpty(HttpContext.Current.Request.Cookies[StrCookiesName].Values["username"]))
                 {
-                    return HttpContext.Current.Request.Cookies[this.StrCookiesName].Values["username"].ToString();
+                    return HttpContext.Current.Request.Cookies[StrCookiesName].Values["username"].ToString();
                 }
 
                 return "Administrator";
@@ -133,9 +127,9 @@
         {
             get
             {
-                if (HttpContext.Current.Request.Cookies[this.StrCookiesName] != null && !string.IsNullOrEmpty(HttpContext.Current.Request.Cookies[this.StrCookiesName].Values["usertypeid"]))
+                if (HttpContext.Current.Request.Cookies[StrCookiesName] != null && !string.IsNullOrEmpty(HttpContext.Current.Request.Cookies[StrCookiesName].Values["usertypeid"]))
                 {
-                    return HttpContext.Current.Request.Cookies[this.StrCookiesName].Values["usertypeid"].ToString().intSafe();
+                    return HttpContext.Current.Request.Cookies[StrCookiesName].Values["usertypeid"].ToString().IntSafe();
                 }
 
                 return 0;

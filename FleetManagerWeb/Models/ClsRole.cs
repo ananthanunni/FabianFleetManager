@@ -6,6 +6,7 @@
     using System.Transactions;
     using System.Web.Mvc;
     using FleetManagerWeb.Common;
+    using FleetManagerWeb.Model.Common;
     using FleetManagerWeb.Models;
 
     public partial class ClsRole : DataContextEntity<RoleDataContext>,IClsRole
@@ -34,7 +35,7 @@
         {
             try
             {
-                using (this.objDataContext = new RoleDataContext(Functions.StrConnection))
+                using (this.objDataContext =GetDataContext())
                 {
                     DeleteRoleResult result = this.objDataContext.DeleteRole(strRoleIdList, lgDeletedBy, PageMaster.Role).FirstOrDefault();
                     if (result == null)
@@ -47,7 +48,7 @@
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.Role, mySession.Current.UserId);
+                _logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.Role, _mySession.UserId);
                 return null;
             }
         }
@@ -57,7 +58,7 @@
             List<SelectListItem> lstRole = new List<SelectListItem>();
             try
             {
-                using (this.objDataContext = new RoleDataContext(Functions.StrConnection))
+                using (this.objDataContext =GetDataContext())
                 {
                     lstRole.Add(new SelectListItem { Text = "--Select--", Value = string.Empty });
                     List<GetRoleAllResult> lstRoleResult = this.objDataContext.GetRoleAll().ToList();
@@ -71,8 +72,8 @@
                 }
             }
             catch (Exception ex)
-            {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.Role, mySession.Current.UserId);
+            {		    
+                _logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.Role, _mySession.UserId);
             }
 
             return lstRole;
@@ -83,7 +84,7 @@
             ClsRole objClsRole = new ClsRole();
             try
             {
-                using (this.objDataContext = new RoleDataContext(Functions.StrConnection))
+                using (this.objDataContext =GetDataContext())
                 {
                     GetRoleByIdResult item = this.objDataContext.GetRoleById(lgRoleId).FirstOrDefault();
                     if (item != null)
@@ -98,7 +99,7 @@
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.Role, mySession.Current.UserId);
+                _logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.Role, _mySession.UserId);
             }
 
             return objClsRole;
@@ -108,7 +109,7 @@
         {
             try
             {
-                using (this.objDataContext = new RoleDataContext(Functions.StrConnection))
+                using (this.objDataContext =GetDataContext())
                 {
                     if (this.objDataContext.Roles.Where(x => x.Id != lgRoleId && x.RoleName == strRoleName && x.IsDeleted == false).Count() > 0)
                     {
@@ -120,7 +121,7 @@
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.Role, mySession.Current.UserId);
+                _logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.Role, _mySession.UserId);
                 return false;
             }
         }
@@ -132,16 +133,16 @@
                 long roleId = 0;
                 using (TransactionScope scope = new TransactionScope())
                 {
-                    using (this.objDataContext = new RoleDataContext(Functions.StrConnection))
+                    using (this.objDataContext =GetDataContext())
                     {
-                        var result = this.objDataContext.InsertOrUpdateRole(objSave.lgId, objSave.strRoleName, objSave.strDescription, objSave.blAllowKilometerLimit, mySession.Current.UserId, PageMaster.Role, objSave.blAllowDispatchBackDateEntry).FirstOrDefault();
+                        var result = this.objDataContext.InsertOrUpdateRole(objSave.lgId, objSave.strRoleName, objSave.strDescription, objSave.blAllowKilometerLimit, _mySession.UserId, PageMaster.Role, objSave.blAllowDispatchBackDateEntry).FirstOrDefault();
                         if (result != null)
                         {
                             roleId = result.InsertedId;
                             foreach (var item in objSave.strRights.Split(','))
                             {
                                 string[] strRight = item.Split('|');
-                                this.objDataContext.InsertOrUpdateRolePermissions(strRight[0].longSafe(), roleId, strRight[1].longSafe(), strRight[2].boolSafe(), strRight[3].boolSafe(), strRight[4].boolSafe(), strRight[5].boolSafe(), strRight[6].boolSafe(), mySession.Current.UserId, PageMaster.Role);
+                                this.objDataContext.InsertOrUpdateRolePermissions(strRight[0].LongSafe(), roleId, strRight[1].LongSafe(), strRight[2].BoolSafe(), strRight[3].BoolSafe(), strRight[4].BoolSafe(), strRight[5].BoolSafe(), strRight[6].BoolSafe(), _mySession.UserId, PageMaster.Role);
                             }
                         }
                     }
@@ -153,7 +154,7 @@
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.Role, mySession.Current.UserId);
+                _logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.Role, _mySession.UserId);
                 return 0;
             }
         }
@@ -162,14 +163,14 @@
         {
             try
             {
-                using (this.objDataContext = new RoleDataContext(Functions.StrConnection))
+                using (this.objDataContext =GetDataContext())
                 {
                     return this.objDataContext.SearchRole(inRow, inPage, strSearch, strSort).ToList();
                 }
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.Role, mySession.Current.UserId);
+                _logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.Role, _mySession.UserId);
                 return null;
             }
         }

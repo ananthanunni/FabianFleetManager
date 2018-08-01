@@ -33,6 +33,11 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\FleetManagerWeb\bin\System.Web.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -41,8 +46,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\Access.cs" />
+    <Compile Include="Common\Extension.cs" />
+    <Compile Include="Common\IMySession.cs" />
+    <Compile Include="Common\PageMaster.cs" />
     <Compile Include="Interaction\MessageType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FleetManager.Core\FleetManager.Core.csproj">
+      <Project>{2b9a84c3-c522-404a-88c8-d805a86e6c59}</Project>
+      <Name>FleetManager.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FleetManager.Data\FleetManager.Data.csproj">
+      <Project>{082b0f00-6d54-42d8-be67-6a227f9f515f}</Project>
+      <Name>FleetManager.Data</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

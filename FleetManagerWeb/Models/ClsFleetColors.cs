@@ -6,6 +6,7 @@
     using System.Transactions;
     using System.Web.Mvc;
     using FleetManagerWeb.Common;
+    using FleetManagerWeb.Model.Common;
     using FleetManagerWeb.Models;
 
     public partial class ClsFleetColors :DataContextEntity<FleetColorsDataContext>, IClsFleetColors
@@ -29,7 +30,7 @@
             {
                 using (TransactionScope scope = new TransactionScope())
                 {
-                    using (this.objDataContext = new FleetColorsDataContext(Functions.StrConnection))
+                    using (this.objDataContext = GetDataContext())
                     {
                         result = this.objDataContext.DeleteFleetColors(strFleetColorsIdList, lgDeletedBy, PageMaster.FleetColors).ToList().FirstOrDefault();
                     }
@@ -39,7 +40,7 @@
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetColors, mySession.Current.UserId);
+                _logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetColors, _mySession.UserId);
             }
 
             return result;
@@ -50,7 +51,7 @@
             List<SelectListItem> lstFleetColors = new List<SelectListItem>();
             try
             {
-                using (this.objDataContext = new FleetColorsDataContext(Functions.StrConnection))
+                using (this.objDataContext = GetDataContext())
                 {
                     lstFleetColors.Add(new SelectListItem { Text = "--Select--", Value = string.Empty });
                     List<GetFleetColorsAllResult> lstFleetColorsResult = this.objDataContext.GetFleetColorsAll().ToList();
@@ -65,7 +66,7 @@
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetColors, mySession.Current.UserId);
+                _logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetColors, _mySession.UserId);
             }
 
             return lstFleetColors;
@@ -75,7 +76,7 @@
         {
             try
             {
-                using (this.objDataContext = new FleetColorsDataContext(Functions.StrConnection))
+                using (this.objDataContext = GetDataContext())
                 {
                     List<GetFleetColorsAllResult> lstFleetColorsAll = this.objDataContext.GetFleetColorsAll().ToList();
                     return lstFleetColorsAll;
@@ -83,7 +84,7 @@
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetColors, mySession.Current.UserId);
+                _logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetColors, _mySession.UserId);
                 return null;
             }
         }
@@ -93,7 +94,7 @@
             ClsFleetColors objClsFleetColors = new ClsFleetColors();
             try
             {
-                using (this.objDataContext = new FleetColorsDataContext(Functions.StrConnection))
+                using (this.objDataContext = GetDataContext())
                 {
                     GetFleetColorsByIdResult item = this.objDataContext.GetFleetColorsById(lgFleetColorsId).ToList().FirstOrDefault();
                     if (item != null)
@@ -105,7 +106,7 @@
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetColors, mySession.Current.UserId);
+                _logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetColors, _mySession.UserId);
             }
 
             return objClsFleetColors;
@@ -115,7 +116,7 @@
         {
             try
             {
-                using (this.objDataContext = new FleetColorsDataContext(Functions.StrConnection))
+                using (this.objDataContext = GetDataContext())
                 {
                     if (this.objDataContext.FleetColors.Where(x => x.Id != lgFleetColorsId && x.FleetColorsName == strFleetColorsName && x.IsDeleted == false).Count() > 0)
                     {
@@ -127,7 +128,7 @@
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetColors, mySession.Current.UserId);
+                _logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetColors, _mySession.UserId);
                 return false;
             }
         }
@@ -138,9 +139,9 @@
             {
                 using (TransactionScope scope = new TransactionScope())
                 {
-                    using (this.objDataContext = new FleetColorsDataContext(Functions.StrConnection))
+                    using (this.objDataContext = GetDataContext())
                     {
-                        var result = this.objDataContext.InsertOrUpdateFleetColors(objSave.lgId, objSave.strFleetColorsName, mySession.Current.UserId, PageMaster.FleetColors).FirstOrDefault();
+                        var result = this.objDataContext.InsertOrUpdateFleetColors(objSave.lgId, objSave.strFleetColorsName, _mySession.UserId, PageMaster.FleetColors).FirstOrDefault();
                         if (result != null)
                         {
                             objSave.lgId = result.InsertedId;
@@ -154,7 +155,7 @@
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetColors, mySession.Current.UserId);
+                _logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetColors, _mySession.UserId);
                 return 0;
             }
         }
@@ -163,7 +164,7 @@
         {
             try
             {
-                using (this.objDataContext = new FleetColorsDataContext(Functions.StrConnection))
+                using (this.objDataContext = GetDataContext())
                 {
                     List<SearchFleetColorsResult> lstSearchFleetColors = this.objDataContext.SearchFleetColors(inRow, inPage, strSearch, strSort).ToList();
                     return lstSearchFleetColors;
@@ -171,7 +172,7 @@
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetColors, mySession.Current.UserId);
+                _logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetColors, _mySession.UserId);
                 return null;
             }
         }

@@ -204,11 +204,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Common\Access.cs" />
-    <Compile Include="Common\Extension.cs" />
-    <Compile Include="Common\Functions.cs" />
-    <Compile Include="Common\mySession.cs" />
-    <Compile Include="Common\PageMaster.cs" />
+    <Compile Include="Common\MySession.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CommonController.cs" />
     <Compile Include="Controllers\CustomClass.cs" />
@@ -242,11 +238,6 @@
     <Compile Include="Models\ClsRole.cs" />
     <Compile Include="Models\ClsTripReason.cs" />
     <Compile Include="Models\ClsUser.cs" />
-    <Compile Include="Models\Common.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Common.dbml</DependentUpon>
-    </Compile>
     <Compile Include="Models\DataContextEntity.cs" />
     <Compile Include="Models\FleetColors.designer.cs">
       <AutoGen>True</AutoGen>
@@ -2346,11 +2337,6 @@
     <Content Include="Views\User\UserView.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Models\Common.dbml">
-      <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>Common.designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="Models\Role.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
       <LastGenOutput>Role.designer.cs</LastGenOutput>
@@ -2727,11 +2713,6 @@
     <None Include="Settings.StyleCop" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Models\Common.dbml.layout">
-      <DependentUpon>Common.dbml</DependentUpon>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Models\Role.dbml.layout">
       <DependentUpon>Role.dbml</DependentUpon>
     </None>
@@ -2773,6 +2754,10 @@
     <ProjectReference Include="..\FleetManager.Core\FleetManager.Core.csproj">
       <Project>{2b9a84c3-c522-404a-88c8-d805a86e6c59}</Project>
       <Name>FleetManager.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FleetManager.Data\FleetManager.Data.csproj">
+      <Project>{082b0f00-6d54-42d8-be67-6a227f9f515f}</Project>
+      <Name>FleetManager.Data</Name>
     </ProjectReference>
     <ProjectReference Include="..\FleetManager.Model\FleetManager.Model.csproj">
       <Project>{e6143e22-7750-4cd2-b355-c1daa8e03a98}</Project>

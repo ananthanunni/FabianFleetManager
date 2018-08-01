@@ -33,6 +33,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -41,16 +43,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Auth\Authentication.cs" />
+    <Compile Include="Auth\IAuthentication.cs" />
+    <Compile Include="Auth\PermissionChecker.cs" />
+    <Compile Include="Auth\IPermissionChecker.cs" />
+    <Compile Include="Configuration\AppConfiguration.cs" />
+    <Compile Include="Configuration\IAppConfiguration.cs" />
     <Compile Include="Converter\DateFormatConverter.cs" />
     <Compile Include="Converter\IDateFormatConverter.cs" />
+    <Compile Include="Cookie\CookieHandler.cs" />
+    <Compile Include="Cookie\ICookieHandler.cs" />
     <Compile Include="Interaction\AlertTextProvider.cs" />
     <Compile Include="Interaction\IAlertTextProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Auth\" />
-  </ItemGroup>
-  <ItemGroup>
+    <ProjectReference Include="..\FleetManager.Core\FleetManager.Core.csproj">
+      <Project>{2B9A84C3-C522-404A-88C8-D805A86E6C59}</Project>
+      <Name>FleetManager.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FleetManager.Data\FleetManager.Data.csproj">
+      <Project>{082b0f00-6d54-42d8-be67-6a227f9f515f}</Project>
+      <Name>FleetManager.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FleetManager.Model\FleetManager.Model.csproj">
       <Project>{E6143E22-7750-4CD2-B355-C1DAA8E03A98}</Project>
       <Name>FleetManager.Model</Name>

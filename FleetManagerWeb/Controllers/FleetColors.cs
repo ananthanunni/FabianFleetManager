@@ -4,21 +4,28 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
+    using FleetManager.Model.Common;
     using FleetManager.Model.Interaction;
+    using FleetManager.Service.Auth;
     using FleetManager.Service.Interaction;
     using FleetManagerWeb.Common;
+    using FleetManagerWeb.Model.Common;
     using FleetManagerWeb.Models;
 
     public class FleetColorsController : BaseController
     {
         private readonly IClsFleetColors _objiClsFleetColors = null;
 	  private readonly IAlertTextProvider _alertTextProvider;
+	  private readonly IPermissionChecker _permissionChecker;
+	  private readonly IMySession _mySession;
 
-	  public FleetColorsController(IClsFleetColors objIClsFleetColors, IAlertTextProvider alertTextProvider)
+	  public FleetColorsController(IClsFleetColors objIClsFleetColors, IAlertTextProvider alertTextProvider,IPermissionChecker permissionChecker,IMySession mySession)
         {
             _objiClsFleetColors = objIClsFleetColors;
 		_alertTextProvider = alertTextProvider;
-        }
+		_permissionChecker = permissionChecker;
+		_mySession = mySession;
+	  }
 
         public ActionResult BindFleetColorsGrid(string sidx, string sord, int page, int rows, string filters, string search)
         {
@@ -36,7 +43,7 @@
             }
             catch (Exception ex)
             {
-                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetColors, mySession.Current.UserId);
+                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetColors, _mySession.UserId);
                 return Json(string.Empty);
             }
         }
@@ -53,7 +60,7 @@
                 }
 
                 strFleetColorsId = strFleetColorsId.Substring(0, strFleetColorsId.Length - 1);
-                DeleteFleetColorsResult result = _objiClsFleetColors.DeleteFleetColors(strFleetColorsId, mySession.Current.UserId);
+                DeleteFleetColorsResult result = _objiClsFleetColors.DeleteFleetColors(strFleetColorsId, _mySession.UserId);
                 if (result != null && result.TotalReference == 0)
                 {
                     return Json(_alertTextProvider.AlertMessage("Fleet Colors", MessageType.DeleteSuccess));
@@ -67,7 +74,7 @@
             }
             catch (Exception ex)
             {
-                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetColors, mySession.Current.UserId);
+                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetColors, _mySession.UserId);
                 return Json(_alertTextProvider.AlertMessage("Fleet Colors", MessageType.DeleteFail));
             }
         }
@@ -80,7 +87,7 @@
             }
             catch (Exception ex)
             {
-                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetColors, mySession.Current.UserId);
+                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetColors, _mySession.UserId);
                 return Json(string.Empty, JsonRequestBehavior.AllowGet);
             }
         }
@@ -89,7 +96,7 @@
         {
             try
             {
-                GetPagePermissionResult objPermission = Functions.CheckPagePermission(PageMaster.FleetColors);
+                var objPermission = _permissionChecker.CheckPagePermission(PageMaster.FleetColors);
                 if (!objPermission.IsActive)
                 {
                     return RedirectToAction("Logout", "Home");
@@ -116,7 +123,7 @@
                             return RedirectToAction("PermissionRedirectPage", "Home");
                         }
 
-                        lgFleetColorsId = Request.QueryString.ToString().Decode().longSafe();
+                        lgFleetColorsId = Request.QueryString.ToString().Decode().LongSafe();
                         objClsFleetColors = _objiClsFleetColors.GetFleetColorsByFleetColorsId(lgFleetColorsId);
                     }
                 }
@@ -130,49 +137,49 @@
 
                 #region Menu Access
                 bool blUserAccess = true, blRoleAccess = true, blTrackerAccess = true, blCarFleetAccess = true, blFleetMakesAccess = true, blFleetModelsAccess = true, blFleetColorsAccess = true, blTripReasonAccess = true;
-                objPermission = Functions.CheckPagePermission(PageMaster.User);
+                objPermission = _permissionChecker.CheckPagePermission(PageMaster.User);
                 if (!objPermission.Add_Right)
                 {
                     blUserAccess = false;
                 }
 
-                objPermission = Functions.CheckPagePermission(PageMaster.Role);
+                objPermission = _permissionChecker.CheckPagePermission(PageMaster.Role);
                 if (!objPermission.Add_Right)
                 {
                     blRoleAccess = false;
                 }
 
-                objPermission = Functions.CheckPagePermission(PageMaster.Tracker);
+                objPermission = _permissionChecker.CheckPagePermission(PageMaster.Tracker);
                 if (!objPermission.Add_Right)
                 {
                     blTrackerAccess = false;
                 }
 
-                objPermission = Functions.CheckPagePermission(PageMaster.CarFleet);
+                objPermission = _permissionChecker.CheckPagePermission(PageMaster.CarFleet);
                 if (!objPermission.Add_Right)
                 {
                     blCarFleetAccess = false;
                 }
 
-                objPermission = Functions.CheckPagePermission(PageMaster.FleetMakes);
+                objPermission = _permissionChecker.CheckPagePermission(PageMaster.FleetMakes);
                 if (!objPermission.Add_Right)
                 {
                     blFleetMakesAccess = false;
                 }
 
-                objPermission = Functions.CheckPagePermission(PageMaster.FleetModels);
+                objPermission = _permissionChecker.CheckPagePermission(PageMaster.FleetModels);
                 if (!objPermission.Add_Right)
                 {
                     blFleetModelsAccess = false;
                 }
 
-                objPermission = Functions.CheckPagePermission(PageMaster.FleetColors);
+                objPermission = _permissionChecker.CheckPagePermission(PageMaster.FleetColors);
                 if (!objPermission.Add_Right)
                 {
                     blFleetColorsAccess = false;
                 }
 
-                objPermission = Functions.CheckPagePermission(PageMaster.TripReason);
+                objPermission = _permissionChecker.CheckPagePermission(PageMaster.TripReason);
                 if (!objPermission.Add_Right)
                 {
                     blTripReasonAccess = false;
@@ -193,7 +200,7 @@
             }
             catch (Exception ex)
             {
-                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetColors, mySession.Current.UserId);
+                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetColors, _mySession.UserId);
                 return View();
             }
         }
@@ -203,7 +210,7 @@
         {
             try
             {
-                GetPagePermissionResult objPermission = Functions.CheckPagePermission(PageMaster.FleetColors);
+                var objPermission = _permissionChecker.CheckPagePermission(PageMaster.FleetColors);
                 if (!objPermission.IsActive)
                 {
                     return RedirectToAction("Logout", "Home");
@@ -266,7 +273,7 @@
             {
                 ViewData["Success"] = "0";
                 ViewData["Message"] = _alertTextProvider.AlertMessage("Fleet Colors", MessageType.Fail);
-                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetColors, mySession.Current.UserId);
+                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetColors, _mySession.UserId);
                 return View(objFleetColors);
             }
         }
@@ -275,7 +282,7 @@
         {
             try
             {
-                GetPagePermissionResult objPermission = Functions.CheckPagePermission(PageMaster.FleetColors);
+                var objPermission = _permissionChecker.CheckPagePermission(PageMaster.FleetColors);
                 if (!objPermission.IsActive)
                 {
                     return RedirectToAction("Logout", "Home");
@@ -293,49 +300,49 @@
 
                 #region Menu Access
                 bool blUserAccess = true, blRoleAccess = true, blTrackerAccess = true, blCarFleetAccess = true, blFleetMakesAccess = true, blFleetModelsAccess = true, blFleetColorsAccess = true, blTripReasonAccess = true;
-                objPermission = Functions.CheckPagePermission(PageMaster.User);
+                objPermission = _permissionChecker.CheckPagePermission(PageMaster.User);
                 if (!objPermission.Add_Right)
                 {
                     blUserAccess = false;
                 }
 
-                objPermission = Functions.CheckPagePermission(PageMaster.Role);
+                objPermission = _permissionChecker.CheckPagePermission(PageMaster.Role);
                 if (!objPermission.Add_Right)
                 {
                     blRoleAccess = false;
                 }
 
-                objPermission = Functions.CheckPagePermission(PageMaster.Tracker);
+                objPermission = _permissionChecker.CheckPagePermission(PageMaster.Tracker);
                 if (!objPermission.Add_Right)
                 {
                     blTrackerAccess = false;
                 }
 
-                objPermission = Functions.CheckPagePermission(PageMaster.CarFleet);
+                objPermission = _permissionChecker.CheckPagePermission(PageMaster.CarFleet);
                 if (!objPermission.Add_Right)
                 {
                     blCarFleetAccess = false;
                 }
 
-                objPermission = Functions.CheckPagePermission(PageMaster.FleetMakes);
+                objPermission = _permissionChecker.CheckPagePermission(PageMaster.FleetMakes);
                 if (!objPermission.Add_Right)
                 {
                     blFleetMakesAccess = false;
                 }
 
-                objPermission = Functions.CheckPagePermission(PageMaster.FleetModels);
+                objPermission = _permissionChecker.CheckPagePermission(PageMaster.FleetModels);
                 if (!objPermission.Add_Right)
                 {
                     blFleetModelsAccess = false;
                 }
 
-                objPermission = Functions.CheckPagePermission(PageMaster.FleetColors);
+                objPermission = _permissionChecker.CheckPagePermission(PageMaster.FleetColors);
                 if (!objPermission.Add_Right)
                 {
                     blFleetColorsAccess = false;
                 }
 
-                objPermission = Functions.CheckPagePermission(PageMaster.TripReason);
+                objPermission = _permissionChecker.CheckPagePermission(PageMaster.TripReason);
                 if (!objPermission.Add_Right)
                 {
                     blTripReasonAccess = false;
@@ -356,7 +363,7 @@
             }
             catch (Exception ex)
             {
-                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetColors, mySession.Current.UserId);
+                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetColors, _mySession.UserId);
                 return View();
             }
         }
@@ -384,7 +391,7 @@
             }
             catch (Exception ex)
             {
-                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetColors, mySession.Current.UserId);
+                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetColors, _mySession.UserId);
                 return Json(string.Empty, JsonRequestBehavior.AllowGet);
             }
         }
@@ -403,7 +410,7 @@
             }
             catch (Exception ex)
             {
-                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetColors, mySession.Current.UserId);
+                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetColors, _mySession.UserId);
                 return string.Empty;
             }
         }

@@ -6,6 +6,7 @@
     using System.Transactions;
     using System.Web.Mvc;
     using FleetManagerWeb.Common;
+    using FleetManagerWeb.Model.Common;
     using FleetManagerWeb.Models;
 
     public partial class ClsFleetMakes : DataContextEntity<FleetMakesDataContext>, IClsFleetMakes
@@ -29,7 +30,7 @@
             {
                 using (TransactionScope scope = new TransactionScope())
                 {
-                    using (this.objDataContext = new FleetMakesDataContext(Functions.StrConnection))
+                    using (this.objDataContext =GetDataContext())
                     {
                         result = this.objDataContext.DeleteFleetMakes(strFleetMakesIdList, lgDeletedBy, PageMaster.FleetMakes).ToList().FirstOrDefault();
                     }
@@ -39,7 +40,7 @@
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetMakes, mySession.Current.UserId);
+                _logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetMakes, _mySession.UserId);
             }
 
             return result;
@@ -50,7 +51,7 @@
             List<SelectListItem> lstFleetMakes = new List<SelectListItem>();
             try
             {
-                using (this.objDataContext = new FleetMakesDataContext(Functions.StrConnection))
+                using (this.objDataContext =GetDataContext())
                 {
                     lstFleetMakes.Add(new SelectListItem { Text = "--Select--", Value = string.Empty });
                     List<GetFleetMakesAllResult> lstFleetMakesResult = this.objDataContext.GetFleetMakesAll().ToList();
@@ -65,7 +66,7 @@
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetMakes, mySession.Current.UserId);
+                _logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetMakes, _mySession.UserId);
             }
 
             return lstFleetMakes;
@@ -75,7 +76,7 @@
         {
             try
             {
-                using (this.objDataContext = new FleetMakesDataContext(Functions.StrConnection))
+                using (this.objDataContext =GetDataContext())
                 {
                     List<GetFleetMakesAllResult> lstFleetMakesAll = this.objDataContext.GetFleetMakesAll().ToList();
                     return lstFleetMakesAll;
@@ -83,7 +84,7 @@
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetMakes, mySession.Current.UserId);
+                _logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetMakes, _mySession.UserId);
                 return null;
             }
         }
@@ -93,7 +94,7 @@
             ClsFleetMakes objClsFleetMakes = new ClsFleetMakes();
             try
             {
-                using (this.objDataContext = new FleetMakesDataContext(Functions.StrConnection))
+                using (this.objDataContext =GetDataContext())
                 {
                     GetFleetMakesByIdResult item = this.objDataContext.GetFleetMakesById(lgFleetMakesId).ToList().FirstOrDefault();
                     if (item != null)
@@ -105,7 +106,7 @@
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetMakes, mySession.Current.UserId);
+                _logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetMakes, _mySession.UserId);
             }
 
             return objClsFleetMakes;
@@ -115,7 +116,7 @@
         {
             try
             {
-                using (this.objDataContext = new FleetMakesDataContext(Functions.StrConnection))
+                using (this.objDataContext =GetDataContext())
                 {
                     if (this.objDataContext.FleetMakes.Where(x => x.Id != lgFleetMakesId && x.Make == strFleetMakesName && x.IsDeleted == false).Count() > 0)
                     {
@@ -127,7 +128,7 @@
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetMakes, mySession.Current.UserId);
+                _logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetMakes, _mySession.UserId);
                 return false;
             }
         }
@@ -138,9 +139,9 @@
             {
                 using (TransactionScope scope = new TransactionScope())
                 {
-                    using (this.objDataContext = new FleetMakesDataContext(Functions.StrConnection))
+                    using (this.objDataContext =GetDataContext())
                     {
-                        var result = this.objDataContext.InsertOrUpdateFleetMakes(objSave.lgId, objSave.strFleetMakesName, mySession.Current.UserId, PageMaster.FleetMakes).FirstOrDefault();
+                        var result = this.objDataContext.InsertOrUpdateFleetMakes(objSave.lgId, objSave.strFleetMakesName, _mySession.UserId, PageMaster.FleetMakes).FirstOrDefault();
                         if (result != null)
                         {
                             objSave.lgId = result.InsertedId;
@@ -154,7 +155,7 @@
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetMakes, mySession.Current.UserId);
+                _logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetMakes, _mySession.UserId);
                 return 0;
             }
         }
@@ -163,7 +164,7 @@
         {
             try
             {
-                using (this.objDataContext = new FleetMakesDataContext(Functions.StrConnection))
+                using (this.objDataContext =GetDataContext())
                 {
                     List<SearchFleetMakesResult> lstSearchFleetMakes = this.objDataContext.SearchFleetMakes(inRow, inPage, strSearch, strSort).ToList();
                     return lstSearchFleetMakes;
@@ -171,7 +172,7 @@
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetMakes, mySession.Current.UserId);
+                _logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetMakes, _mySession.UserId);
                 return null;
             }
         }

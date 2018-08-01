@@ -1,4 +1,4 @@
-﻿namespace FleetManagerWeb.Common
+﻿namespace FleetManagerWeb.Model.Common
 {
     public enum Access
     {
