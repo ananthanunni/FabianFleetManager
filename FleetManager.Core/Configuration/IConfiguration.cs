@@ -10,6 +10,7 @@ namespace FleetManager.Core.Configuration
     {
 	  T Get<T>(string key);
 	  string ConnectionString { get; }
+	  string CookieName { get; }
 	  bool IsDebug { get; }
     }
 }

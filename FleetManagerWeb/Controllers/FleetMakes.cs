@@ -4,36 +4,40 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
+    using FleetManager.Model.Interaction;
+    using FleetManager.Service.Interaction;
     using FleetManagerWeb.Common;
     using FleetManagerWeb.Models;
 
-    public class FleetMakesController : Controller
+    public class FleetMakesController : BaseController
     {
-        private readonly IClsFleetMakes objiClsFleetMakes = null;
+        private readonly IClsFleetMakes _objiClsFleetMakes = null;
+	  private readonly IAlertTextProvider _alertTextProvider;
 
-        public FleetMakesController(IClsFleetMakes objIClsFleetMakes)
+	  public FleetMakesController(IClsFleetMakes objIClsFleetMakes, IAlertTextProvider alertTextProvider)
         {
-            this.objiClsFleetMakes = objIClsFleetMakes;
+            _objiClsFleetMakes = objIClsFleetMakes;
+		_alertTextProvider = alertTextProvider;
         }
 
         public ActionResult BindFleetMakesGrid(string sidx, string sord, int page, int rows, string filters, string search)
         {
             try
             {
-                List<SearchFleetMakesResult> lstFleetMakes = this.objiClsFleetMakes.SearchFleetMakes(rows, page, search, sidx + " " + sord);
+                List<SearchFleetMakesResult> lstFleetMakes = _objiClsFleetMakes.SearchFleetMakes(rows, page, search, sidx + " " + sord);
                 if (lstFleetMakes != null)
                 {
-                    return this.FillGridFleetMakes(page, rows, lstFleetMakes);
+                    return FillGridFleetMakes(page, rows, lstFleetMakes);
                 }
                 else
                 {
-                    return this.Json(string.Empty);
+                    return Json(string.Empty);
                 }
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetMakes, mySession.Current.UserId);
-                return this.Json(string.Empty);
+                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetMakes, mySession.Current.UserId);
+                return Json(string.Empty);
             }
         }
 
@@ -49,22 +53,22 @@
                 }
 
                 strFleetMakesId = strFleetMakesId.Substring(0, strFleetMakesId.Length - 1);
-                DeleteFleetMakesResult result = this.objiClsFleetMakes.DeleteFleetMakes(strFleetMakesId, mySession.Current.UserId);
+                DeleteFleetMakesResult result = _objiClsFleetMakes.DeleteFleetMakes(strFleetMakesId, mySession.Current.UserId);
                 if (result != null && result.TotalReference == 0)
                 {
-                    return this.Json(Functions.AlertMessage("Fleet Makes", MessageType.DeleteSucess));
+                    return Json(_alertTextProvider.AlertMessage("Fleet Makes", MessageType.DeleteSuccess));
                 }
                 else if (result != null && result.TotalReference > 0)
                 {
-                    return this.Json(Functions.AlertMessage("Fleet Makes", MessageType.DeletePartial, result.Name));
+                    return Json(_alertTextProvider.AlertMessage("Fleet Makes", MessageType.DeletePartial, result.Name));
                 }
 
-                return this.Json(Functions.AlertMessage("Fleet Makes", MessageType.DeleteFail));
+                return Json(_alertTextProvider.AlertMessage("Fleet Makes", MessageType.DeleteFail));
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetMakes, mySession.Current.UserId);
-                return this.Json(Functions.AlertMessage("Fleet Makes", MessageType.DeleteFail));
+                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetMakes, mySession.Current.UserId);
+                return Json(_alertTextProvider.AlertMessage("Fleet Makes", MessageType.DeleteFail));
             }
         }
 
@@ -72,12 +76,12 @@
         {
             try
             {
-                return this.Json(this.objiClsFleetMakes.GetAllFleetMakesForDropDown(), JsonRequestBehavior.AllowGet);
+                return Json(_objiClsFleetMakes.GetAllFleetMakesForDropDown(), JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetMakes, mySession.Current.UserId);
-                return this.Json(string.Empty, JsonRequestBehavior.AllowGet);
+                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetMakes, mySession.Current.UserId);
+                return Json(string.Empty, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -88,39 +92,39 @@
                 GetPagePermissionResult objPermission = Functions.CheckPagePermission(PageMaster.FleetMakes);
                 if (!objPermission.IsActive)
                 {
-                    return this.RedirectToAction("Logout", "Home");
+                    return RedirectToAction("Logout", "Home");
                 }
 
-                ClsFleetMakes objClsFleetMakes = this.objiClsFleetMakes as ClsFleetMakes;
+                ClsFleetMakes objClsFleetMakes = _objiClsFleetMakes as ClsFleetMakes;
                 long lgFleetMakesId = 0;
-                if (this.Request.QueryString.Count > 0)
+                if (Request.QueryString.Count > 0)
                 {
-                    if (this.Request.QueryString["iFrame"] != null)
+                    if (Request.QueryString["iFrame"] != null)
                     {
                         if (!objPermission.Add_Right)
                         {
-                            return this.RedirectToAction("PermissionRedirectPage", "Home");
+                            return RedirectToAction("PermissionRedirectPage", "Home");
                         }
 
                         objClsFleetMakes.hdniFrame = true;
-                        this.ViewData["iFrame"] = "iFrame";
+                        ViewData["iFrame"] = "iFrame";
                     }
                     else
                     {
-                        if (!objPermission.Edit_Right || string.IsNullOrEmpty(this.Request.QueryString.ToString().Decode()))
+                        if (!objPermission.Edit_Right || string.IsNullOrEmpty(Request.QueryString.ToString().Decode()))
                         {
-                            return this.RedirectToAction("PermissionRedirectPage", "Home");
+                            return RedirectToAction("PermissionRedirectPage", "Home");
                         }
 
-                        lgFleetMakesId = this.Request.QueryString.ToString().Decode().longSafe();
-                        objClsFleetMakes = this.objiClsFleetMakes.GetFleetMakesByFleetMakesId(lgFleetMakesId);
+                        lgFleetMakesId = Request.QueryString.ToString().Decode().longSafe();
+                        objClsFleetMakes = _objiClsFleetMakes.GetFleetMakesByFleetMakesId(lgFleetMakesId);
                     }
                 }
                 else
                 {
                     if (!objPermission.Add_Right)
                     {
-                        return this.RedirectToAction("PermissionRedirectPage", "Home");
+                        return RedirectToAction("PermissionRedirectPage", "Home");
                     }
                 }
 
@@ -174,23 +178,23 @@
                     blTripReasonAccess = false;
                 }
 
-                this.ViewData["UserAccess"] = blUserAccess;
-                this.ViewData["RoleAccess"] = blRoleAccess;
-                this.ViewData["TrackerAccess"] = blTrackerAccess;
+                ViewData["UserAccess"] = blUserAccess;
+                ViewData["RoleAccess"] = blRoleAccess;
+                ViewData["TrackerAccess"] = blTrackerAccess;
 
-                this.ViewData["CarFleetAccess"] = blCarFleetAccess;
-                this.ViewData["FleetMakesAccess"] = blFleetMakesAccess;
-                this.ViewData["FleetModelsAccess"] = blFleetModelsAccess;
-                this.ViewData["FleetColorsAccess"] = blFleetColorsAccess;
-                this.ViewData["TripReasonAccess"] = blTripReasonAccess;
+                ViewData["CarFleetAccess"] = blCarFleetAccess;
+                ViewData["FleetMakesAccess"] = blFleetMakesAccess;
+                ViewData["FleetModelsAccess"] = blFleetModelsAccess;
+                ViewData["FleetColorsAccess"] = blFleetColorsAccess;
+                ViewData["TripReasonAccess"] = blTripReasonAccess;
                 #endregion
 
-                return this.View(objClsFleetMakes);
+                return View(objClsFleetMakes);
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetMakes, mySession.Current.UserId);
-                return this.View();
+                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetMakes, mySession.Current.UserId);
+                return View();
             }
         }
 
@@ -202,68 +206,68 @@
                 GetPagePermissionResult objPermission = Functions.CheckPagePermission(PageMaster.FleetMakes);
                 if (!objPermission.IsActive)
                 {
-                    return this.RedirectToAction("Logout", "Home");
+                    return RedirectToAction("Logout", "Home");
                 }
 
                 if (objFleetMakes.lgId == 0)
                 {
                     if (!objPermission.Add_Right)
                     {
-                        return this.RedirectToAction("PermissionRedirectPage", "Home");
+                        return RedirectToAction("PermissionRedirectPage", "Home");
                     }
                 }
                 else
                 {
                     if (!objPermission.Edit_Right)
                     {
-                        return this.RedirectToAction("PermissionRedirectPage", "Home");
+                        return RedirectToAction("PermissionRedirectPage", "Home");
                     }
                 }
 
                 if (objFleetMakes.hdniFrame)
                 {
-                    this.ViewData["iFrame"] = "iFrame";
+                    ViewData["iFrame"] = "iFrame";
                 }
 
-                bool blExists = this.objiClsFleetMakes.IsFleetMakesExists(objFleetMakes.lgId, objFleetMakes.strFleetMakesName);
+                bool blExists = _objiClsFleetMakes.IsFleetMakesExists(objFleetMakes.lgId, objFleetMakes.strFleetMakesName);
                 if (blExists)
                 {
-                    this.ViewData["Success"] = "0";
-                    this.ViewData["Message"] = Functions.AlertMessage("Fleet Makes", MessageType.AlreadyExist);
+                    ViewData["Success"] = "0";
+                    ViewData["Message"] = _alertTextProvider.AlertMessage("Fleet Makes", MessageType.AlreadyExists);
                 }
                 else
                 {
-                    string strErrorMsg = this.ValidateFleetMakes(objFleetMakes);
+                    string strErrorMsg = ValidateFleetMakes(objFleetMakes);
                     if (!string.IsNullOrEmpty(strErrorMsg))
                     {
-                        this.ViewData["Success"] = "0";
-                        this.ViewData["Message"] = strErrorMsg;
+                        ViewData["Success"] = "0";
+                        ViewData["Message"] = strErrorMsg;
                     }
                     else
                     {
-                        objFleetMakes.lgId = this.objiClsFleetMakes.SaveFleetMakes(objFleetMakes);
+                        objFleetMakes.lgId = _objiClsFleetMakes.SaveFleetMakes(objFleetMakes);
                         if (objFleetMakes.lgId > 0)
                         {
-                            this.ViewData["Success"] = "1";
-                            this.ViewData["Message"] = Functions.AlertMessage("Fleet Makes", MessageType.Success);
-                            return this.View(objFleetMakes);
+                            ViewData["Success"] = "1";
+                            ViewData["Message"] = _alertTextProvider.AlertMessage("Fleet Makes", MessageType.Success);
+                            return View(objFleetMakes);
                         }
                         else
                         {
-                            this.ViewData["Success"] = "0";
-                            this.ViewData["Message"] = Functions.AlertMessage("Fleet Makes", MessageType.Fail);
+                            ViewData["Success"] = "0";
+                            ViewData["Message"] = _alertTextProvider.AlertMessage("Fleet Makes", MessageType.Fail);
                         }
                     }
                 }
 
-                return this.View(objFleetMakes);
+                return View(objFleetMakes);
             }
             catch (Exception ex)
             {
-                this.ViewData["Success"] = "0";
-                this.ViewData["Message"] = Functions.AlertMessage("Fleet Makes", MessageType.Fail);
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetMakes, mySession.Current.UserId);
-                return this.View(objFleetMakes);
+                ViewData["Success"] = "0";
+                ViewData["Message"] = _alertTextProvider.AlertMessage("Fleet Makes", MessageType.Fail);
+                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetMakes, mySession.Current.UserId);
+                return View(objFleetMakes);
             }
         }
 
@@ -274,18 +278,18 @@
                 GetPagePermissionResult objPermission = Functions.CheckPagePermission(PageMaster.FleetMakes);
                 if (!objPermission.IsActive)
                 {
-                    return this.RedirectToAction("Logout", "Home");
+                    return RedirectToAction("Logout", "Home");
                 }
 
                 if (!objPermission.View_Right)
                 {
-                    return this.RedirectToAction("PermissionRedirectPage", "Home");
+                    return RedirectToAction("PermissionRedirectPage", "Home");
                 }
 
-                this.ViewData["blAddRights"] = objPermission.Add_Right;
-                this.ViewData["blEditRights"] = objPermission.Edit_Right;
-                this.ViewData["blDeleteRights"] = objPermission.Delete_Right;
-                this.ViewData["blExportRights"] = objPermission.Export_Right;
+                ViewData["blAddRights"] = objPermission.Add_Right;
+                ViewData["blEditRights"] = objPermission.Edit_Right;
+                ViewData["blDeleteRights"] = objPermission.Delete_Right;
+                ViewData["blExportRights"] = objPermission.Export_Right;
 
                 #region Menu Access
                 bool blUserAccess = true, blRoleAccess = true, blTrackerAccess = true, blCarFleetAccess = true, blFleetMakesAccess = true, blFleetModelsAccess = true, blFleetColorsAccess = true, blTripReasonAccess = true;
@@ -337,23 +341,23 @@
                     blTripReasonAccess = false;
                 }
 
-                this.ViewData["UserAccess"] = blUserAccess;
-                this.ViewData["RoleAccess"] = blRoleAccess;
-                this.ViewData["TrackerAccess"] = blTrackerAccess;
+                ViewData["UserAccess"] = blUserAccess;
+                ViewData["RoleAccess"] = blRoleAccess;
+                ViewData["TrackerAccess"] = blTrackerAccess;
 
-                this.ViewData["CarFleetAccess"] = blCarFleetAccess;
-                this.ViewData["FleetMakesAccess"] = blFleetMakesAccess;
-                this.ViewData["FleetModelsAccess"] = blFleetModelsAccess;
-                this.ViewData["FleetColorsAccess"] = blFleetColorsAccess;
-                this.ViewData["TripReasonAccess"] = blTripReasonAccess;
+                ViewData["CarFleetAccess"] = blCarFleetAccess;
+                ViewData["FleetMakesAccess"] = blFleetMakesAccess;
+                ViewData["FleetModelsAccess"] = blFleetModelsAccess;
+                ViewData["FleetColorsAccess"] = blFleetColorsAccess;
+                ViewData["TripReasonAccess"] = blTripReasonAccess;
                 #endregion
                 
-                return this.View();
+                return View();
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetMakes, mySession.Current.UserId);
-                return this.View();
+                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetMakes, mySession.Current.UserId);
+                return View();
             }
         }
 
@@ -376,12 +380,12 @@
                                 Id = objFleetMakes.Id.ToString().Encode()
                             }).ToArray()
                 };
-                return this.Json(jsonData, JsonRequestBehavior.AllowGet);
+                return Json(jsonData, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetMakes, mySession.Current.UserId);
-                return this.Json(string.Empty, JsonRequestBehavior.AllowGet);
+                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetMakes, mySession.Current.UserId);
+                return Json(string.Empty, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -392,14 +396,14 @@
                 string strErrorMsg = string.Empty;
                 if (string.IsNullOrEmpty(objFleetMakes.strFleetMakesName))
                 {
-                    strErrorMsg += Functions.AlertMessage("Fleet Makes Name", MessageType.InputRequired) + "<br/>";
+                    strErrorMsg += _alertTextProvider.AlertMessage("Fleet Makes Name", MessageType.InputRequired) + "<br/>";
                 }
 
                 return strErrorMsg;
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetMakes, mySession.Current.UserId);
+                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetMakes, mySession.Current.UserId);
                 return string.Empty;
             }
         }

@@ -207,9 +207,9 @@
     <Compile Include="Common\Access.cs" />
     <Compile Include="Common\Extension.cs" />
     <Compile Include="Common\Functions.cs" />
-    <Compile Include="Common\MessageType.cs" />
     <Compile Include="Common\mySession.cs" />
     <Compile Include="Common\PageMaster.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CommonController.cs" />
     <Compile Include="Controllers\CustomClass.cs" />
     <Compile Include="Controllers\CarFleet.cs" />
@@ -247,6 +247,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Common.dbml</DependentUpon>
     </Compile>
+    <Compile Include="Models\DataContextEntity.cs" />
     <Compile Include="Models\FleetColors.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

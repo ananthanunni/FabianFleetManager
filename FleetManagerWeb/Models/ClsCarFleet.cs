@@ -7,9 +7,13 @@
     using System.Web.Mvc;
     using FleetManagerWeb.Common;
 
-    public partial class ClsCarFleet : IClsCarFleet
+    public partial class ClsCarFleet : DataContextEntity<CarFleetDataContext>, IClsCarFleet
     {
-        private CarFleetDataContext objDataContext = null;
+	  public ClsCarFleet(CarFleetDataContext context=null):base(context)
+	  {
+
+	  }
+        
         public bool hdniFrame { get; set; }
         public int inId { get; set; }
         public int inOwner_Id { get; set; }

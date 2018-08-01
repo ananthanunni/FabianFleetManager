@@ -7,11 +7,13 @@
     using System.Web.Mvc;
     using FleetManagerWeb.Common;
 
-    public partial class ClsTracker : IClsTracker
+    public partial class ClsTracker : DataContextEntity<TrackerDataContext>, IClsTracker
     {
-        private TrackerDataContext objDataContext = null;
+	  public ClsTracker(TrackerDataContext context = null) : base(context)
+	  {
+	  }
 
-        public bool hdniFrame { get; set; }
+	  public bool hdniFrame { get; set; }
 
         public int inId { get; set; }
 

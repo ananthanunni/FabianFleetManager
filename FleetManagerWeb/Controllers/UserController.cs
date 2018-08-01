@@ -4,22 +4,27 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
+    using FleetManager.Model.Interaction;
+    using FleetManager.Service.Interaction;
     using FleetManagerWeb.Common;
+    using FleetManagerWeb.Controllers;
     using FleetManagerWeb.Models;
 
-    public class UserController : Controller
+    public class UserController : BaseController
     {
         /// <summary>   Zero-based index of the cls role. </summary>
-        private readonly IClsRole objiClsRole = null;
+        private readonly IClsRole _objiClsRole = null;
+	  private readonly IAlertTextProvider _alertTextProvider;
 
-        /// <summary>   Zero-based index of the cls user. </summary>
-        private readonly IClsUser objiClsUser = null;
+	  /// <summary>   Zero-based index of the cls user. </summary>
+	  private readonly IClsUser _objiClsUser = null;
 
-        public UserController(IClsUser objIClsUser, IClsRole objIClsRole)
+        public UserController(IClsUser objIClsUser, IClsRole objIClsRole, IAlertTextProvider alertTextProvider)
         {
-            this.objiClsUser = objIClsUser;
-            this.objiClsRole = objIClsRole;
-        }
+            _objiClsUser = objIClsUser;
+            _objiClsRole = objIClsRole;
+		_alertTextProvider = alertTextProvider;
+	  }
 
         public void BindDropDownListForUser(ClsUser objClsUser, bool blBindDropDownFromDb)
         {
@@ -27,9 +32,9 @@
             {
                 if (blBindDropDownFromDb)
                 {
-                    objClsUser.lstRole = this.objiClsRole.GetAllRoleForDropDown().ToList();
+                    objClsUser.lstRole = _objiClsRole.GetAllRoleForDropDown().ToList();
                     objClsUser.lstBranch = new List<SelectListItem>();
-                    objClsUser.lstUserType = this.objiClsUser.GetAllUserTypeForDropDown().ToList();
+                    objClsUser.lstUserType = _objiClsUser.GetAllUserTypeForDropDown().ToList();
                 }
                 else
                 {
@@ -40,7 +45,7 @@
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User);
+                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User);
             }
         }
 
@@ -48,20 +53,20 @@
         {
             try
             {
-                List<SearchUserResult> lstUser = this.objiClsUser.SearchUser(rows, page, search, sidx + " " + sord);
+                List<SearchUserResult> lstUser = _objiClsUser.SearchUser(rows, page, search, sidx + " " + sord);
                 if (lstUser != null)
                 {
-                    return this.FillGrid(page, rows, lstUser);
+                    return FillGrid(page, rows, lstUser);
                 }
                 else
                 {
-                    return this.Json(string.Empty);
+                    return Json(string.Empty);
                 }
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, mySession.Current.UserId);
-                return this.Json(string.Empty);
+                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, mySession.Current.UserId);
+                return Json(string.Empty);
             }
         }
 
@@ -77,22 +82,22 @@
                 }
 
                 strUserId = strUserId.Substring(0, strUserId.Length - 1);
-                DeleteUserResult result = this.objiClsUser.DeleteUser(strUserId, mySession.Current.UserId);
+                DeleteUserResult result = _objiClsUser.DeleteUser(strUserId, mySession.Current.UserId);
                 if (result != null && result.TotalReference == 0)
                 {
-                    return this.Json(Functions.AlertMessage("User", MessageType.DeleteSucess));
+                    return Json(_alertTextProvider.AlertMessage("User", MessageType.DeleteSuccess));
                 }
                 else if (result != null && result.TotalReference > 0)
                 {
-                    return this.Json(Functions.AlertMessage("User", MessageType.DeletePartial, result.Name));
+                    return Json(_alertTextProvider.AlertMessage("User", MessageType.DeletePartial, result.Name));
                 }
 
-                return this.Json(Functions.AlertMessage("User", MessageType.DeleteFail));
+                return Json(_alertTextProvider.AlertMessage("User", MessageType.DeleteFail));
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, mySession.Current.UserId);
-                return this.Json(Functions.AlertMessage("User", MessageType.DeleteFail));
+                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, mySession.Current.UserId);
+                return Json(_alertTextProvider.AlertMessage("User", MessageType.DeleteFail));
             }
         }
 
@@ -100,12 +105,12 @@
         {
             try
             {
-                return this.Json(this.objiClsUser.GetAllUserForDropDown(), JsonRequestBehavior.AllowGet);
+                return Json(_objiClsUser.GetAllUserForDropDown(), JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User);
-                return this.Json(string.Empty, JsonRequestBehavior.AllowGet);
+                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User);
+                return Json(string.Empty, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -116,39 +121,39 @@
                 GetPagePermissionResult objPermission = Functions.CheckPagePermission(PageMaster.User);
                 if (!objPermission.IsActive)
                 {
-                    return this.RedirectToAction("Logout", "Home");
+                    return RedirectToAction("Logout", "Home");
                 }
 
-                ClsUser objClsUser = this.objiClsUser as ClsUser;
+                ClsUser objClsUser = _objiClsUser as ClsUser;
                 long lgUserId = 0;
-                if (this.Request.QueryString.Count > 0)
+                if (Request.QueryString.Count > 0)
                 {
-                    if (this.Request.QueryString["iFrame"] != null)
+                    if (Request.QueryString["iFrame"] != null)
                     {
                         if (!objPermission.Add_Right)
                         {
-                            return this.RedirectToAction("PermissionRedirectPage", "Home");
+                            return RedirectToAction("PermissionRedirectPage", "Home");
                         }
 
                         objClsUser.hdniFrame = true;
                     }
                     else
                     {
-                        if (!objPermission.Edit_Right || string.IsNullOrEmpty(this.Request.QueryString.ToString().Decode()))
+                        if (!objPermission.Edit_Right || string.IsNullOrEmpty(Request.QueryString.ToString().Decode()))
                         {
-                            return this.RedirectToAction("PermissionRedirectPage", "Home");
+                            return RedirectToAction("PermissionRedirectPage", "Home");
                         }
 
-                        lgUserId = this.Request.QueryString.ToString().Decode().longSafe();
-                        objClsUser = this.objiClsUser.GetUserByUserId(lgUserId);
-                        this.ViewBag.Password = objClsUser.strPassword;
+                        lgUserId = Request.QueryString.ToString().Decode().longSafe();
+                        objClsUser = _objiClsUser.GetUserByUserId(lgUserId);
+                        ViewBag.Password = objClsUser.strPassword;
                     }
                 }
                 else
                 {
                     if (!objPermission.Add_Right)
                     {
-                        return this.RedirectToAction("PermissionRedirectPage", "Home");
+                        return RedirectToAction("PermissionRedirectPage", "Home");
                     }
                 }
 
@@ -202,24 +207,24 @@
                     blTripReasonAccess = false;
                 }
 
-                this.ViewData["UserAccess"] = blUserAccess;
-                this.ViewData["RoleAccess"] = blRoleAccess;
-                this.ViewData["TrackerAccess"] = blTrackerAccess;
+                ViewData["UserAccess"] = blUserAccess;
+                ViewData["RoleAccess"] = blRoleAccess;
+                ViewData["TrackerAccess"] = blTrackerAccess;
 
-                this.ViewData["CarFleetAccess"] = blCarFleetAccess;
-                this.ViewData["FleetMakesAccess"] = blFleetMakesAccess;
-                this.ViewData["FleetModelsAccess"] = blFleetModelsAccess;
-                this.ViewData["FleetColorsAccess"] = blFleetColorsAccess;
-                this.ViewData["TripReasonAccess"] = blTripReasonAccess;
+                ViewData["CarFleetAccess"] = blCarFleetAccess;
+                ViewData["FleetMakesAccess"] = blFleetMakesAccess;
+                ViewData["FleetModelsAccess"] = blFleetModelsAccess;
+                ViewData["FleetColorsAccess"] = blFleetColorsAccess;
+                ViewData["TripReasonAccess"] = blTripReasonAccess;
                 #endregion
 
-                this.BindDropDownListForUser(objClsUser, true);
-                return this.View(objClsUser);
+                BindDropDownListForUser(objClsUser, true);
+                return View(objClsUser);
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, mySession.Current.UserId);
-                return this.View();
+                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, mySession.Current.UserId);
+                return View();
             }
         }
 
@@ -232,76 +237,76 @@
                 GetPagePermissionResult objPermission = Functions.CheckPagePermission(PageMaster.User);
                 if (!objPermission.IsActive)
                 {
-                    return this.RedirectToAction("Logout", "Home");
+                    return RedirectToAction("Logout", "Home");
                 }
 
                 if (objUser.lgId == 0)
                 {
                     if (!objPermission.Add_Right)
                     {
-                        return this.RedirectToAction("PermissionRedirectPage", "Home");
+                        return RedirectToAction("PermissionRedirectPage", "Home");
                     }
                 }
                 else
                 {
                     if (!objPermission.Edit_Right)
                     {
-                        return this.RedirectToAction("PermissionRedirectPage", "Home");
+                        return RedirectToAction("PermissionRedirectPage", "Home");
                     }
                 }
 
                 if (objUser.hdniFrame)
                 {
-                    this.ViewData["iFrame"] = "iFrame";
+                    ViewData["iFrame"] = "iFrame";
                 }
 
-                bool blExists = this.objiClsUser.IsUserExists(objUser.lgId, objUser.strUserName);
-                bool blExists1 = this.objiClsUser.IsUserEmailExists(objUser.lgId, objUser.strEmailID);
+                bool blExists = _objiClsUser.IsUserExists(objUser.lgId, objUser.strUserName);
+                bool blExists1 = _objiClsUser.IsUserEmailExists(objUser.lgId, objUser.strEmailID);
                 if (blExists)
                 {
-                    this.ViewData["Success"] = "0";
-                    this.ViewData["Message"] = Functions.AlertMessage("User", MessageType.AlreadyExist);
+                    ViewData["Success"] = "0";
+                    ViewData["Message"] = _alertTextProvider.AlertMessage("User", MessageType.AlreadyExists);
                 }
                 else if (blExists1)
                 {
-                    this.ViewData["Success"] = "0";
-                    this.ViewData["Message"] = Functions.AlertMessage("Email Address", MessageType.AlreadyExist);
+                    ViewData["Success"] = "0";
+                    ViewData["Message"] = _alertTextProvider.AlertMessage("Email Address", MessageType.AlreadyExists);
                 }
                 else
                 {
-                    string strErrorMsg = this.ValidateUser(objUser);
+                    string strErrorMsg = ValidateUser(objUser);
                     if (!string.IsNullOrEmpty(strErrorMsg))
                     {
-                        this.ViewData["Success"] = "0";
-                        this.ViewData["Message"] = strErrorMsg;
+                        ViewData["Success"] = "0";
+                        ViewData["Message"] = strErrorMsg;
                     }
                     else
                     {
-                        long resultId = this.objiClsUser.SaveUser(objUser);
+                        long resultId = _objiClsUser.SaveUser(objUser);
                         if (resultId > 0)
                         {
-                            this.ViewData["Success"] = "1";
-                            this.ViewData["Message"] = Functions.AlertMessage("User", MessageType.Success);
-                            this.BindDropDownListForUser(objUser, false);
-                            return this.View(objUser);
+                            ViewData["Success"] = "1";
+                            ViewData["Message"] = _alertTextProvider.AlertMessage("User", MessageType.Success);
+                            BindDropDownListForUser(objUser, false);
+                            return View(objUser);
                         }
                         else
                         {
-                            this.ViewData["Success"] = "0";
-                            this.ViewData["Message"] = Functions.AlertMessage("User", MessageType.Fail);
+                            ViewData["Success"] = "0";
+                            ViewData["Message"] = _alertTextProvider.AlertMessage("User", MessageType.Fail);
                         }
                     }
                 }
 
-                this.BindDropDownListForUser(objUser, true);
-                return this.View(objUser);
+                BindDropDownListForUser(objUser, true);
+                return View(objUser);
             }
             catch (Exception ex)
             {
-                this.ViewData["Success"] = "0";
-                this.ViewData["Message"] = Functions.AlertMessage("User", MessageType.Fail);
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, mySession.Current.UserId);
-                return this.View(objUser);
+                ViewData["Success"] = "0";
+                ViewData["Message"] = _alertTextProvider.AlertMessage("User", MessageType.Fail);
+                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, mySession.Current.UserId);
+                return View(objUser);
             }
         }
 
@@ -312,18 +317,18 @@
                 GetPagePermissionResult objPermission = Functions.CheckPagePermission(PageMaster.User);
                 if (!objPermission.IsActive)
                 {
-                    return this.RedirectToAction("Logout", "Home");
+                    return RedirectToAction("Logout", "Home");
                 }
 
                 if (!objPermission.View_Right)
                 {
-                    return this.RedirectToAction("PermissionRedirectPage", "Home");
+                    return RedirectToAction("PermissionRedirectPage", "Home");
                 }
 
-                this.ViewData["blAddRights"] = objPermission.Add_Right;
-                this.ViewData["blEditRights"] = objPermission.Edit_Right;
-                this.ViewData["blDeleteRights"] = objPermission.Delete_Right;
-                this.ViewData["blExportRights"] = objPermission.Export_Right;
+                ViewData["blAddRights"] = objPermission.Add_Right;
+                ViewData["blEditRights"] = objPermission.Edit_Right;
+                ViewData["blDeleteRights"] = objPermission.Delete_Right;
+                ViewData["blExportRights"] = objPermission.Export_Right;
 
                 #region Menu Access
                 bool blUserAccess = true, blRoleAccess = true, blTrackerAccess = true, blCarFleetAccess = true, blFleetMakesAccess = true, blFleetModelsAccess = true, blFleetColorsAccess = true, blTripReasonAccess = true;
@@ -375,23 +380,23 @@
                     blTripReasonAccess = false;
                 }
 
-                this.ViewData["UserAccess"] = blUserAccess;
-                this.ViewData["RoleAccess"] = blRoleAccess;
-                this.ViewData["TrackerAccess"] = blTrackerAccess;
+                ViewData["UserAccess"] = blUserAccess;
+                ViewData["RoleAccess"] = blRoleAccess;
+                ViewData["TrackerAccess"] = blTrackerAccess;
 
-                this.ViewData["CarFleetAccess"] = blCarFleetAccess;
-                this.ViewData["FleetMakesAccess"] = blFleetMakesAccess;
-                this.ViewData["FleetModelsAccess"] = blFleetModelsAccess;
-                this.ViewData["FleetColorsAccess"] = blFleetColorsAccess;
-                this.ViewData["TripReasonAccess"] = blTripReasonAccess;
+                ViewData["CarFleetAccess"] = blCarFleetAccess;
+                ViewData["FleetMakesAccess"] = blFleetMakesAccess;
+                ViewData["FleetModelsAccess"] = blFleetModelsAccess;
+                ViewData["FleetColorsAccess"] = blFleetColorsAccess;
+                ViewData["TripReasonAccess"] = blTripReasonAccess;
                 #endregion
 
-                return this.View();
+                return View();
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, mySession.Current.UserId);
-                return this.View();
+                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, mySession.Current.UserId);
+                return View();
             }
         }
 
@@ -425,12 +430,12 @@
                                 IsActive = objUser.IsActive ? "Active" : "Inactive"
                             }).ToArray()
                 };
-                return this.Json(jsonData, JsonRequestBehavior.AllowGet);
+                return Json(jsonData, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User);
-                return this.Json(string.Empty, JsonRequestBehavior.AllowGet);
+                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User);
+                return Json(string.Empty, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -441,44 +446,44 @@
                 string strErrorMsg = string.Empty;
                 if (string.IsNullOrEmpty(objUser.strFirstName))
                 {
-                    strErrorMsg += Functions.AlertMessage("First Name", MessageType.InputRequired) + "<br/>";
+                    strErrorMsg += _alertTextProvider.AlertMessage("First Name", MessageType.InputRequired) + "<br/>";
                 }
 
                 if (string.IsNullOrEmpty(objUser.strSurName))
                 {
-                    strErrorMsg += Functions.AlertMessage("Surname", MessageType.InputRequired) + "<br/>";
+                    strErrorMsg += _alertTextProvider.AlertMessage("Surname", MessageType.InputRequired) + "<br/>";
                 }
 
                 if (string.IsNullOrEmpty(objUser.strMobileNo))
                 {
-                    strErrorMsg += Functions.AlertMessage("Mobile No", MessageType.InputRequired) + "<br/>";
+                    strErrorMsg += _alertTextProvider.AlertMessage("Mobile No", MessageType.InputRequired) + "<br/>";
                 }
 
                 if (string.IsNullOrEmpty(objUser.strEmailID))
                 {
-                    strErrorMsg += Functions.AlertMessage("Email Id", MessageType.InputRequired) + "<br/>";
+                    strErrorMsg += _alertTextProvider.AlertMessage("Email Id", MessageType.InputRequired) + "<br/>";
                 }
 
                 if (string.IsNullOrEmpty(objUser.strUserName))
                 {
-                    strErrorMsg += Functions.AlertMessage("User Name", MessageType.InputRequired) + "<br/>";
+                    strErrorMsg += _alertTextProvider.AlertMessage("User Name", MessageType.InputRequired) + "<br/>";
                 }
 
                 if (string.IsNullOrEmpty(objUser.strPassword))
                 {
-                    strErrorMsg += Functions.AlertMessage("Password", MessageType.InputRequired) + "<br/>";
+                    strErrorMsg += _alertTextProvider.AlertMessage("Password", MessageType.InputRequired) + "<br/>";
                 }
 
                 if (objUser.lgRoleId == 0)
                 {
-                    strErrorMsg += Functions.AlertMessage("Role", MessageType.SelectRequired) + "<br/>";
+                    strErrorMsg += _alertTextProvider.AlertMessage("Role", MessageType.SelectRequired) + "<br/>";
                 }
 
                 return strErrorMsg;
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, mySession.Current.UserId);
+                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, mySession.Current.UserId);
                 return string.Empty;
             }
         }

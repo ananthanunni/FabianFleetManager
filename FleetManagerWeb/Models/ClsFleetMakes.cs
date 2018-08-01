@@ -8,11 +8,13 @@
     using FleetManagerWeb.Common;
     using FleetManagerWeb.Models;
 
-    public partial class ClsFleetMakes : IClsFleetMakes
+    public partial class ClsFleetMakes : DataContextEntity<FleetMakesDataContext>, IClsFleetMakes
     {
-        private FleetMakesDataContext objDataContext = null;
+	  public ClsFleetMakes(FleetMakesDataContext context = null) : base(context)
+	  {
+	  }
 
-        public bool hdniFrame { get; set; }
+	  public bool hdniFrame { get; set; }
 
         public long lgId { get; set; }
 

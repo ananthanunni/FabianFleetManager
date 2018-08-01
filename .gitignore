@@ -1,4 +1,4 @@
-FleetManagerWeb/bin/**/*
 packages/*
-FleetManagerWeb/obj/**/*
+*/bin/**/*
+*/obj/**/*
 .vs/

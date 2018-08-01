@@ -4,21 +4,34 @@ using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace FleetManager.Core.Configuration
 {
     public class Configuration : IConfiguration
     {
+	  [Obsolete("This will be removed later during refactoring. Use FleetManager.Core.IConfiguration instead. Singleton instance is available as DI")]
+	  private static IConfiguration _instance = null;
+
 	  public Configuration()
 	  {
-#if DEBUG
-		ConnectionString = ConfigurationManager.ConnectionStrings["FleetManagerConnectionString"].ToString();
-#else
-		ConnectionString = ""; // TODO: Use a production connection string
-#endif
+		Initialize();
+		_instance = this;
+	  }
+
+	  [Obsolete("This will be removed later during refactoring. Use FleetManager.Core.IConfiguration instead. Singleton instance is available as DI")]
+	  public static IConfiguration Instance
+	  {
+		get
+		{
+		    if (_instance != null) return _instance;
+
+		    return DependencyResolver.Current.GetService<IConfiguration>();
+		}
 	  }
 
 	  public string ConnectionString { get; private set; }
+	  public string CookieName { get; set; }
 
 	  public bool IsDebug
 	  {
@@ -36,6 +49,15 @@ namespace FleetManager.Core.Configuration
 	  {
 		var value = ConfigurationManager.AppSettings.Get(key);
 		return (T)Convert.ChangeType(value, typeof(T));
+	  }
+
+	  private void Initialize()
+	  {
+#if DEBUG
+		ConnectionString = ConfigurationManager.ConnectionStrings["FleetManagerConnectionString"].ToString();
+		CookieName = Get<string>("CookieName");
+#else
+#endif
 	  }
     }
 }

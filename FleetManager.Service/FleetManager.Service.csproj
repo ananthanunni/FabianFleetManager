@@ -41,7 +41,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Converter\DateFormatConverter.cs" />
+    <Compile Include="Converter\IDateFormatConverter.cs" />
+    <Compile Include="Interaction\AlertTextProvider.cs" />
+    <Compile Include="Interaction\IAlertTextProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Auth\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FleetManager.Model\FleetManager.Model.csproj">
+      <Project>{E6143E22-7750-4CD2-B355-C1DAA8E03A98}</Project>
+      <Name>FleetManager.Model</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

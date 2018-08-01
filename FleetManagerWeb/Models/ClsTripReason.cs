@@ -8,11 +8,13 @@
     using FleetManagerWeb.Common;
     using FleetManagerWeb.Models;
 
-    public partial class ClsTripReason : IClsTripReason
+    public partial class ClsTripReason : DataContextEntity<TripReasonDataContext>, IClsTripReason
     {
-        private TripReasonDataContext objDataContext = null;
+	  public ClsTripReason(TripReasonDataContext context = null) : base(context)
+	  {
+	  }
 
-        public bool hdniFrame { get; set; }
+	  public bool hdniFrame { get; set; }
 
         public long lgId { get; set; }
 

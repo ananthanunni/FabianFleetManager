@@ -4,37 +4,42 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
+    using FleetManager.Model.Interaction;
+    using FleetManager.Service.Interaction;
     using FleetManagerWeb.Common;
+    using FleetManagerWeb.Controllers;
     using FleetManagerWeb.Models;
 
-    public class RoleController : Controller
+    public class RoleController : BaseController
     {
         /// <summary>   Zero-based index of the cls role. </summary>
-        private readonly IClsRole objiClsRole = null;
+        private readonly IClsRole _objiClsRole = null;
+	  private readonly IAlertTextProvider _alertTextProvider;
 
-        public RoleController(IClsRole objIClsRole)
+	  public RoleController(IClsRole objIClsRole,IAlertTextProvider alertTextProvider)
         {
-            this.objiClsRole = objIClsRole;
-        }
+            _objiClsRole = objIClsRole;
+		_alertTextProvider = alertTextProvider;
+	  }
 
         public ActionResult BindRoleGrid(string sidx, string sord, int page, int rows, string filters, string search)
         {
             try
             {
-                List<SearchRoleResult> lstRole = this.objiClsRole.SearchRole(rows, page, search, sidx + " " + sord);
+                List<SearchRoleResult> lstRole = _objiClsRole.SearchRole(rows, page, search, sidx + " " + sord);
                 if (lstRole != null)
                 {
-                    return this.FillGrid(page, rows, lstRole);
+                    return FillGrid(page, rows, lstRole);
                 }
                 else
                 {
-                    return this.Json(string.Empty);
+                    return Json(string.Empty);
                 }
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.Role);
-                return this.Json(string.Empty);
+                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.Role);
+                return Json(string.Empty);
             }
         }
 
@@ -45,17 +50,17 @@
                 List<GetPagePermissionResult> lstRolePermission = Functions.GerRolePermissionByRoleId(lgRoleId);
                 if (lstRolePermission != null)
                 {
-                    return this.FillRollPermissionGrid(lstRolePermission);
+                    return FillRollPermissionGrid(lstRolePermission);
                 }
                 else
                 {
-                    return this.Json(string.Empty);
+                    return Json(string.Empty);
                 }
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.Role);
-                return this.Json(string.Empty, JsonRequestBehavior.AllowGet);
+                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.Role);
+                return Json(string.Empty, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -71,22 +76,22 @@
                 }
 
                 strRoleId = strRoleId.Substring(0, strRoleId.Length - 1);
-                DeleteRoleResult result = this.objiClsRole.DeleteRole(strRoleId, mySession.Current.UserId);
+                DeleteRoleResult result = _objiClsRole.DeleteRole(strRoleId, mySession.Current.UserId);
                 if (result != null && result.TotalReference == 0)
                 {
-                    return this.Json(Functions.AlertMessage("Role", MessageType.DeleteSucess));
+                    return Json(_alertTextProvider.AlertMessage("Role", MessageType.DeleteSuccess));
                 }
                 else if (result != null && result.TotalReference > 0)
                 {
-                    return this.Json(Functions.AlertMessage("Role", MessageType.DeletePartial, result.Name));
+                    return Json(_alertTextProvider.AlertMessage("Role", MessageType.DeletePartial, result.Name));
                 }
 
-                return this.Json(Functions.AlertMessage("Role", MessageType.DeleteFail));
+                return Json(_alertTextProvider.AlertMessage("Role", MessageType.DeleteFail));
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.Role);
-                return this.Json(Functions.AlertMessage("Role", MessageType.DeleteFail));
+                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.Role);
+                return Json(_alertTextProvider.AlertMessage("Role", MessageType.DeleteFail));
             }
         }
 
@@ -94,12 +99,12 @@
         {
             try
             {
-                return this.Json(this.objiClsRole.GetAllRoleForDropDown(), JsonRequestBehavior.AllowGet);
+                return Json(_objiClsRole.GetAllRoleForDropDown(), JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.Role);
-                return this.Json(string.Empty, JsonRequestBehavior.AllowGet);
+                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.Role);
+                return Json(string.Empty, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -110,38 +115,38 @@
                 GetPagePermissionResult objPermission = Functions.CheckPagePermission(PageMaster.Role);
                 if (!objPermission.IsActive)
                 {
-                    return this.RedirectToAction("Logout", "Home");
+                    return RedirectToAction("Logout", "Home");
                 }
 
-                ClsRole objClsRole = this.objiClsRole as ClsRole;
+                ClsRole objClsRole = _objiClsRole as ClsRole;
                 long lgRoleId = 0;
-                if (this.Request.QueryString.Count > 0)
+                if (Request.QueryString.Count > 0)
                 {
-                    if (this.Request.QueryString["iFrame"] != null)
+                    if (Request.QueryString["iFrame"] != null)
                     {
                         if (!objPermission.Add_Right)
                         {
-                            return this.RedirectToAction("PermissionRedirectPage", "Home");
+                            return RedirectToAction("PermissionRedirectPage", "Home");
                         }
 
                         objClsRole.hdniFrame = true;
                     }
                     else
                     {
-                        if (!objPermission.Edit_Right || string.IsNullOrEmpty(this.Request.QueryString.ToString().Decode()))
+                        if (!objPermission.Edit_Right || string.IsNullOrEmpty(Request.QueryString.ToString().Decode()))
                         {
-                            return this.RedirectToAction("PermissionRedirectPage", "Home");
+                            return RedirectToAction("PermissionRedirectPage", "Home");
                         }
 
-                        lgRoleId = this.Request.QueryString.ToString().Decode().longSafe();
-                        objClsRole = this.objiClsRole.GetRoleByRoleId(lgRoleId);
+                        lgRoleId = Request.QueryString.ToString().Decode().longSafe();
+                        objClsRole = _objiClsRole.GetRoleByRoleId(lgRoleId);
                     }
                 }
                 else
                 {
                     if (!objPermission.Add_Right)
                     {
-                        return this.RedirectToAction("PermissionRedirectPage", "Home");
+                        return RedirectToAction("PermissionRedirectPage", "Home");
                     }
                 }
 
@@ -195,23 +200,23 @@
                     blTripReasonAccess = false;
                 }
 
-                this.ViewData["UserAccess"] = blUserAccess;
-                this.ViewData["RoleAccess"] = blRoleAccess;
-                this.ViewData["TrackerAccess"] = blTrackerAccess;
+                ViewData["UserAccess"] = blUserAccess;
+                ViewData["RoleAccess"] = blRoleAccess;
+                ViewData["TrackerAccess"] = blTrackerAccess;
 
-                this.ViewData["CarFleetAccess"] = blCarFleetAccess;
-                this.ViewData["FleetMakesAccess"] = blFleetMakesAccess;
-                this.ViewData["FleetModelsAccess"] = blFleetModelsAccess;
-                this.ViewData["FleetColorsAccess"] = blFleetColorsAccess;
-                this.ViewData["TripReasonAccess"] = blTripReasonAccess;
+                ViewData["CarFleetAccess"] = blCarFleetAccess;
+                ViewData["FleetMakesAccess"] = blFleetMakesAccess;
+                ViewData["FleetModelsAccess"] = blFleetModelsAccess;
+                ViewData["FleetColorsAccess"] = blFleetColorsAccess;
+                ViewData["TripReasonAccess"] = blTripReasonAccess;
                 #endregion
 
-                return this.View(objClsRole);
+                return View(objClsRole);
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.Role);
-                return this.View();
+                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.Role);
+                return View();
             }
         }
 
@@ -225,60 +230,60 @@
                 {
                     if (!objPermission.Add_Right)
                     {
-                        return this.RedirectToAction("PermissionRedirectPage", "Home");
+                        return RedirectToAction("PermissionRedirectPage", "Home");
                     }
                 }
                 else
                 {
                     if (!objPermission.Edit_Right)
                     {
-                        return this.RedirectToAction("PermissionRedirectPage", "Home");
+                        return RedirectToAction("PermissionRedirectPage", "Home");
                     }
                 }
 
                 if (objRole.hdniFrame)
                 {
-                    this.ViewData["iFrame"] = "iFrame";
+                    ViewData["iFrame"] = "iFrame";
                 }
 
-                bool blExists = this.objiClsRole.IsRoleExists(objRole.lgId, objRole.strRoleName);
+                bool blExists = _objiClsRole.IsRoleExists(objRole.lgId, objRole.strRoleName);
                 if (blExists)
                 {
-                    this.ViewData["Success"] = "0";
-                    this.ViewData["Message"] = Functions.AlertMessage("Role", MessageType.AlreadyExist);
+                    ViewData["Success"] = "0";
+                    ViewData["Message"] = _alertTextProvider.AlertMessage("Role", MessageType.AlreadyExists);
                 }
                 else
                 {
-                    string strErrorMsg = this.ValidateRole(objRole);
+                    string strErrorMsg = ValidateRole(objRole);
                     if (!string.IsNullOrEmpty(strErrorMsg))
                     {
-                        this.ViewData["Success"] = "0";
-                        this.ViewData["Message"] = strErrorMsg;
+                        ViewData["Success"] = "0";
+                        ViewData["Message"] = strErrorMsg;
                     }
                     else
                     {
-                        long resultId = this.objiClsRole.SaveRole(objRole);
+                        long resultId = _objiClsRole.SaveRole(objRole);
                         if (resultId > 0)
                         {
-                            this.ViewData["Success"] = "1";
-                            this.ViewData["Message"] = Functions.AlertMessage("Role", MessageType.Success);
+                            ViewData["Success"] = "1";
+                            ViewData["Message"] = _alertTextProvider.AlertMessage("Role", MessageType.Success);
                         }
                         else
                         {
-                            this.ViewData["Success"] = "0";
-                            this.ViewData["Message"] = Functions.AlertMessage("Role", MessageType.Fail);
+                            ViewData["Success"] = "0";
+                            ViewData["Message"] = _alertTextProvider.AlertMessage("Role", MessageType.Fail);
                         }
                     }
                 }
 
-                return this.View(objRole);
+                return View(objRole);
             }
             catch (Exception ex)
             {
-                this.ViewData["Success"] = "0";
-                this.ViewData["Message"] = Functions.AlertMessage("Role", MessageType.Fail);
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.Role);
-                return this.View(objRole);
+                ViewData["Success"] = "0";
+                ViewData["Message"] = _alertTextProvider.AlertMessage("Role", MessageType.Fail);
+                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.Role);
+                return View(objRole);
             }
         }
 
@@ -289,18 +294,18 @@
                 GetPagePermissionResult objPermission = Functions.CheckPagePermission(PageMaster.Role);
                 if (!objPermission.IsActive)
                 {
-                    return this.RedirectToAction("Logout", "Home");
+                    return RedirectToAction("Logout", "Home");
                 }
 
                 if (!objPermission.View_Right)
                 {
-                    return this.RedirectToAction("PermissionRedirectPage", "Home");
+                    return RedirectToAction("PermissionRedirectPage", "Home");
                 }
 
-                this.ViewData["blAddRights"] = objPermission.Add_Right;
-                this.ViewData["blEditRights"] = objPermission.Edit_Right;
-                this.ViewData["blDeleteRights"] = objPermission.Delete_Right;
-                this.ViewData["blExportRights"] = objPermission.Export_Right;
+                ViewData["blAddRights"] = objPermission.Add_Right;
+                ViewData["blEditRights"] = objPermission.Edit_Right;
+                ViewData["blDeleteRights"] = objPermission.Delete_Right;
+                ViewData["blExportRights"] = objPermission.Export_Right;
 
                 #region Menu Access
                 bool blUserAccess = true, blRoleAccess = true, blTrackerAccess = true, blCarFleetAccess = true, blFleetMakesAccess = true, blFleetModelsAccess = true, blFleetColorsAccess = true, blTripReasonAccess = true;
@@ -352,23 +357,23 @@
                     blTripReasonAccess = false;
                 }
 
-                this.ViewData["UserAccess"] = blUserAccess;
-                this.ViewData["RoleAccess"] = blRoleAccess;
-                this.ViewData["TrackerAccess"] = blTrackerAccess;
+                ViewData["UserAccess"] = blUserAccess;
+                ViewData["RoleAccess"] = blRoleAccess;
+                ViewData["TrackerAccess"] = blTrackerAccess;
 
-                this.ViewData["CarFleetAccess"] = blCarFleetAccess;
-                this.ViewData["FleetMakesAccess"] = blFleetMakesAccess;
-                this.ViewData["FleetModelsAccess"] = blFleetModelsAccess;
-                this.ViewData["FleetColorsAccess"] = blFleetColorsAccess;
-                this.ViewData["TripReasonAccess"] = blTripReasonAccess;
+                ViewData["CarFleetAccess"] = blCarFleetAccess;
+                ViewData["FleetMakesAccess"] = blFleetMakesAccess;
+                ViewData["FleetModelsAccess"] = blFleetModelsAccess;
+                ViewData["FleetColorsAccess"] = blFleetColorsAccess;
+                ViewData["TripReasonAccess"] = blTripReasonAccess;
                 #endregion
                 
-                return this.View();
+                return View();
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.Role);
-                return this.View();
+                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.Role);
+                return View();
             }
         }
 
@@ -393,12 +398,12 @@
                                 Description = objRole.Description
                             }).ToArray()
                 };
-                return this.Json(jsonData, JsonRequestBehavior.AllowGet);
+                return Json(jsonData, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User);
-                return this.Json(string.Empty, JsonRequestBehavior.AllowGet);
+                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User);
+                return Json(string.Empty, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -430,12 +435,12 @@
                                 Export_Right = objRole.Export_Right
                             }).ToArray()
                 };
-                return this.Json(jsonData, JsonRequestBehavior.AllowGet);
+                return Json(jsonData, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User);
-                return this.Json(string.Empty, JsonRequestBehavior.AllowGet);
+                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User);
+                return Json(string.Empty, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -446,7 +451,7 @@
                 string strErrorMsg = string.Empty;
                 if (string.IsNullOrEmpty(objRole.strRoleName))
                 {
-                    strErrorMsg += Functions.AlertMessage("Role Name", MessageType.InputRequired) + "<br/>";
+                    strErrorMsg += _alertTextProvider.AlertMessage("Role Name", MessageType.InputRequired) + "<br/>";
                 }
 
                 if (string.IsNullOrEmpty(objRole.strRights))
@@ -458,7 +463,7 @@
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.Role, mySession.Current.UserId);
+                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.Role, mySession.Current.UserId);
                 return string.Empty;
             }
         }

@@ -7,78 +7,20 @@
     using System.Linq;
     using System.Transactions;
     using System.Web;
+    using FleetManager.Core.Configuration;
+    using FleetManager.Model.Interaction;
     using Models;
 
+    [Obsolete("Will be removed after moving functionalities into organized classes.")]
     public static class Functions
     {
         public static readonly string StrdateFormat = "dd/MM/yyyy";
         public static readonly string StrdateTimeFormat = "dd/MM/yyyy hh:mm tt";
 
-        /// <summary>   Name of the cookie. </summary>
-        private static readonly string StrcookieName = "kcsremuser";
-
         /// <summary>   Context for the object data. </summary>
         private static CommonDataContext objDataContext = null;
 
         public static readonly string StrConnection = System.Configuration.ConfigurationManager.ConnectionStrings["FleetManagerConnectionString"].ToString();
-
-        public static string AlertMessage(string tableName, MessageType msgType, string message = null)
-        {
-            if (msgType == MessageType.Success)
-            {
-                return tableName + " Submitted Successfully.";
-            }
-            else if (msgType == MessageType.Fail)
-            {
-                return tableName + " Not Submitted Successfully.";
-            }
-            else if (msgType == MessageType.DeleteSucess)
-            {
-                return tableName + "(s) Deleted Successfully.";
-            }
-            else if (msgType == MessageType.DeleteFail)
-            {
-                return tableName + "(s) Delete Failure.";
-            }
-            else if (msgType == MessageType.DeletePartial)
-            {
-                if (!string.IsNullOrEmpty(message))
-                {
-                    return "Following " + tableName + "(s) Can Not Be Deleted Due To Reference.<br/>" + message;
-                }
-                else
-                {
-                    return "Some " + tableName + "(s) Can Not Be Deleted Due To Reference.";
-                }
-            }
-            else if (msgType == MessageType.AlreadyExist)
-            {
-                if (!string.IsNullOrEmpty(message))
-                {
-                    return message + " Already Exists.";
-                }
-                else
-                {
-                    return tableName + " Already Exists.";
-                }
-            }
-            else if (msgType == MessageType.InputRequired)
-            {
-                return "Please Enter " + tableName + ".";
-            }
-            else if (msgType == MessageType.SelectRequired)
-            {
-                return "Please Select " + tableName + ".";
-            }
-            else if (msgType == MessageType.CanNotUpdate)
-            {
-                return tableName + " has been Approved. So Record Can not be Updated.";
-            }
-            else
-            {
-                return message;
-            }
-        }
 
         public static GetPagePermissionResult CheckPagePermission(long lgPageId)
         {
@@ -101,75 +43,7 @@
                 return new GetPagePermissionResult();
             }
         }
-
-        public static string ConvertDateFormat(string strDate)
-        {
-            string[] arrDate = null;
-            if (strDate.Contains("/"))
-            {
-                arrDate = strDate.Split('/');
-            }
-            else if (strDate.Contains("-"))
-            {
-                arrDate = strDate.Split('-');
-            }
-
-            if (arrDate.Length > 2)
-            {
-                string strMonth = arrDate[1];
-                if (strMonth == "1" || strMonth == "01")
-                {
-                    return arrDate[0] + " JAN " + arrDate[2];
-                }
-                else if (strMonth == "2" || strMonth == "02")
-                {
-                    return arrDate[0] + " FEB " + arrDate[2];
-                }
-                else if (strMonth == "3" || strMonth == "03")
-                {
-                    return arrDate[0] + " MAR " + arrDate[2];
-                }
-                else if (strMonth == "4" || strMonth == "04")
-                {
-                    return arrDate[0] + " APR " + arrDate[2];
-                }
-                else if (strMonth == "5" || strMonth == "05")
-                {
-                    return arrDate[0] + " MAY " + arrDate[2];
-                }
-                else if (strMonth == "6" || strMonth == "06")
-                {
-                    return arrDate[0] + " JUN " + arrDate[2];
-                }
-                else if (strMonth == "7" || strMonth == "07")
-                {
-                    return arrDate[0] + " JUL " + arrDate[2];
-                }
-                else if (strMonth == "8" || strMonth == "08")
-                {
-                    return arrDate[0] + " AUG " + arrDate[2];
-                }
-                else if (strMonth == "9" || strMonth == "09")
-                {
-                    return arrDate[0] + " SEP " + arrDate[2];
-                }
-                else if (strMonth == "10")
-                {
-                    return arrDate[0] + " OCT " + arrDate[2];
-                }
-                else if (strMonth == "11")
-                {
-                    return arrDate[0] + " NOV " + arrDate[2];
-                }
-                else if (strMonth == "12")
-                {
-                    return arrDate[0] + " DEC " + arrDate[2];
-                }
-            }
-
-            return strDate;
-        }
-
+	  
         public static string CreateRootDirectory(string pageName, string dirPath)
         {
             try
@@ -228,33 +102,7 @@
 
             return string.Empty;
         }
-
-        public static string GetRememberMe(string strKey)
-        {
-            try
-            {
-                if (System.Web.HttpContext.Current.Request.Cookies[StrcookieName] != null)
-                {
-                    switch (strKey)
-                    {
-                        case "password":
-                            return string.IsNullOrEmpty(System.Web.HttpContext.Current.Request.Cookies[StrcookieName].Values["password"]) ? null : System.Web.HttpContext.Current.Request.Cookies[StrcookieName].Values["password"].ToString();
-                        case "username":
-                            return string.IsNullOrEmpty(System.Web.HttpContext.Current.Request.Cookies[StrcookieName].Values[strKey]) ? string.Empty : System.Web.HttpContext.Current.Request.Cookies[StrcookieName].Values[strKey].ToString();
-                        case "rememberme":
-                            return string.IsNullOrEmpty(System.Web.HttpContext.Current.Request.Cookies[StrcookieName].Values[strKey]) ? null : System.Web.HttpContext.Current.Request.Cookies[StrcookieName].Values[strKey].ToString();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name.ToString(), PageMaster.LgCommon);
-                throw;
-            }
-
-            return string.Empty;
-        }
-
+	  
         public static string GetRootDirectory(string pageName)
         {
             try
@@ -370,7 +218,7 @@
             {
                 if (rememberMe)
                 {
-                    HttpCookie hcUser = new HttpCookie(StrcookieName);
+                    HttpCookie hcUser = new HttpCookie(Configuration.Instance.CookieName);
                     hcUser.Values["rememberme"] = "true";
                     hcUser.Values["username"] = userName;
                     hcUser.Values["password"] = password;
@@ -382,9 +230,9 @@
                 }
                 else
                 {
-                    if (System.Web.HttpContext.Current.Request.Cookies.AllKeys.Contains(StrcookieName))
+                    if (System.Web.HttpContext.Current.Request.Cookies.AllKeys.Contains(Configuration.Instance.CookieName))
                     {
-                        HttpCookie hcAccount = System.Web.HttpContext.Current.Request.Cookies[StrcookieName];
+                        HttpCookie hcAccount = System.Web.HttpContext.Current.Request.Cookies[Configuration.Instance.CookieName];
                         hcAccount.Expires = DateTime.Now.AddDays(-1);
                         System.Web.HttpContext.Current.Response.Cookies.Add(hcAccount);
                     }
@@ -425,26 +273,10 @@
                 Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name.ToString(), PageMaster.LgCommon);
             }
         }
-
-        public static void Write(Exception ex, string strProcedureName, long lgPageId, long lgUserId)
-        {
-            InsertErrorLog(ex, strProcedureName, lgPageId, lgUserId);
-        }
-
-        public static void Write(Exception ex, string strprocedureName, long lgPageId)
-        {
-            InsertErrorLog(ex, strprocedureName, lgPageId, 1);
-        }
-
-        private static void InsertErrorLog(Exception ex, string strMethodName, long lgPageId, long lgUserId)
-        {
-            try
-            {
-                
-            }
-            catch
-            {
-            }
-        }
+	  
+	  public static void Write(Exception ex, string procedureName, long lgPageId, long lgUserId = 1)
+	  {
+		new FleetManager.Core.Logging.Logger().Write(ex, procedureName, lgPageId, lgUserId);
+	  }
     }
 }

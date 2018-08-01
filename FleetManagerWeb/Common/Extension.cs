@@ -281,7 +281,7 @@
             byte[] k = lstK.ToArray();
             return k;
         }
-
+	  
         private static AesCryptoServiceProvider GetProvider(byte[] key)
         {
             AesCryptoServiceProvider result = new AesCryptoServiceProvider();

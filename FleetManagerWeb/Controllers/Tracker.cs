@@ -4,36 +4,40 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
+    using FleetManager.Model.Interaction;
+    using FleetManager.Service.Interaction;
     using FleetManagerWeb.Common;
     using FleetManagerWeb.Models;
 
-    public class TrackerController : Controller
+    public class TrackerController : BaseController
     {
-        private readonly IClsTracker objiClsTracker = null;
+        private readonly IClsTracker _objiClsTracker = null;
+	  private readonly IAlertTextProvider _alertTextProvider;
 
-        public TrackerController(IClsTracker objIClsTracker)
+	  public TrackerController(IClsTracker objIClsTracker,IAlertTextProvider alertTextProvider)
         {
-            this.objiClsTracker = objIClsTracker;
-        }
+            _objiClsTracker = objIClsTracker;
+		_alertTextProvider = alertTextProvider;
+	  }
 
         public ActionResult BindTrackerGrid(string sidx, string sord, int page, int rows, string filters, string search, string tripstartdate, string tripenddate, string locationstart, string locationend)
         {
             try
             {
-                List<SearchTrackerResult> lstTracker = this.objiClsTracker.SearchTracker(rows, page, search, sidx + " " + sord, tripstartdate, tripenddate, locationstart, locationend);
+                List<SearchTrackerResult> lstTracker = _objiClsTracker.SearchTracker(rows, page, search, sidx + " " + sord, tripstartdate, tripenddate, locationstart, locationend);
                 if (lstTracker != null)
                 {
-                    return this.FillGridTracker(page, rows, lstTracker);
+                    return FillGridTracker(page, rows, lstTracker);
                 }
                 else
                 {
-                    return this.Json(string.Empty);
+                    return Json(string.Empty);
                 }
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.Tracker, mySession.Current.UserId);
-                return this.Json(string.Empty);
+                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.Tracker, mySession.Current.UserId);
+                return Json(string.Empty);
             }
         }
 
@@ -49,12 +53,12 @@
                 }
 
                 strTrackerId = strTrackerId.Substring(0, strTrackerId.Length - 1);
-                return this.Json(Functions.AlertMessage("Tracker", MessageType.DeleteSucess));
+                return Json(_alertTextProvider.AlertMessage("Tracker", MessageType.DeleteSuccess));
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.Tracker, mySession.Current.UserId);
-                return this.Json(Functions.AlertMessage("Tracker", MessageType.DeleteFail));
+                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.Tracker, mySession.Current.UserId);
+                return Json(_alertTextProvider.AlertMessage("Tracker", MessageType.DeleteFail));
             }
         }
 
@@ -65,39 +69,39 @@
                 GetPagePermissionResult objPermission = Functions.CheckPagePermission(PageMaster.Tracker);
                 if (!objPermission.IsActive)
                 {
-                    return this.RedirectToAction("Logout", "Home");
+                    return RedirectToAction("Logout", "Home");
                 }
 
-                ClsTracker objClsTracker = this.objiClsTracker as ClsTracker;
+                ClsTracker objClsTracker = _objiClsTracker as ClsTracker;
                 long lgTrackerId = 0;
-                if (this.Request.QueryString.Count > 0)
+                if (Request.QueryString.Count > 0)
                 {
-                    if (this.Request.QueryString["iFrame"] != null)
+                    if (Request.QueryString["iFrame"] != null)
                     {
                         if (!objPermission.Add_Right)
                         {
-                            return this.RedirectToAction("PermissionRedirectPage", "Home");
+                            return RedirectToAction("PermissionRedirectPage", "Home");
                         }
 
                         objClsTracker.hdniFrame = true;
-                        this.ViewData["iFrame"] = "iFrame";
+                        ViewData["iFrame"] = "iFrame";
                     }
                     else
                     {
-                        if (!objPermission.Edit_Right || string.IsNullOrEmpty(this.Request.QueryString.ToString().Decode()))
+                        if (!objPermission.Edit_Right || string.IsNullOrEmpty(Request.QueryString.ToString().Decode()))
                         {
-                            return this.RedirectToAction("PermissionRedirectPage", "Home");
+                            return RedirectToAction("PermissionRedirectPage", "Home");
                         }
 
-                        lgTrackerId = this.Request.QueryString.ToString().Decode().longSafe();
-                        objClsTracker = this.objiClsTracker.GetTrackerByTrackerId(lgTrackerId);
+                        lgTrackerId = Request.QueryString.ToString().Decode().longSafe();
+                        objClsTracker = _objiClsTracker.GetTrackerByTrackerId(lgTrackerId);
                     }
                 }
                 else
                 {
                     if (!objPermission.Add_Right)
                     {
-                        return this.RedirectToAction("PermissionRedirectPage", "Home");
+                        return RedirectToAction("PermissionRedirectPage", "Home");
                     }
                 }
 
@@ -151,23 +155,23 @@
                     blTripReasonAccess = false;
                 }
 
-                this.ViewData["UserAccess"] = blUserAccess;
-                this.ViewData["RoleAccess"] = blRoleAccess;
-                this.ViewData["TrackerAccess"] = blTrackerAccess;
+                ViewData["UserAccess"] = blUserAccess;
+                ViewData["RoleAccess"] = blRoleAccess;
+                ViewData["TrackerAccess"] = blTrackerAccess;
 
-                this.ViewData["CarFleetAccess"] = blCarFleetAccess;
-                this.ViewData["FleetMakesAccess"] = blFleetMakesAccess;
-                this.ViewData["FleetModelsAccess"] = blFleetModelsAccess;
-                this.ViewData["FleetColorsAccess"] = blFleetColorsAccess;
-                this.ViewData["TripReasonAccess"] = blTripReasonAccess;
+                ViewData["CarFleetAccess"] = blCarFleetAccess;
+                ViewData["FleetMakesAccess"] = blFleetMakesAccess;
+                ViewData["FleetModelsAccess"] = blFleetModelsAccess;
+                ViewData["FleetColorsAccess"] = blFleetColorsAccess;
+                ViewData["TripReasonAccess"] = blTripReasonAccess;
                 #endregion
 
-                return this.View(objClsTracker);
+                return View(objClsTracker);
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.Tracker, mySession.Current.UserId);
-                return this.View();
+                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.Tracker, mySession.Current.UserId);
+                return View();
             }
         }
 
@@ -179,59 +183,59 @@
                 GetPagePermissionResult objPermission = Functions.CheckPagePermission(PageMaster.Tracker);
                 if (!objPermission.IsActive)
                 {
-                    return this.RedirectToAction("Logout", "Home");
+                    return RedirectToAction("Logout", "Home");
                 }
 
                 if (objTracker.inId == 0)
                 {
                     if (!objPermission.Add_Right)
                     {
-                        return this.RedirectToAction("PermissionRedirectPage", "Home");
+                        return RedirectToAction("PermissionRedirectPage", "Home");
                     }
                 }
                 else
                 {
                     if (!objPermission.Edit_Right)
                     {
-                        return this.RedirectToAction("PermissionRedirectPage", "Home");
+                        return RedirectToAction("PermissionRedirectPage", "Home");
                     }
                 }
 
                 if (objTracker.hdniFrame)
                 {
-                    this.ViewData["iFrame"] = "iFrame";
+                    ViewData["iFrame"] = "iFrame";
                 }
 
-                string strErrorMsg = this.ValidateTracker(objTracker);
+                string strErrorMsg = ValidateTracker(objTracker);
                 if (!string.IsNullOrEmpty(strErrorMsg))
                 {
-                    this.ViewData["Success"] = "0";
-                    this.ViewData["Message"] = strErrorMsg;
+                    ViewData["Success"] = "0";
+                    ViewData["Message"] = strErrorMsg;
                 }
                 else
                 {
-                    objTracker.inId = this.objiClsTracker.SaveTracker(objTracker);
+                    objTracker.inId = _objiClsTracker.SaveTracker(objTracker);
                     if (objTracker.inId > 0)
                     {
-                        this.ViewData["Success"] = "1";
-                        this.ViewData["Message"] = Functions.AlertMessage("Tracker", MessageType.Success);
-                        return this.View(objTracker);
+                        ViewData["Success"] = "1";
+                        ViewData["Message"] = _alertTextProvider.AlertMessage("Tracker", MessageType.Success);
+                        return View(objTracker);
                     }
                     else
                     {
-                        this.ViewData["Success"] = "0";
-                        this.ViewData["Message"] = Functions.AlertMessage("Tracker", MessageType.Fail);
+                        ViewData["Success"] = "0";
+                        ViewData["Message"] = _alertTextProvider.AlertMessage("Tracker", MessageType.Fail);
                     }
                 }
 
-                return this.View(objTracker);
+                return View(objTracker);
             }
             catch (Exception ex)
             {
-                this.ViewData["Success"] = "0";
-                this.ViewData["Message"] = Functions.AlertMessage("Tracker", MessageType.Fail);
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.Tracker, mySession.Current.UserId);
-                return this.View(objTracker);
+                ViewData["Success"] = "0";
+                ViewData["Message"] = _alertTextProvider.AlertMessage("Tracker", MessageType.Fail);
+                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.Tracker, mySession.Current.UserId);
+                return View(objTracker);
             }
         }
 
@@ -242,18 +246,18 @@
                 GetPagePermissionResult objPermission = Functions.CheckPagePermission(PageMaster.Tracker);
                 if (!objPermission.IsActive)
                 {
-                    return this.RedirectToAction("Logout", "Home");
+                    return RedirectToAction("Logout", "Home");
                 }
 
                 if (!objPermission.View_Right)
                 {
-                    return this.RedirectToAction("PermissionRedirectPage", "Home");
+                    return RedirectToAction("PermissionRedirectPage", "Home");
                 }
 
-                this.ViewData["blAddRights"] = objPermission.Add_Right;
-                this.ViewData["blEditRights"] = objPermission.Edit_Right;
-                this.ViewData["blDeleteRights"] = objPermission.Delete_Right;
-                this.ViewData["blExportRights"] = objPermission.Export_Right;
+                ViewData["blAddRights"] = objPermission.Add_Right;
+                ViewData["blEditRights"] = objPermission.Edit_Right;
+                ViewData["blDeleteRights"] = objPermission.Delete_Right;
+                ViewData["blExportRights"] = objPermission.Export_Right;
 
                 #region Menu Access
                 bool blUserAccess = true, blRoleAccess = true, blTrackerAccess = true, blCarFleetAccess = true, blFleetMakesAccess = true, blFleetModelsAccess = true, blFleetColorsAccess = true, blTripReasonAccess = true;
@@ -305,23 +309,23 @@
                     blTripReasonAccess = false;
                 }
 
-                this.ViewData["UserAccess"] = blUserAccess;
-                this.ViewData["RoleAccess"] = blRoleAccess;
-                this.ViewData["TrackerAccess"] = blTrackerAccess;
+                ViewData["UserAccess"] = blUserAccess;
+                ViewData["RoleAccess"] = blRoleAccess;
+                ViewData["TrackerAccess"] = blTrackerAccess;
 
-                this.ViewData["CarFleetAccess"] = blCarFleetAccess;
-                this.ViewData["FleetMakesAccess"] = blFleetMakesAccess;
-                this.ViewData["FleetModelsAccess"] = blFleetModelsAccess;
-                this.ViewData["FleetColorsAccess"] = blFleetColorsAccess;
-                this.ViewData["TripReasonAccess"] = blTripReasonAccess;
+                ViewData["CarFleetAccess"] = blCarFleetAccess;
+                ViewData["FleetMakesAccess"] = blFleetMakesAccess;
+                ViewData["FleetModelsAccess"] = blFleetModelsAccess;
+                ViewData["FleetColorsAccess"] = blFleetColorsAccess;
+                ViewData["TripReasonAccess"] = blTripReasonAccess;
                 #endregion
                 
-                return this.View();
+                return View();
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.Tracker, mySession.Current.UserId);
-                return this.View();
+                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.Tracker, mySession.Current.UserId);
+                return View();
             }
         }
 
@@ -358,12 +362,12 @@
                                 Id = objTracker.Id.ToString().Encode()
                             }).ToArray()
                 };
-                return this.Json(jsonData, JsonRequestBehavior.AllowGet);
+                return Json(jsonData, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.Tracker, mySession.Current.UserId);
-                return this.Json(string.Empty, JsonRequestBehavior.AllowGet);
+                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.Tracker, mySession.Current.UserId);
+                return Json(string.Empty, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -374,34 +378,34 @@
                 string strErrorMsg = string.Empty;
                 if (string.IsNullOrEmpty(objTracker.strTripStart))
                 {
-                    strErrorMsg += Functions.AlertMessage("Trip Start Date", MessageType.InputRequired) + "<br/>";
+                    strErrorMsg += _alertTextProvider.AlertMessage("Trip Start Date", MessageType.InputRequired) + "<br/>";
                 }
                 else if (string.IsNullOrEmpty(objTracker.strTripEnd))
                 {
-                    strErrorMsg += Functions.AlertMessage("Trip End Date", MessageType.InputRequired) + "<br/>";
+                    strErrorMsg += _alertTextProvider.AlertMessage("Trip End Date", MessageType.InputRequired) + "<br/>";
                 }
                 else if (string.IsNullOrEmpty(objTracker.inKmStart.ToString()))
                 {
-                    strErrorMsg += Functions.AlertMessage("Km Start", MessageType.InputRequired) + "<br/>";
+                    strErrorMsg += _alertTextProvider.AlertMessage("Km Start", MessageType.InputRequired) + "<br/>";
                 }
                 else if (string.IsNullOrEmpty(objTracker.inKmEnd.ToString()))
                 {
-                    strErrorMsg += Functions.AlertMessage("Km End", MessageType.InputRequired) + "<br/>";
+                    strErrorMsg += _alertTextProvider.AlertMessage("Km End", MessageType.InputRequired) + "<br/>";
                 }
                 else if (string.IsNullOrEmpty(objTracker.inFuelStart.ToString()))
                 {
-                    strErrorMsg += Functions.AlertMessage("Fuel Start", MessageType.InputRequired) + "<br/>";
+                    strErrorMsg += _alertTextProvider.AlertMessage("Fuel Start", MessageType.InputRequired) + "<br/>";
                 }
                 else if (string.IsNullOrEmpty(objTracker.inFuelEnd.ToString()))
                 {
-                    strErrorMsg += Functions.AlertMessage("Fuel End", MessageType.InputRequired) + "<br/>";
+                    strErrorMsg += _alertTextProvider.AlertMessage("Fuel End", MessageType.InputRequired) + "<br/>";
                 }
 
                 return strErrorMsg;
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.Tracker, mySession.Current.UserId);
+                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.Tracker, mySession.Current.UserId);
                 return string.Empty;
             }
         }

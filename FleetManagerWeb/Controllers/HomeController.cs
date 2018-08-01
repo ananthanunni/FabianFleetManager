@@ -7,21 +7,21 @@
     using System.Web.Mvc;
     using FleetManager.Core.Configuration;
     using FleetManagerWeb.Common;
+    using FleetManagerWeb.Controllers;
     using FleetManagerWeb.Models;
 
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         private readonly IClsUser _objiClsUser = null;
-	  private readonly IConfiguration _configuration;
 
 	  public HomeController(IClsUser objIClsUser)
+		:base()
         {
             _objiClsUser = objIClsUser;
         }
 
         public ActionResult Index()
         {
-
             #region Menu Access
             bool blUserAccess = true, blRoleAccess = true, blTrackerAccess = true, blCarFleetAccess = true, blFleetMakesAccess = true, blFleetModelsAccess = true, blFleetColorsAccess = true, blTripReasonAccess = true;
             GetPagePermissionResult objPermission = Functions.CheckPagePermission(PageMaster.User);
@@ -91,19 +91,19 @@
             try
             {
                 ClsUser objLogin = _objiClsUser as ClsUser;
-                if (Functions.GetRememberMe("rememberme") == "true")
+                if (GetCookieValue("rememberme") == "true")
                 {
-                    objLogin.strUserName = Functions.GetRememberMe("username");
-                    objLogin.strPassword = Functions.GetRememberMe("password");
-                    ViewBag.password = Functions.GetRememberMe("password");
-                    objLogin.blRememberMe = Convert.ToBoolean(Functions.GetRememberMe("rememberme"));
+                    objLogin.strUserName = GetCookieValue("username");
+                    objLogin.strPassword = GetCookieValue("password");
+                    ViewBag.password = GetCookieValue("password");
+                    objLogin.blRememberMe = Convert.ToBoolean(GetCookieValue("rememberme"));
                 }
 
                 return View(objLogin);
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.LgCommon);
+                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.LgCommon);
                 throw;
             }
         }
@@ -126,7 +126,7 @@
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.LgCommon);
+                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.LgCommon);
                 return View(objLogin);
             }
         }
@@ -150,7 +150,7 @@
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.LgCommon);
+                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.LgCommon);
                 throw;
             }
         }
@@ -173,7 +173,7 @@
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.LgCommon);
+                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.LgCommon);
                 return View();
             }
         }
@@ -197,7 +197,7 @@
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.LgCommon);
+                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.LgCommon);
                 return Json("1111");
             }
         }
@@ -219,7 +219,7 @@
             }
             catch (Exception ex)
             {
-                Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.LgCommon);
+                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.LgCommon);
                 throw;
             }
         }

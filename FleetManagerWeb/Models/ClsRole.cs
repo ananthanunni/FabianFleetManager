@@ -8,11 +8,13 @@
     using FleetManagerWeb.Common;
     using FleetManagerWeb.Models;
 
-    public partial class ClsRole : IClsRole
+    public partial class ClsRole : DataContextEntity<RoleDataContext>,IClsRole
     {
-        private RoleDataContext objDataContext = null;
+	  public ClsRole(RoleDataContext context = null) : base(context)
+	  {
+	  }
 
-        public bool blAllowDispatchBackDateEntry { get; set; }
+	  public bool blAllowDispatchBackDateEntry { get; set; }
 
         public bool blAllowKilometerLimit { get; set; }
 

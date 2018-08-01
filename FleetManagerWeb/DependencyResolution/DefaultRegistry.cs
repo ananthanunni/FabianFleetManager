@@ -35,8 +35,12 @@ namespace FleetManagerWeb.DependencyResolution {
 		//For<FleetManager.Core.Configuration.IConfiguration>().Use<FleetManager.Core.Configuration.Configuration>();
 
 		RegisterCore();
-		RegisterModels();		
+		RegisterDataContexts();
+		RegisterModels();
+		RegisterServices();
         }
+
+	  #endregion
 
 	  private void RegisterModels()
 	  {
@@ -53,11 +57,52 @@ namespace FleetManagerWeb.DependencyResolution {
 	  private void RegisterCore()
 	  {
 		ForSingletonOf<FleetManager.Core.Configuration.IConfiguration>().Use<FleetManager.Core.Configuration.Configuration>();
-		For<Models.CommonDataContext>().Use<Models.CommonDataContext>(ctx => 
+		For<FleetManager.Core.Logging.ILogger>().Use<FleetManager.Core.Logging.Logger>();
+	  }
+
+	  private void RegisterDataContexts()
+	  {
+		For<Models.CommonDataContext>().Use(ctx =>
 		    new Models.CommonDataContext(ctx.GetInstance<FleetManager.Core.Configuration.IConfiguration>().ConnectionString)
+		);
+
+		For<Models.CarFleetDataContext>().Use(ctx =>
+		    new Models.CarFleetDataContext(ctx.GetInstance<FleetManager.Core.Configuration.IConfiguration>().ConnectionString)
+		);
+
+		For<Models.FleetColorsDataContext>().Use(ctx =>
+		    new Models.FleetColorsDataContext(ctx.GetInstance<FleetManager.Core.Configuration.IConfiguration>().ConnectionString)
+		);
+
+		For<Models.FleetMakesDataContext>().Use(ctx =>
+		    new Models.FleetMakesDataContext(ctx.GetInstance<FleetManager.Core.Configuration.IConfiguration>().ConnectionString)
+		);
+
+		For<Models.FleetModelsDataContext>().Use(ctx =>
+		    new Models.FleetModelsDataContext(ctx.GetInstance<FleetManager.Core.Configuration.IConfiguration>().ConnectionString)
+		);
+
+		For<Models.RoleDataContext>().Use(ctx =>
+		    new Models.RoleDataContext(ctx.GetInstance<FleetManager.Core.Configuration.IConfiguration>().ConnectionString)
+		);
+
+		For<Models.TrackerDataContext>().Use(ctx =>
+		    new Models.TrackerDataContext(ctx.GetInstance<FleetManager.Core.Configuration.IConfiguration>().ConnectionString)
+		);
+
+		For<Models.TripReasonDataContext>().Use(ctx =>
+		    new Models.TripReasonDataContext(ctx.GetInstance<FleetManager.Core.Configuration.IConfiguration>().ConnectionString)
+		);
+
+		For<Models.UserDataContext>().Use(ctx =>
+		    new Models.UserDataContext(ctx.GetInstance<FleetManager.Core.Configuration.IConfiguration>().ConnectionString)
 		);
 	  }
 
-	  #endregion
+	  private void RegisterServices()
+	  {
+		For<FleetManager.Service.Interaction.IAlertTextProvider>().Use<FleetManager.Service.Interaction.AlertTextProvider>();
+		For<FleetManager.Service.Converter.IDateFormatConverter>().Use<FleetManager.Service.Converter.DateFormatConverter>();
+	  }
     }
 }

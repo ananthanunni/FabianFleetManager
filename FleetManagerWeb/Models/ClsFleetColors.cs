@@ -8,11 +8,13 @@
     using FleetManagerWeb.Common;
     using FleetManagerWeb.Models;
 
-    public partial class ClsFleetColors : IClsFleetColors
+    public partial class ClsFleetColors :DataContextEntity<FleetColorsDataContext>, IClsFleetColors
     {
-        private FleetColorsDataContext objDataContext = null;
+	  public ClsFleetColors(FleetColorsDataContext context = null) : base(context)
+	  {
+	  }
 
-        public bool hdniFrame { get; set; }
+	  public bool hdniFrame { get; set; }
 
         public long lgId { get; set; }
 
