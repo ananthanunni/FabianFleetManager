@@ -204,7 +204,6 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Bootstrapper.cs" />
     <Compile Include="Common\Access.cs" />
     <Compile Include="Common\Extension.cs" />
     <Compile Include="Common\Functions.cs" />
@@ -2768,6 +2767,20 @@
     <None Include="Models\CarFleet.dbml.layout">
       <DependentUpon>CarFleet.dbml</DependentUpon>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FleetManager.Core\FleetManager.Core.csproj">
+      <Project>{2b9a84c3-c522-404a-88c8-d805a86e6c59}</Project>
+      <Name>FleetManager.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FleetManager.Model\FleetManager.Model.csproj">
+      <Project>{e6143e22-7750-4cd2-b355-c1daa8e03a98}</Project>
+      <Name>FleetManager.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FleetManager.Service\FleetManager.Service.csproj">
+      <Project>{ba440248-d438-4765-accf-494a5e6e46d8}</Project>
+      <Name>FleetManager.Service</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

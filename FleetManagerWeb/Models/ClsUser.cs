@@ -83,13 +83,13 @@
             ClsUser objUserMaster = new ClsUser();
             try
             {
-                objUserMaster = this.GetUserByUserId(lgUserId);
+                objUserMaster = GetUserByUserId(lgUserId);
                 if (objUserMaster != null)
                 {
                     objUserMaster.strPassword = strUserPwd;
                 }
 
-                this.SaveUser(objUserMaster);
+                SaveUser(objUserMaster);
             }
             catch (Exception ex)
             {
@@ -103,9 +103,9 @@
         {
             try
             {
-                using (this.objDataContext = new UserDataContext(Functions.StrConnection))
+                using (objDataContext = new UserDataContext(Functions.StrConnection))
                 {
-                    DeleteUserResult result = this.objDataContext.DeleteUser(strUserId, lgDeletedBy, PageMaster.User).FirstOrDefault();
+                    DeleteUserResult result = objDataContext.DeleteUser(strUserId, lgDeletedBy, PageMaster.User).FirstOrDefault();
                     if (result == null)
                     {
                         result = new DeleteUserResult();
@@ -126,10 +126,10 @@
             List<SelectListItem> lstUser = new List<SelectListItem>();
             try
             {
-                using (this.objDataContext = new UserDataContext(Functions.StrConnection))
+                using (objDataContext = new UserDataContext(Functions.StrConnection))
                 {
                     lstUser.Add(new SelectListItem { Text = "--Select--", Value = string.Empty });
-                    List<GetUserAllResult> lstUserResult = this.objDataContext.GetUserAll().ToList();
+                    List<GetUserAllResult> lstUserResult = objDataContext.GetUserAll().ToList();
                     if (lstUserResult != null && lstUserResult.Count > 0)
                     {
                         if (mySession.Current.UserTypeId == 1 || mySession.Current.UserTypeId == 11)
@@ -164,10 +164,10 @@
             List<SelectListItem> lstUser = new List<SelectListItem>();
             try
             {
-                using (this.objDataContext = new UserDataContext(Functions.StrConnection))
+                using (objDataContext = new UserDataContext(Functions.StrConnection))
                 {
                     lstUser.Add(new SelectListItem { Text = "--Select--", Value = string.Empty });
-                    List<GetUserAllResult> lstUserResult = this.objDataContext.GetUserAll().ToList();
+                    List<GetUserAllResult> lstUserResult = objDataContext.GetUserAll().ToList();
                     if (lstUserResult.Count > 0)
                     {
                         foreach (var item in lstUserResult)
@@ -190,10 +190,10 @@
             List<SelectListItem> lstUser = new List<SelectListItem>();
             try
             {
-                using (this.objDataContext = new UserDataContext(Functions.StrConnection))
+                using (objDataContext = new UserDataContext(Functions.StrConnection))
                 {
                     lstUser.Add(new SelectListItem { Text = "--Select--", Value = string.Empty });
-                    List<GetAllUserTypeForDropDownResult> lstUserResult = this.objDataContext.GetAllUserTypeForDropDown().ToList();
+                    List<GetAllUserTypeForDropDownResult> lstUserResult = objDataContext.GetAllUserTypeForDropDown().ToList();
                     if (lstUserResult.Count > 0)
                     {
                         foreach (var item in lstUserResult)
@@ -215,8 +215,8 @@
         {
             try
             {
-                this.objDataContext = new UserDataContext(Functions.StrConnection);
-                return this.objDataContext.GetBranchManagerByBranchId(lgBranchId).ToList();
+                objDataContext = new UserDataContext(Functions.StrConnection);
+                return objDataContext.GetBranchManagerByBranchId(lgBranchId).ToList();
             }
             catch (Exception ex)
             {
@@ -230,9 +230,9 @@
         {
             try
             {
-                using (this.objDataContext = new UserDataContext(Functions.StrConnection))
+                using (objDataContext = new UserDataContext(Functions.StrConnection))
                 {
-                    List<GetUserAllResult> lstUserAll = this.objDataContext.GetUserAll().ToList();
+                    List<GetUserAllResult> lstUserAll = objDataContext.GetUserAll().ToList();
                     return lstUserAll;
                 }
             }
@@ -248,9 +248,9 @@
             ClsUser objClsUser = new ClsUser();
             try
             {
-                using (this.objDataContext = new UserDataContext(Functions.StrConnection))
+                using (objDataContext = new UserDataContext(Functions.StrConnection))
                 {
-                    var result = this.objDataContext.User.Where(x => x.BranchId == lgBranchId && x.UserTypeId == lgUserTypeId);
+                    var result = objDataContext.User.Where(x => x.BranchId == lgBranchId && x.UserTypeId == lgUserTypeId);
                     if (result != null)
                     {
                         foreach (var item in result)
@@ -286,9 +286,9 @@
             ClsUser objClsUser = new ClsUser();
             try
             {
-                using (this.objDataContext = new UserDataContext(Functions.StrConnection))
+                using (objDataContext = new UserDataContext(Functions.StrConnection))
                 {
-                    GetUserByEmailIdResult item = this.objDataContext.GetUserByEmailId(strEmailId).FirstOrDefault();
+                    GetUserByEmailIdResult item = objDataContext.GetUserByEmailId(strEmailId).FirstOrDefault();
                     if (item != null)
                     {
                         objClsUser.lgId = item.Id;
@@ -313,9 +313,9 @@
             ClsUser objClsUser = new ClsUser();
             try
             {
-                using (this.objDataContext = new UserDataContext(Functions.StrConnection))
+                using (objDataContext = new UserDataContext(Functions.StrConnection))
                 {
-                    GetUserByIdResult item = this.objDataContext.GetUserById(lgUserId).FirstOrDefault();
+                    GetUserByIdResult item = objDataContext.GetUserById(lgUserId).FirstOrDefault();
                     if (item != null)
                     {
                         objClsUser.lgId = item.Id;
@@ -349,8 +349,8 @@
         {
             try
             {
-                this.objDataContext = new UserDataContext(Functions.StrConnection);
-                var objResult = this.objDataContext.GetUserIdByUseType("Admin,Management").ToList();
+                objDataContext = new UserDataContext(Functions.StrConnection);
+                var objResult = objDataContext.GetUserIdByUseType("Admin,Management").ToList();
                 List<GetBranchManagerByBranchIdResult> result = new List<GetBranchManagerByBranchIdResult>();
                 foreach (var item in objResult)
                 {
@@ -371,9 +371,9 @@
         {
             try
             {
-                using (this.objDataContext = new UserDataContext(Functions.StrConnection))
+                using (objDataContext = new UserDataContext(Functions.StrConnection))
                 {
-                    if (this.objDataContext.User.Where(x => x.Id != lgUserId && x.EmailID == userEmail).Count() > 0)
+                    if (objDataContext.User.Where(x => x.Id != lgUserId && x.EmailID == userEmail).Count() > 0)
                     {
                         return true;
                     }
@@ -392,9 +392,9 @@
         {
             try
             {
-                using (this.objDataContext = new UserDataContext(Functions.StrConnection))
+                using (objDataContext = new UserDataContext(Functions.StrConnection))
                 {
-                    if (this.objDataContext.User.Where(x => x.Id != lgUserId && x.UserName == userName).Count() > 0)
+                    if (objDataContext.User.Where(x => x.Id != lgUserId && x.UserName == userName).Count() > 0)
                     {
                         return true;
                     }
@@ -413,10 +413,10 @@
         {
             try
             {
-                using (this.objDataContext = new UserDataContext(Functions.StrConnection))
+                using (objDataContext = new UserDataContext(Functions.StrConnection))
                 {
                     objSave.strPassword = objSave.strPassword.EncryptString();
-                    var result = this.objDataContext.InsertOrUpdateUser(objSave.lgId, 1, 1, objSave.strFirstName, objSave.strSurName, objSave.strMobileNo, objSave.strEmailID, objSave.strUserName, objSave.strPassword, objSave.strAddress, "EMP/12345", objSave.lgRoleId, objSave.blIsActive, objSave.blIsLogin, mySession.Current.UserId, PageMaster.User).FirstOrDefault();
+                    var result = objDataContext.InsertOrUpdateUser(objSave.lgId, 1, 1, objSave.strFirstName, objSave.strSurName, objSave.strMobileNo, objSave.strEmailID, objSave.strUserName, objSave.strPassword, objSave.strAddress, "EMP/12345", objSave.lgRoleId, objSave.blIsActive, objSave.blIsLogin, mySession.Current.UserId, PageMaster.User).FirstOrDefault();
                     if (result != null)
                     {
                         return result.InsertedId;
@@ -438,9 +438,9 @@
         {
             try
             {
-                using (this.objDataContext = new UserDataContext(Functions.StrConnection))
+                using (objDataContext = new UserDataContext(Functions.StrConnection))
                 {
-                    return this.objDataContext.SearchUser(inRow, inPage, strSearch, strSort).ToList();
+                    return objDataContext.SearchUser(inRow, inPage, strSearch, strSort).ToList();
                 }
             }
             catch (Exception ex)
@@ -454,9 +454,9 @@
         {
             try
             {
-                using (this.objDataContext = new UserDataContext(Functions.StrConnection))
+                using (objDataContext = new UserDataContext(Functions.StrConnection))
                 {
-                    User objUser = this.objDataContext.User.Where(n => n.UserName == strUserName && n.Password == strPassword && n.IsActive == true).FirstOrDefault();
+                    User objUser = objDataContext.User.Where(n => n.UserName == strUserName && n.Password == strPassword && n.IsActive == true).FirstOrDefault();
                     if (objUser != null)
                     {
                         ClsUser objClsUser = new ClsUser();

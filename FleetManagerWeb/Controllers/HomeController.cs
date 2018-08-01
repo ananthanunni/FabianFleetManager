@@ -5,16 +5,18 @@
     using System.Linq;
     using System.Text;
     using System.Web.Mvc;
+    using FleetManager.Core.Configuration;
     using FleetManagerWeb.Common;
     using FleetManagerWeb.Models;
 
     public class HomeController : Controller
     {
-        private readonly IClsUser objiClsUser = null;
+        private readonly IClsUser _objiClsUser = null;
+	  private readonly IConfiguration _configuration;
 
-        public HomeController(IClsUser objIClsUser)
+	  public HomeController(IClsUser objIClsUser)
         {
-            this.objiClsUser = objIClsUser;
+            _objiClsUser = objIClsUser;
         }
 
         public ActionResult Index()
@@ -70,34 +72,34 @@
                 blTripReasonAccess = false;
             }
 
-            this.ViewData["UserAccess"] = blUserAccess;
-            this.ViewData["RoleAccess"] = blRoleAccess;
-            this.ViewData["TrackerAccess"] = blTrackerAccess;
+            ViewData["UserAccess"] = blUserAccess;
+            ViewData["RoleAccess"] = blRoleAccess;
+            ViewData["TrackerAccess"] = blTrackerAccess;
 
-            this.ViewData["CarFleetAccess"] = blCarFleetAccess;
-            this.ViewData["FleetMakesAccess"] = blFleetMakesAccess;
-            this.ViewData["FleetModelsAccess"] = blFleetModelsAccess;
-            this.ViewData["FleetColorsAccess"] = blFleetColorsAccess;
-            this.ViewData["TripReasonAccess"] = blTripReasonAccess;
+            ViewData["CarFleetAccess"] = blCarFleetAccess;
+            ViewData["FleetMakesAccess"] = blFleetMakesAccess;
+            ViewData["FleetModelsAccess"] = blFleetModelsAccess;
+            ViewData["FleetColorsAccess"] = blFleetColorsAccess;
+            ViewData["TripReasonAccess"] = blTripReasonAccess;
             #endregion
 
-            return this.View();
+            return View();
         }
 
         public ActionResult Login()
         {
             try
             {
-                ClsUser objLogin = this.objiClsUser as ClsUser;
+                ClsUser objLogin = _objiClsUser as ClsUser;
                 if (Functions.GetRememberMe("rememberme") == "true")
                 {
                     objLogin.strUserName = Functions.GetRememberMe("username");
                     objLogin.strPassword = Functions.GetRememberMe("password");
-                    this.ViewBag.password = Functions.GetRememberMe("password");
+                    ViewBag.password = Functions.GetRememberMe("password");
                     objLogin.blRememberMe = Convert.ToBoolean(Functions.GetRememberMe("rememberme"));
                 }
 
-                return this.View(objLogin);
+                return View(objLogin);
             }
             catch (Exception ex)
             {
@@ -111,21 +113,21 @@
         {
             try
             {
-                ClsUser objClsUser = this.objiClsUser.ValidateLogin(objLogin.strUserName, objLogin.strPassword.EncryptString());
+                ClsUser objClsUser = _objiClsUser.ValidateLogin(objLogin.strUserName, objLogin.strPassword.EncryptString());
                 if (objClsUser != null)
                 {
                     Functions.UpdateCookies(objClsUser.strUserName, objClsUser.strPassword.EncryptString(), objClsUser.lgId.ToString(), objClsUser.strFirstName + " " + objClsUser.strSurName, objLogin.blRememberMe.ToString(), objClsUser.lgRoleId.ToString(), objClsUser.lgBranchId.ToString(), objClsUser.lgUserTypeId.ToString(), "true");
 
                     objClsUser.blIsLogin = true;
-                    this.objiClsUser.SaveUser(objClsUser);
+                    _objiClsUser.SaveUser(objClsUser);
                 }
 
-                return this.RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home");
             }
             catch (Exception ex)
             {
                 Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.LgCommon);
-                return this.View(objLogin);
+                return View(objLogin);
             }
         }
 
@@ -133,18 +135,18 @@
         {
             try
             {
-                ClsUser objClsUser = this.objiClsUser as ClsUser;
-                objClsUser = this.objiClsUser.GetUserByUserId(mySession.Current.UserId);
+                ClsUser objClsUser = _objiClsUser as ClsUser;
+                objClsUser = _objiClsUser.GetUserByUserId(mySession.Current.UserId);
                 if (objClsUser != null)
                 {
                     objClsUser.blIsLogin = false;
-                    this.objiClsUser.SaveUser(objClsUser);
+                    _objiClsUser.SaveUser(objClsUser);
                 }
 
                 Functions.LogoutUser();
-                this.ViewData.Clear();
-                this.TempData.Clear();
-                return this.RedirectToAction("Login");
+                ViewData.Clear();
+                TempData.Clear();
+                return RedirectToAction("Login");
             }
             catch (Exception ex)
             {
@@ -157,22 +159,22 @@
         {
             if (mySession.Current.UserId == 0)
             {
-                return this.RedirectToAction("Login");
+                return RedirectToAction("Login");
             }
 
-            return this.View();
+            return View();
         }
 
         public ActionResult UserUnAuthorize()
         {
             try
             {
-                return this.View();
+                return View();
             }
             catch (Exception ex)
             {
                 Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.LgCommon);
-                return this.View();
+                return View();
             }
         }
 
@@ -181,22 +183,22 @@
         {
             try
             {
-                ClsUser objUser = this.objiClsUser.ValidateLogin(objLogin.strUserName, objLogin.strPassword.EncryptString());
+                ClsUser objUser = _objiClsUser.ValidateLogin(objLogin.strUserName, objLogin.strPassword.EncryptString());
                 if (objUser != null)
                 {
                     // if (objUser.IsLogin)
                     // {
                     //    return Json("3333");
                     // }
-                    return this.Json(objUser.strEmailID);
+                    return Json(objUser.strEmailID);
                 }
 
-                return this.Json("2222");
+                return Json("2222");
             }
             catch (Exception ex)
             {
                 Functions.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.LgCommon);
-                return this.Json("1111");
+                return Json("1111");
             }
         }
 
@@ -206,13 +208,13 @@
             {
                 if (mySession.Current.Password == strCurrentPwd.EncryptString())
                 {
-                    ClsUser objUser = this.objiClsUser.ChangePassword(mySession.Current.UserId, strNewPwd);
+                    ClsUser objUser = _objiClsUser.ChangePassword(mySession.Current.UserId, strNewPwd);
                     Functions.UpdateCookies(mySession.Current.UserName, strNewPwd.EncryptString(), mySession.Current.UserId.ToString(), mySession.Current.Fullname, mySession.Current.Rememberme, mySession.Current.RoleId.ToString(), mySession.Current.BranchId.ToString(), mySession.Current.UserTypeId.ToString(), "false");
-                    return this.Json("Success", JsonRequestBehavior.AllowGet);
+                    return Json("Success", JsonRequestBehavior.AllowGet);
                 }
                 else
                 {
-                    return this.Json("CurrentWrong", JsonRequestBehavior.AllowGet);
+                    return Json("CurrentWrong", JsonRequestBehavior.AllowGet);
                 }
             }
             catch (Exception ex)

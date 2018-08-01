@@ -16,9 +16,10 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace FleetManagerWeb.DependencyResolution {
+    using System;
     using StructureMap.Configuration.DSL;
     using StructureMap.Graph;
-	
+
     public class DefaultRegistry : Registry {
         #region Constructors and Destructors
 
@@ -30,10 +31,33 @@ namespace FleetManagerWeb.DependencyResolution {
                     scan.WithDefaultConventions();
                     scan.With(new ControllerConvention());
                 });
-            ////NIRAV
-            //For<IExample>().Use<Example>();
+		////NIRAV
+		//For<FleetManager.Core.Configuration.IConfiguration>().Use<FleetManager.Core.Configuration.Configuration>();
+
+		RegisterCore();
+		RegisterModels();		
         }
 
-        #endregion
+	  private void RegisterModels()
+	  {
+		For<Models.IClsRole>().Use<Models.ClsRole>();
+		For<Models.IClsUser>().Use<Models.ClsUser>();
+		For<Models.IClsFleetMakes>().Use<Models.ClsFleetMakes>();
+		For<Models.IClsFleetModels>().Use<Models.ClsFleetModels>();
+		For<Models.IClsFleetColors>().Use<Models.ClsFleetColors>();
+		For<Models.IClsTripReason>().Use<Models.ClsTripReason>();
+		For<Models.IClsTracker>().Use<Models.ClsTracker>();
+		For<Models.IClsCarFleet>().Use<Models.ClsCarFleet>();
+	  }
+
+	  private void RegisterCore()
+	  {
+		ForSingletonOf<FleetManager.Core.Configuration.IConfiguration>().Use<FleetManager.Core.Configuration.Configuration>();
+		For<Models.CommonDataContext>().Use<Models.CommonDataContext>(ctx => 
+		    new Models.CommonDataContext(ctx.GetInstance<FleetManager.Core.Configuration.IConfiguration>().ConnectionString)
+		);
+	  }
+
+	  #endregion
     }
 }
