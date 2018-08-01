@@ -10,7 +10,11 @@
 
     public partial class ClsFleetModels : DataContextEntity<FleetModelsDataContext>, IClsFleetModels
     {
-	  public ClsFleetModels(FleetModelsDataContext context = null) : base(context)
+	  public ClsFleetModels()
+	  {
+
+	  }
+	  public ClsFleetModels(FleetModelsDataContext context) : base(context)
 	  {
 	  }
 

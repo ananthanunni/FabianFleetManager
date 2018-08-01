@@ -11,7 +11,11 @@
 
     public partial class ClsRole : DataContextEntity<RoleDataContext>,IClsRole
     {
-	  public ClsRole(RoleDataContext context = null) : base(context)
+	  public ClsRole()
+	  {
+
+	  }
+	  public ClsRole(RoleDataContext context) : base(context)
 	  {
 	  }
 

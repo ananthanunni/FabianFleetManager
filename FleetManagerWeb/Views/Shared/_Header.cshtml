@@ -8,6 +8,8 @@
     bool isFleetModelsAccess = Convert.ToBoolean(ViewData["FleetModelsAccess"]);
     bool isFleetColorsAccess = Convert.ToBoolean(ViewData["FleetColorsAccess"]);
     bool isTripReasonAccess = Convert.ToBoolean(ViewData["TripReasonAccess"]);
+
+    var mySession = DependencyResolver.Current.GetService<FleetManager.Core.Common.IMySession>();
 }
 <div>
     <!--BEGIN THEME SETTING-->
@@ -35,7 +37,7 @@
                 <ul class="nav navbar navbar-top-links navbar-right mbn">
                     <li class="dropdown topbar-user">
                         <a data-hover="dropdown" href="#" class="dropdown-toggle">
-                            <span class="hidden-xs">@FleetManagerWeb.Common.mySession.Current.UserName</span>
+                            <span class="hidden-xs">@mySession.UserName</span>
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu dropdown-user pull-right">

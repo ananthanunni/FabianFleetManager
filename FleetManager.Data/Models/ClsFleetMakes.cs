@@ -10,7 +10,11 @@
 
     public partial class ClsFleetMakes : DataContextEntity<FleetMakesDataContext>, IClsFleetMakes
     {
-	  public ClsFleetMakes(FleetMakesDataContext context = null) : base(context)
+	  public ClsFleetMakes()
+	  {
+
+	  }
+	  public ClsFleetMakes(FleetMakesDataContext context) : base(context)
 	  {
 	  }
 

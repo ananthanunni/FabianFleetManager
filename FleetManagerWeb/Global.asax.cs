@@ -25,5 +25,10 @@
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AuthConfig.RegisterAuth();
         }
+
+	  protected void Application_Error(Exception ex)
+	  {
+
+	  }
     }
 }

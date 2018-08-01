@@ -11,9 +11,9 @@
 
     public partial class ClsUser : DataContextEntity<UserDataContext>, IClsUser
     {
-	  public ClsUser(UserDataContext context = null) : base(context)
-	  {
-	  }
+	  public ClsUser() { }
+
+	  public ClsUser(UserDataContext context) : base(context) { }
 
 	  public bool blIsActive { get; set; }
 

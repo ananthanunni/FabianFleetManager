@@ -11,7 +11,11 @@
 
     public partial class ClsFleetColors :DataContextEntity<FleetColorsDataContext>, IClsFleetColors
     {
-	  public ClsFleetColors(FleetColorsDataContext context = null) : base(context)
+	  public ClsFleetColors()
+	  {
+
+	  }
+	  public ClsFleetColors(FleetColorsDataContext context) : base(context)
 	  {
 	  }
 

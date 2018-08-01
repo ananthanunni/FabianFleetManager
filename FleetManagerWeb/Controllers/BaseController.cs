@@ -57,5 +57,10 @@ namespace FleetManagerWeb.Controllers
 
 		return string.Empty;
 	  }
+
+	  protected override void OnException(ExceptionContext filterContext)
+	  {
+		base.OnException(filterContext);
+	  }
     }
 }

@@ -10,7 +10,12 @@
 
     public partial class ClsCarFleet : DataContextEntity<CarFleetDataContext>, IClsCarFleet
     {
-	  public ClsCarFleet(CarFleetDataContext context=null):base(context)
+	  public ClsCarFleet()
+	  {
+
+	  }
+
+	  public ClsCarFleet(CarFleetDataContext context):base(context)
 	  {
 
 	  }

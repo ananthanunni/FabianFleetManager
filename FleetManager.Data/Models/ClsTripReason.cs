@@ -11,7 +11,11 @@
 
     public partial class ClsTripReason : DataContextEntity<TripReasonDataContext>, IClsTripReason
     {
-	  public ClsTripReason(TripReasonDataContext context = null) : base(context)
+	  public ClsTripReason()
+	  {
+
+	  }
+	  public ClsTripReason(TripReasonDataContext context) : base(context)
 	  {
 	  }
 

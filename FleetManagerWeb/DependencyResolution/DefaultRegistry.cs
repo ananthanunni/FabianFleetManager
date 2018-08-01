@@ -65,39 +65,39 @@ namespace FleetManagerWeb.DependencyResolution {
 	  {
 		For<FleetManager.Data.Models.CommonDataContext>().Use(ctx =>
 		    new FleetManager.Data.Models.CommonDataContext(ctx.GetInstance<FleetManager.Core.Configuration.IConfiguration>().ConnectionString)
-		);
+		).Transient();
 
 		For<FleetManager.Data.Models.CarFleetDataContext>().Use(ctx =>
 		    new FleetManager.Data.Models.CarFleetDataContext(ctx.GetInstance<FleetManager.Core.Configuration.IConfiguration>().ConnectionString)
-		);
+		).Transient();
 
 		For<Models.FleetColorsDataContext>().Use(ctx =>
 		    new Models.FleetColorsDataContext(ctx.GetInstance<FleetManager.Core.Configuration.IConfiguration>().ConnectionString)
-		);
+		).Transient();
 
 		For<Models.FleetMakesDataContext>().Use(ctx =>
 		    new Models.FleetMakesDataContext(ctx.GetInstance<FleetManager.Core.Configuration.IConfiguration>().ConnectionString)
-		);
+		).Transient();
 
 		For<Models.FleetModelsDataContext>().Use(ctx =>
 		    new Models.FleetModelsDataContext(ctx.GetInstance<FleetManager.Core.Configuration.IConfiguration>().ConnectionString)
-		);
+		).Transient();
 
 		For<Models.RoleDataContext>().Use(ctx =>
 		    new Models.RoleDataContext(ctx.GetInstance<FleetManager.Core.Configuration.IConfiguration>().ConnectionString)
-		);
+		).Transient();
 
 		For<Models.TrackerDataContext>().Use(ctx =>
 		    new Models.TrackerDataContext(ctx.GetInstance<FleetManager.Core.Configuration.IConfiguration>().ConnectionString)
-		);
+		).Transient();
 
 		For<Models.TripReasonDataContext>().Use(ctx =>
 		    new Models.TripReasonDataContext(ctx.GetInstance<FleetManager.Core.Configuration.IConfiguration>().ConnectionString)
-		);
+		).Transient();
 
 		For<Models.UserDataContext>().Use(ctx =>
 		    new Models.UserDataContext(ctx.GetInstance<FleetManager.Core.Configuration.IConfiguration>().ConnectionString)
-		);
+		).Transient();
 	  }
 
 	  private void RegisterServices()

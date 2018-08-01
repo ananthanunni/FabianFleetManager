@@ -11,7 +11,11 @@
 
     public partial class ClsTracker : DataContextEntity<TrackerDataContext>, IClsTracker
     {
-	  public ClsTracker(TrackerDataContext context = null) : base(context)
+	  public ClsTracker()
+	  {
+
+	  }
+	  public ClsTracker(TrackerDataContext context) : base(context)
 	  {
 	  }
 
