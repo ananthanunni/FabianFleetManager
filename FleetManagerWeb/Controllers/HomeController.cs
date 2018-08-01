@@ -12,16 +12,14 @@
 
     public class HomeController : BaseController
     {
-        private readonly IClsUser _objiClsUser = null;
 	  private readonly IPermissionChecker _permissionChecker;
 	  private readonly IMySession _mySession;
 	  private readonly ICookieHandler _cookieHandler;
 	  private readonly IAuthentication _authentication;
 
-	  public HomeController(IClsUser objIClsUser,IPermissionChecker permissionChecker,IMySession mySession, ICookieHandler cookieHandler,IAuthentication authentication)
+	  public HomeController(IPermissionChecker permissionChecker,IMySession mySession, ICookieHandler cookieHandler,IAuthentication authentication)
 		:base()
         {
-            _objiClsUser = objIClsUser;
 		_permissionChecker = permissionChecker;
 		_mySession = mySession;
 		_cookieHandler = cookieHandler;
@@ -98,7 +96,7 @@
         {
             try
             {
-                ClsUser objLogin = _objiClsUser as ClsUser;
+                ClsUser objLogin = _authentication.CurrentUser as ClsUser;
                 if (GetCookieValue("rememberme") == "true")
                 {
                     objLogin.strUserName = GetCookieValue("username");
@@ -121,15 +119,8 @@
         {
             try
             {
-                ClsUser objClsUser = _objiClsUser.ValidateLogin(objLogin.strUserName, objLogin.strPassword.EncryptString());
-                if (objClsUser != null)
-                {
-                    _cookieHandler.UpdateCookies(objClsUser.strUserName, objClsUser.strPassword.EncryptString(), objClsUser.lgId.ToString(), objClsUser.strFirstName + " " + objClsUser.strSurName, objLogin.blRememberMe.ToString(), objClsUser.lgRoleId.ToString(), objClsUser.lgBranchId.ToString(), objClsUser.lgUserTypeId.ToString(), "true");
-
-                    objClsUser.blIsLogin = true;
-                    _objiClsUser.SaveUser(objClsUser);
-                }
-
+                _authentication.LoginUser(objLogin.strUserName, objLogin.strPassword,objLogin.blRememberMe.ToString());
+                
                 return RedirectToAction("Index", "Home");
             }
             catch (Exception ex)
@@ -142,19 +133,13 @@
         public ActionResult Logout()
         {
             try
-            {
-                ClsUser objClsUser = _objiClsUser as ClsUser;
-                objClsUser = _objiClsUser.GetUserByUserId(_mySession.UserId);
-                if (objClsUser != null)
-                {
-                    objClsUser.blIsLogin = false;
-                    _objiClsUser.SaveUser(objClsUser);
-                }
-
+            {                
                 _authentication.LogoutUser();
-                ViewData.Clear();
-                TempData.Clear();
-                return RedirectToAction("Login");
+
+		    ViewData.Clear();
+		    TempData.Clear();
+
+		    return RedirectToAction("Login");
             }
             catch (Exception ex)
             {
@@ -186,37 +171,37 @@
             }
         }
 
-        [HttpPost]
-        public JsonResult ValidateLogin(ClsUser objLogin)
-        {
-            try
-            {
-                ClsUser objUser = _objiClsUser.ValidateLogin(objLogin.strUserName, objLogin.strPassword.EncryptString());
-                if (objUser != null)
-                {
-                    // if (objUser.IsLogin)
-                    // {
-                    //    return Json("3333");
-                    // }
-                    return Json(objUser.strEmailID);
-                }
+	  [HttpPost]
+	  public JsonResult ValidateLogin(ClsUser objLogin)
+	  {
+		try
+		{
+		    var objUser = _authentication.CheckCredentials(objLogin.strUserName, objLogin.strPassword.EncryptString()) as ClsUser;
+		    if (objUser != null)
+		    {
+			  // if (objUser.IsLogin)
+			  // {
+			  //    return Json("3333");
+			  // }
+			  return Json(objUser.strEmailID);
+		    }
 
-                return Json("2222");
-            }
-            catch (Exception ex)
-            {
-                Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.LgCommon);
-                return Json("1111");
-            }
-        }
+		    return Json("2222");
+		}
+		catch (Exception ex)
+		{
+		    Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.LgCommon);
+		    return Json("1111");
+		}
+	  }
 
-        public ActionResult ChangePassword(string strCurrentPwd, string strNewPwd)
+	  public ActionResult ChangePassword(string strCurrentPwd, string strNewPwd)
         {
             try
             {
                 if (_mySession.Password == strCurrentPwd.EncryptString())
                 {
-                    ClsUser objUser = _objiClsUser.ChangePassword(_mySession.UserId, strNewPwd);
+                    var objUser = _authentication.CurrentUser.ChangePassword(_mySession.UserId, strNewPwd);
                     _cookieHandler.UpdateCookies(_mySession.UserName, strNewPwd.EncryptString(), _mySession.UserId.ToString(), _mySession.Fullname, _mySession.Rememberme, _mySession.RoleId.ToString(), _mySession.BranchId.ToString(), _mySession.UserTypeId.ToString(), "false");
                     return Json("Success", JsonRequestBehavior.AllowGet);
                 }
