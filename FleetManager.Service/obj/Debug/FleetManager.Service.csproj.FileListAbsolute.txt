@@ -1,5 +1,0 @@
-E:\Projects\Workspace\Freelance\UpWork\20180801Fabian\Code\FleetManagerWeb\FleetManager.Service\bin\Debug\FleetManager.Service.dll
-E:\Projects\Workspace\Freelance\UpWork\20180801Fabian\Code\FleetManagerWeb\FleetManager.Service\bin\Debug\FleetManager.Service.pdb
-E:\Projects\Workspace\Freelance\UpWork\20180801Fabian\Code\FleetManagerWeb\FleetManager.Service\obj\Debug\FleetManager.Service.csproj.CoreCompileInputs.cache
-E:\Projects\Workspace\Freelance\UpWork\20180801Fabian\Code\FleetManagerWeb\FleetManager.Service\obj\Debug\FleetManager.Service.dll
-E:\Projects\Workspace\Freelance\UpWork\20180801Fabian\Code\FleetManagerWeb\FleetManager.Service\obj\Debug\FleetManager.Service.pdb

@@ -1,6 +1,0 @@
-E:\Projects\Workspace\Freelance\UpWork\20180801Fabian\Code\FleetManagerWeb\FleetManager.Core\bin\Debug\FleetManager.Core.dll
-E:\Projects\Workspace\Freelance\UpWork\20180801Fabian\Code\FleetManagerWeb\FleetManager.Core\bin\Debug\FleetManager.Core.pdb
-E:\Projects\Workspace\Freelance\UpWork\20180801Fabian\Code\FleetManagerWeb\FleetManager.Core\obj\Debug\FleetManager.Core.csprojAssemblyReference.cache
-E:\Projects\Workspace\Freelance\UpWork\20180801Fabian\Code\FleetManagerWeb\FleetManager.Core\obj\Debug\FleetManager.Core.csproj.CoreCompileInputs.cache
-E:\Projects\Workspace\Freelance\UpWork\20180801Fabian\Code\FleetManagerWeb\FleetManager.Core\obj\Debug\FleetManager.Core.dll
-E:\Projects\Workspace\Freelance\UpWork\20180801Fabian\Code\FleetManagerWeb\FleetManager.Core\obj\Debug\FleetManager.Core.pdb
