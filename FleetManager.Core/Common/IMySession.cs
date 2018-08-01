@@ -1,4 +1,4 @@
-﻿namespace FleetManager.Model.Common
+﻿namespace FleetManager.Core.Common
 {
     public interface IMySession
     {

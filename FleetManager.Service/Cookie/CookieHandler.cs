@@ -1,12 +1,8 @@
-﻿using FleetManager.Core.Configuration;
+﻿using FleetManager.Core.Common;
+using FleetManager.Core.Configuration;
 using FleetManager.Core.Logging;
-using FleetManager.Model.Common;
-using FleetManagerWeb.Model.Common;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web;
 
 namespace FleetManager.Service.Cookie

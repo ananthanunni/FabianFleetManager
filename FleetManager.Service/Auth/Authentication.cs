@@ -1,9 +1,5 @@
-﻿using FleetManager.Model.Common;
+﻿using FleetManager.Core.Common;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web;
 
 namespace FleetManager.Service.Auth

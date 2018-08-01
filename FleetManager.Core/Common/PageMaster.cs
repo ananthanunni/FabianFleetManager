@@ -1,4 +1,4 @@
-namespace FleetManagerWeb.Model.Common
+namespace FleetManager.Core.Common
 {
     using System;
     using System.Linq;

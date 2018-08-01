@@ -1,14 +1,9 @@
-﻿using FleetManager.Core.Logging;
-using FleetManager.Model.Common;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity;
+﻿using FleetManager.Core.Common;
+using FleetManager.Core.Logging;
 using System.Data.Linq;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
-namespace FleetManagerWeb.Models
+namespace FleetManager.Data.Models
 {
     public abstract class DataContextEntity<T>
 	  where T:DataContext

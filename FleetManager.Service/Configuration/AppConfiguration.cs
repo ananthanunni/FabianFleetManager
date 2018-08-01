@@ -1,13 +1,10 @@
-﻿using FleetManager.Core.Configuration;
+﻿using FleetManager.Core.Common;
+using FleetManager.Core.Configuration;
 using FleetManager.Core.Logging;
 using FleetManager.Data.Models;
-using FleetManagerWeb.Model.Common;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FleetManager.Service.Configuration
 {

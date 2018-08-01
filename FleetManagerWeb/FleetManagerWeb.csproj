@@ -225,63 +225,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\CarFleet.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CarFleet.dbml</DependentUpon>
-    </Compile>
-    <Compile Include="Models\ClsCarFleet.cs" />
-    <Compile Include="Models\ClsTracker.cs" />
-    <Compile Include="Models\ClsFleetColors.cs" />
-    <Compile Include="Models\ClsFleetMakes.cs" />
-    <Compile Include="Models\ClsFleetModels.cs" />
-    <Compile Include="Models\ClsRole.cs" />
-    <Compile Include="Models\ClsTripReason.cs" />
-    <Compile Include="Models\ClsUser.cs" />
-    <Compile Include="Models\DataContextEntity.cs" />
-    <Compile Include="Models\FleetColors.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>FleetColors.dbml</DependentUpon>
-    </Compile>
-    <Compile Include="Models\FleetMakes.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>FleetMakes.dbml</DependentUpon>
-    </Compile>
-    <Compile Include="Models\FleetModels.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>FleetModels.dbml</DependentUpon>
-    </Compile>
-    <Compile Include="Models\IClsCarFleet.cs" />
-    <Compile Include="Models\IClsTracker.cs" />
-    <Compile Include="Models\IClsFleetColors.cs" />
-    <Compile Include="Models\IClsFleetMakes.cs" />
-    <Compile Include="Models\IClsFleetModels.cs" />
-    <Compile Include="Models\IClsRole.cs" />
-    <Compile Include="Models\IClsTripReason.cs" />
-    <Compile Include="Models\IClsUser.cs" />
-    <Compile Include="Models\Role.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Role.dbml</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Tracker.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Tracker.dbml</DependentUpon>
-    </Compile>
-    <Compile Include="Models\TripReason.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>TripReason.dbml</DependentUpon>
-    </Compile>
-    <Compile Include="Models\User.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>User.dbml</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -2242,39 +2185,6 @@
     <Content Include="Scripts\Utility\User.js" />
     <Content Include="Scripts\Utility\UserView.js" />
     <Content Include="Scripts\Utility\Zip.js" />
-    <Content Include="Models\FleetMakes.dbml">
-      <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>FleetMakes.designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="Models\FleetModels.dbml">
-      <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>FleetModels.designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="Models\FleetColors.dbml">
-      <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>FleetColors.designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="Models\TripReason.dbml">
-      <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>TripReason.designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="Models\Tracker.dbml">
-      <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>Tracker.designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="Models\CarFleet.dbml">
-      <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>CarFleet.designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </Content>
-    <None Include="Models\Tracker.dbml.layout">
-      <DependentUpon>Tracker.dbml</DependentUpon>
-    </None>
     <None Include="Properties\DataSources\System.Xml.XmlNode.datasource" />
     <Content Include="Views\FleetMakes\FleetMakes.cshtml" />
     <Content Include="Views\FleetMakes\FleetMakesView.cshtml" />
@@ -2316,6 +2226,7 @@
     <Folder Include="Content\Custom\vendors\bootstrap-datetimepicker\bootstrap\" />
     <Folder Include="Content\Custom\vendors\jquery-ui-1.10.4.custom\jquery-ui-1.10.4.custom\" />
     <Folder Include="Filters\" />
+    <Folder Include="Models\" />
     <Folder Include="Scripts\Library\bootstrap-datetimepicker\bootstrap\" />
     <Folder Include="Scripts\Library\jquery-ui-1.10.4.custom\jquery-ui-1.10.4.custom\" />
     <Folder Include="Scripts\Library\uniform\css\" />
@@ -2335,18 +2246,6 @@
     <Content Include="Views\Shared\_Header.cshtml" />
     <Content Include="Views\User\User.cshtml" />
     <Content Include="Views\User\UserView.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Models\Role.dbml">
-      <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>Role.designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="Models\User.dbml">
-      <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>User.designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
@@ -2713,42 +2612,7 @@
     <None Include="Settings.StyleCop" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Models\Role.dbml.layout">
-      <DependentUpon>Role.dbml</DependentUpon>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Models\User.dbml.layout">
-      <DependentUpon>User.dbml</DependentUpon>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <WCFMetadata Include="Service References\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Models\FleetMakes.dbml.layout">
-      <DependentUpon>FleetMakes.dbml</DependentUpon>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Models\FleetModels.dbml.layout">
-      <DependentUpon>FleetModels.dbml</DependentUpon>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Models\FleetColors.dbml.layout">
-      <DependentUpon>FleetColors.dbml</DependentUpon>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Models\TripReason.dbml.layout">
-      <DependentUpon>TripReason.dbml</DependentUpon>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Models\CarFleet.dbml.layout">
-      <DependentUpon>CarFleet.dbml</DependentUpon>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FleetManager.Core\FleetManager.Core.csproj">

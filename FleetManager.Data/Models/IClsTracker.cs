@@ -1,5 +1,6 @@
-namespace FleetManagerWeb.Models
+namespace FleetManager.Data.Models
 {
+    using FleetManagerWeb.Models;
     using System.Collections.Generic;
     using System.Web.Mvc;
 

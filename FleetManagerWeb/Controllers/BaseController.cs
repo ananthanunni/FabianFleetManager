@@ -1,4 +1,5 @@
-﻿using FleetManager.Core.Configuration;
+﻿using FleetManager.Core.Common;
+using FleetManager.Core.Configuration;
 using FleetManager.Core.Logging;
 using FleetManagerWeb.Common;
 using FleetManagerWeb.Model.Common;

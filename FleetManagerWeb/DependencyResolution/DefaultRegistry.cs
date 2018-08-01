@@ -44,21 +44,21 @@ namespace FleetManagerWeb.DependencyResolution {
 
 	  private void RegisterModels()
 	  {
-		For<Models.IClsRole>().Use<Models.ClsRole>();
-		For<Models.IClsUser>().Use<Models.ClsUser>();
-		For<Models.IClsFleetMakes>().Use<Models.ClsFleetMakes>();
-		For<Models.IClsFleetModels>().Use<Models.ClsFleetModels>();
-		For<Models.IClsFleetColors>().Use<Models.ClsFleetColors>();
-		For<Models.IClsTripReason>().Use<Models.ClsTripReason>();
-		For<Models.IClsTracker>().Use<Models.ClsTracker>();
-		For<Models.IClsCarFleet>().Use<Models.ClsCarFleet>();
-		For<FleetManager.Model.Common.IMySession>().Use<Common.MySession>();
+		For<FleetManager.Data.Models.IClsRole>().Use<FleetManager.Data.Models.ClsRole>();
+		For<FleetManager.Data.Models.IClsUser>().Use<FleetManager.Data.Models.ClsUser>();
+		For<FleetManager.Data.Models.IClsFleetMakes>().Use<FleetManager.Data.Models.ClsFleetMakes>();
+		For<FleetManager.Data.Models.IClsFleetModels>().Use<FleetManager.Data.Models.ClsFleetModels>();
+		For<FleetManager.Data.Models.IClsFleetColors>().Use<FleetManager.Data.Models.ClsFleetColors>();
+		For<FleetManager.Data.Models.IClsTripReason>().Use<FleetManager.Data.Models.ClsTripReason>();
+		For<FleetManager.Data.Models.IClsTracker>().Use<FleetManager.Data.Models.ClsTracker>();
+		For<FleetManager.Data.Models.IClsCarFleet>().Use<FleetManager.Data.Models.ClsCarFleet>();
 	  }
 
 	  private void RegisterCore()
 	  {
 		ForSingletonOf<FleetManager.Core.Configuration.IConfiguration>().Use<FleetManager.Core.Configuration.Configuration>();
 		For<FleetManager.Core.Logging.ILogger>().Use<FleetManager.Core.Logging.Logger>();
+		For<FleetManager.Core.Common.IMySession>().Use<Common.MySession>();
 	  }
 
 	  private void RegisterDataContexts()
@@ -67,8 +67,8 @@ namespace FleetManagerWeb.DependencyResolution {
 		    new FleetManager.Data.Models.CommonDataContext(ctx.GetInstance<FleetManager.Core.Configuration.IConfiguration>().ConnectionString)
 		);
 
-		For<Models.CarFleetDataContext>().Use(ctx =>
-		    new Models.CarFleetDataContext(ctx.GetInstance<FleetManager.Core.Configuration.IConfiguration>().ConnectionString)
+		For<FleetManager.Data.Models.CarFleetDataContext>().Use(ctx =>
+		    new FleetManager.Data.Models.CarFleetDataContext(ctx.GetInstance<FleetManager.Core.Configuration.IConfiguration>().ConnectionString)
 		);
 
 		For<Models.FleetColorsDataContext>().Use(ctx =>

@@ -32,8 +32,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\FleetManagerWeb\bin\System.Web.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -42,18 +48,85 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\CarFleet.designer.cs">
+      <DependentUpon>CarFleet.dbml</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="Models\ClsCarFleet.cs" />
+    <Compile Include="Models\ClsFleetColors.cs" />
+    <Compile Include="Models\ClsFleetMakes.cs" />
+    <Compile Include="Models\ClsFleetModels.cs" />
+    <Compile Include="Models\ClsRole.cs" />
+    <Compile Include="Models\ClsTracker.cs" />
+    <Compile Include="Models\ClsTripReason.cs" />
+    <Compile Include="Models\ClsUser.cs" />
     <Compile Include="Models\Common.designer.cs">
       <DependentUpon>Common.dbml</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Include="Models\DataContextEntity.cs" />
+    <Compile Include="Models\FleetColors.designer.cs">
+      <DependentUpon>FleetColors.dbml</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="Models\FleetMakes.designer.cs">
+      <DependentUpon>FleetMakes.dbml</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="Models\FleetModels.designer.cs">
+      <DependentUpon>FleetModels.dbml</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="Models\IClsCarFleet.cs" />
+    <Compile Include="Models\IClsFleetColors.cs" />
+    <Compile Include="Models\IClsFleetMakes.cs" />
+    <Compile Include="Models\IClsFleetModels.cs" />
+    <Compile Include="Models\IClsRole.cs" />
+    <Compile Include="Models\IClsTracker.cs" />
+    <Compile Include="Models\IClsTripReason.cs" />
+    <Compile Include="Models\IClsUser.cs" />
+    <Compile Include="Models\Role.designer.cs">
+      <DependentUpon>Role.dbml</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="Models\Tracker.designer.cs">
+      <DependentUpon>Tracker.dbml</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="Models\TripReason.designer.cs">
+      <DependentUpon>TripReason.dbml</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="Models\User.designer.cs">
+      <DependentUpon>User.dbml</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
     <Compile Include="Placeholder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\FleetManager.Core\FleetManager.Core.csproj">
+      <Project>{2B9A84C3-C522-404A-88C8-D805A86E6C59}</Project>
+      <Name>FleetManager.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <Content Include="Models\Common.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
@@ -62,8 +135,77 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Models\CarFleet.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>CarFleet.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <None Include="app.config" />
+    <None Include="Models\CarFleet.dbml.layout">
+      <DependentUpon>CarFleet.dbml</DependentUpon>
+    </None>
     <None Include="Models\Common.dbml.layout">
       <DependentUpon>Common.dbml</DependentUpon>
+    </None>
+    <Content Include="Models\User.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>User.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Models\FleetColors.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>FleetColors.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <None Include="Models\FleetColors.dbml.layout">
+      <DependentUpon>FleetColors.dbml</DependentUpon>
+    </None>
+    <Content Include="Models\FleetMakes.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>FleetMakes.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <None Include="Models\FleetMakes.dbml.layout">
+      <DependentUpon>FleetMakes.dbml</DependentUpon>
+    </None>
+    <Content Include="Models\FleetModels.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>FleetModels.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <None Include="Models\FleetModels.dbml.layout">
+      <DependentUpon>FleetModels.dbml</DependentUpon>
+    </None>
+    <Content Include="Models\Role.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>Role.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <None Include="Models\Role.dbml.layout">
+      <DependentUpon>Role.dbml</DependentUpon>
+    </None>
+    <Content Include="Models\Tracker.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>Tracker.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <None Include="Models\Tracker.dbml.layout">
+      <DependentUpon>Tracker.dbml</DependentUpon>
+    </None>
+    <Content Include="Models\TripReason.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>TripReason.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
+    <None Include="Models\TripReason.dbml.layout">
+      <DependentUpon>TripReason.dbml</DependentUpon>
+    </None>
+    <None Include="Models\User.dbml.layout">
+      <DependentUpon>User.dbml</DependentUpon>
+    </None>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

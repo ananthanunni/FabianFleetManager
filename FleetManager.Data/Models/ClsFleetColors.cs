@@ -1,13 +1,13 @@
-﻿namespace FleetManagerWeb.Models
+﻿namespace FleetManager.Data.Models
 {
+    using FleetManager.Core.Common;
+    using FleetManager.Data.Models;
+    using FleetManagerWeb.Models;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Transactions;
     using System.Web.Mvc;
-    using FleetManagerWeb.Common;
-    using FleetManagerWeb.Model.Common;
-    using FleetManagerWeb.Models;
 
     public partial class ClsFleetColors :DataContextEntity<FleetColorsDataContext>, IClsFleetColors
     {

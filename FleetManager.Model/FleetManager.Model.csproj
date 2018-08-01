@@ -47,9 +47,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\Access.cs" />
-    <Compile Include="Common\Extension.cs" />
-    <Compile Include="Common\IMySession.cs" />
-    <Compile Include="Common\PageMaster.cs" />
     <Compile Include="Interaction\MessageType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

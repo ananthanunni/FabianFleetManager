@@ -1,9 +1,8 @@
 ﻿namespace FleetManagerWeb.Common
 {
-    using FleetManager.Model.Common;
-    using FleetManagerWeb.Model.Common;
+    using FleetManager.Core.Common;
+    using FleetManager.Core.Extensions;
     using System;
-    using System.Linq;
     using System.Web;
 
     public class MySession : IMySession

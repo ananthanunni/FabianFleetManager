@@ -1,18 +1,17 @@
 ﻿namespace FleetManagerWeb
 {
+    using FleetManager.Core.Common;
+    using FleetManager.Core.Extensions;
+    using FleetManager.Data.Models;
+    using FleetManager.Model.Interaction;
+    using FleetManager.Service.Auth;
+    using FleetManager.Service.Interaction;
+    using FleetManagerWeb.Controllers;
+    using FleetManagerWeb.Models;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
-    using FleetManager.Data.Models;
-    using FleetManager.Model.Common;
-    using FleetManager.Model.Interaction;
-    using FleetManager.Service.Auth;
-    using FleetManager.Service.Interaction;
-    using FleetManagerWeb.Common;
-    using FleetManagerWeb.Controllers;
-    using FleetManagerWeb.Model.Common;
-    using FleetManagerWeb.Models;
 
     public class RoleController : BaseController
     {

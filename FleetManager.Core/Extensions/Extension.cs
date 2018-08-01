@@ -1,5 +1,6 @@
-﻿namespace FleetManagerWeb.Model.Common
+﻿namespace FleetManager.Core.Extensions
 {
+    using FleetManager.Core.Common;
     using FleetManager.Core.Logging;
     using System;
     using System.Collections.Generic;

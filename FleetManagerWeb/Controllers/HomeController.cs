@@ -1,19 +1,14 @@
 ﻿namespace FleetManagerWeb
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Web.Mvc;
-    using FleetManager.Core.Configuration;
+    using FleetManager.Core.Common;
+    using FleetManager.Core.Extensions;
     using FleetManager.Data.Models;
-    using FleetManager.Model.Common;
     using FleetManager.Service.Auth;
     using FleetManager.Service.Cookie;
-    using FleetManagerWeb.Common;
     using FleetManagerWeb.Controllers;
-    using FleetManagerWeb.Model.Common;
     using FleetManagerWeb.Models;
+    using System;
+    using System.Web.Mvc;
 
     public class HomeController : BaseController
     {

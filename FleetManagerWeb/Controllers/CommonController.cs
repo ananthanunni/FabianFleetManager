@@ -1,5 +1,11 @@
 namespace FleetManagerWeb.Controllers
 {
+    using FleetManager.Core.Common;
+    using FleetManager.Core.Extensions;
+    using FleetManager.Data.Models;
+    using FleetManagerWeb.Models;
+    using iTextSharp.text;
+    using iTextSharp.text.pdf;
     using System;
     using System.Collections.Generic;
     using System.Data;
@@ -7,13 +13,6 @@ namespace FleetManagerWeb.Controllers
     using System.Linq;
     using System.Web.Hosting;
     using System.Web.Mvc;
-    using iTextSharp.text;
-    using iTextSharp.text.pdf;
-    using FleetManagerWeb.Common;
-    using FleetManagerWeb.Models;
-    using FleetManagerWeb.Model.Common;
-    using FleetManager.Core.Logging;
-    using FleetManager.Model.Common;
 
     public class CommonController : BaseController
     {
