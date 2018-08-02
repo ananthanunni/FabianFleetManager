@@ -7,7 +7,7 @@
       <Column Name="Code" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
       <Column Name="Reg" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
       <Column Name="[Desc]" Member="Desc" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="Color_Id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Color_Id" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
       <Column Name="Fuel_Type" Type="System.String" DbType="NVarChar(1)" CanBeNull="true" />
       <Column Name="Last_Trip" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Column Name="Last_Km" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
@@ -18,7 +18,7 @@
       <Column Name="DeletedBy" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="DeletedOn" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
       <Column Name="FleetModels_Id" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
-      <Column Name="FleetMakes_Id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="FleetMakes_Id" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
     </Type>
   </Table>
   <Function Name="dbo.CountCarFleet" Method="CountCarFleet">

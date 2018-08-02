@@ -71,32 +71,32 @@ namespace FleetManagerWeb.DependencyResolution {
 		    new FleetManager.Data.Models.CarFleetDataContext(ctx.GetInstance<FleetManager.Core.Configuration.IConfiguration>().ConnectionString)
 		).Transient();
 
-		For<Models.FleetColorsDataContext>().Use(ctx =>
-		    new Models.FleetColorsDataContext(ctx.GetInstance<FleetManager.Core.Configuration.IConfiguration>().ConnectionString)
+		For<FleetManager.Data.Models.FleetColorsDataContext>().Use(ctx =>
+		    new FleetManager.Data.Models.FleetColorsDataContext(ctx.GetInstance<FleetManager.Core.Configuration.IConfiguration>().ConnectionString)
 		).Transient();
 
-		For<Models.FleetMakesDataContext>().Use(ctx =>
-		    new Models.FleetMakesDataContext(ctx.GetInstance<FleetManager.Core.Configuration.IConfiguration>().ConnectionString)
+		For<FleetManager.Data.Models.FleetMakesDataContext>().Use(ctx =>
+		    new FleetManager.Data.Models.FleetMakesDataContext(ctx.GetInstance<FleetManager.Core.Configuration.IConfiguration>().ConnectionString)
 		).Transient();
 
-		For<Models.FleetModelsDataContext>().Use(ctx =>
-		    new Models.FleetModelsDataContext(ctx.GetInstance<FleetManager.Core.Configuration.IConfiguration>().ConnectionString)
+		For<FleetManager.Data.Models.FleetModelsDataContext>().Use(ctx =>
+		    new FleetManager.Data.Models.FleetModelsDataContext(ctx.GetInstance<FleetManager.Core.Configuration.IConfiguration>().ConnectionString)
 		).Transient();
 
-		For<Models.RoleDataContext>().Use(ctx =>
-		    new Models.RoleDataContext(ctx.GetInstance<FleetManager.Core.Configuration.IConfiguration>().ConnectionString)
+		For<FleetManager.Data.Models.RoleDataContext>().Use(ctx =>
+		    new FleetManager.Data.Models.RoleDataContext(ctx.GetInstance<FleetManager.Core.Configuration.IConfiguration>().ConnectionString)
 		).Transient();
 
-		For<Models.TrackerDataContext>().Use(ctx =>
-		    new Models.TrackerDataContext(ctx.GetInstance<FleetManager.Core.Configuration.IConfiguration>().ConnectionString)
+		For<FleetManager.Data.Models.TrackerDataContext>().Use(ctx =>
+		    new FleetManager.Data.Models.TrackerDataContext(ctx.GetInstance<FleetManager.Core.Configuration.IConfiguration>().ConnectionString)
 		).Transient();
 
-		For<Models.TripReasonDataContext>().Use(ctx =>
-		    new Models.TripReasonDataContext(ctx.GetInstance<FleetManager.Core.Configuration.IConfiguration>().ConnectionString)
+		For<FleetManager.Data.Models.TripReasonDataContext>().Use(ctx =>
+		    new FleetManager.Data.Models.TripReasonDataContext(ctx.GetInstance<FleetManager.Core.Configuration.IConfiguration>().ConnectionString)
 		).Transient();
 
-		For<Models.UserDataContext>().Use(ctx =>
-		    new Models.UserDataContext(ctx.GetInstance<FleetManager.Core.Configuration.IConfiguration>().ConnectionString)
+		For<FleetManager.Data.Models.UserDataContext>().Use(ctx =>
+		    new FleetManager.Data.Models.UserDataContext(ctx.GetInstance<FleetManager.Core.Configuration.IConfiguration>().ConnectionString)
 		).Transient();
 	  }
 

@@ -9,7 +9,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FleetManagerWeb.Models
+namespace FleetManager.Data.Models
 {
 	using System.Data.Linq;
 	using System.Data.Linq.Mapping;
@@ -22,7 +22,7 @@ namespace FleetManagerWeb.Models
 	using System;
 	
 	
-	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="SVLL_ETS")]
+	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="FleetManager")]
 	public partial class FleetColorsDataContext : System.Data.Linq.DataContext
 	{
 		
@@ -30,12 +30,18 @@ namespace FleetManagerWeb.Models
 		
     #region Extensibility Method Definitions
     partial void OnCreated();
-    partial void InsertFleetColors(FleetColors instance);
-    partial void UpdateFleetColors(FleetColors instance);
-    partial void DeleteFleetColors(FleetColors instance);
-        #endregion
-
-        public FleetColorsDataContext(string connection) : 
+    partial void InsertFleetColor(FleetColor instance);
+    partial void UpdateFleetColor(FleetColor instance);
+    partial void DeleteFleetColor(FleetColor instance);
+    #endregion
+		
+		public FleetColorsDataContext() : 
+				base(global::FleetManager.Data.Properties.Settings.Default.FleetManagerConnectionString, mappingSource)
+		{
+			OnCreated();
+		}
+		
+		public FleetColorsDataContext(string connection) : 
 				base(connection, mappingSource)
 		{
 			OnCreated();
@@ -59,11 +65,11 @@ namespace FleetManagerWeb.Models
 			OnCreated();
 		}
 		
-		public System.Data.Linq.Table<FleetColors> FleetColors
+		public System.Data.Linq.Table<FleetColor> FleetColors
 		{
 			get
 			{
-				return this.GetTable<FleetColors>();
+				return this.GetTable<FleetColor>();
 			}
 		}
 		
@@ -111,7 +117,7 @@ namespace FleetManagerWeb.Models
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.FleetColors")]
-	public partial class FleetColors : INotifyPropertyChanging, INotifyPropertyChanged
+	public partial class FleetColor : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
@@ -158,7 +164,7 @@ namespace FleetManagerWeb.Models
     partial void OnIsDeletedChanged();
     #endregion
 		
-		public FleetColors()
+		public FleetColor()
 		{
 			OnCreated();
 		}
@@ -183,7 +189,7 @@ namespace FleetManagerWeb.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FleetColorsName", DbType="NVarChar(100) NOT NULL", CanBeNull=false)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FleetColorsName", DbType="NVarChar(10) NOT NULL", CanBeNull=false)]
 		public string FleetColorsName
 		{
 			get

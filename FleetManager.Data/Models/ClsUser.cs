@@ -1,67 +1,65 @@
-﻿namespace FleetManager.Data.Models
-{
-    using FleetManager.Core.Common;
-    using FleetManager.Core.Extensions;
-    using FleetManager.Data.Models;
-    using FleetManagerWeb.Models;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Web.Mvc;
+﻿using FleetManager.Core.Common;
+using FleetManager.Core.Extensions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
 
+namespace FleetManager.Data.Models
+{
     public partial class ClsUser : DataContextEntity<UserDataContext>, IClsUser
     {
 	  public ClsUser() { }
 
 	  public ClsUser(UserDataContext context) : base(context) { }
 
-	  public bool blIsActive { get; set; }
+	  public bool BlIsActive { get; set; }
 
-	  public bool blIsLogin { get; set; }
+	  public bool BlIsLogin { get; set; }
 
-	  public bool blRememberMe { get; set; }
+	  public bool BlRememberMe { get; set; }
 
-	  public bool hdniFrame { get; set; }
+	  public bool HdniFrame { get; set; }
 
-	  public long lgBranchId { get; set; }
+	  public long LgBranchId { get; set; }
 
-	  public long lgId { get; set; }
+	  public long LgId { get; set; }
 
-	  public long lgRoleId { get; set; }
+	  public long LgRoleId { get; set; }
 
-	  public long lgUserTypeId { get; set; }
+	  public long LgUserTypeId { get; set; }
 
-	  public long lgVehicleDistributeId { get; set; }
+	  public long LgVehicleDistributeId { get; set; }
 
-	  public List<SelectListItem> lstBranch { get; set; }
+	  public List<SelectListItem> LstBranch { get; set; }
 
-	  public List<SelectListItem> lstRole { get; set; }
+	  public List<SelectListItem> LstRole { get; set; }
 
-	  public List<ClsUser> lstUser { get; set; }
+	  public List<ClsUser> LstUser { get; set; }
 
-	  public List<SelectListItem> lstUserType { get; set; }
+	  public List<SelectListItem> LstUserType { get; set; }
 
-	  public string strAddress { get; set; }
+	  public string StrAddress { get; set; }
 
-	  public string strBranchName { get; set; }
+	  public string StrBranchName { get; set; }
 
-	  public string strEmailID { get; set; }
+	  public string StrEmailID { get; set; }
 
-	  public string strEmployeeCode { get; set; }
+	  public string StrEmployeeCode { get; set; }
 
-	  public string strFirstName { get; set; }
+	  public string StrFirstName { get; set; }
 
-	  public string strMobileNo { get; set; }
+	  public string StrMobileNo { get; set; }
 
-	  public string strPassword { get; set; }
+	  public string StrPassword { get; set; }
 
-	  public string strRoleName { get; set; }
+	  public string StrRoleName { get; set; }
 
-	  public string strSurName { get; set; }
+	  public string StrSurName { get; set; }
 
-	  public string strUserName { get; set; }
+	  public string StrUserName { get; set; }
 
-	  public string strUserTypeName { get; set; }
+	  public string StrUserTypeName { get; set; }
 
 	  public static bool AppStart()
 	  {
@@ -89,7 +87,7 @@
 		    objUserMaster = GetUserByUserId(lgUserId);
 		    if (objUserMaster != null)
 		    {
-			  objUserMaster.strPassword = strUserPwd;
+			  objUserMaster.StrPassword = strUserPwd;
 		    }
 
 		    SaveUser(objUserMaster);
@@ -253,25 +251,25 @@
 		{
 		    using (objDataContext = GetDataContext())
 		    {
-			  var result = objDataContext.User.Where(x => x.BranchId == lgBranchId && x.UserTypeId == lgUserTypeId);
+			  var result = objDataContext.Users.Where(x => x.BranchId == lgBranchId && x.UserTypeId == lgUserTypeId);
 			  if (result != null)
 			  {
 				foreach (var item in result)
 				{
-				    objClsUser.lgId = item.Id;
-				    objClsUser.strFirstName = item.FirstName;
-				    objClsUser.strSurName = item.SurName;
-				    objClsUser.strMobileNo = item.MobileNo;
-				    objClsUser.strEmailID = item.EmailID;
-				    objClsUser.strUserName = item.UserName;
-				    objClsUser.strPassword = item.Password.DecryptString();
-				    objClsUser.strAddress = item.Address;
-				    objClsUser.lgRoleId = item.RoleId;
-				    objClsUser.lgBranchId = item.BranchId;
-				    objClsUser.lgUserTypeId = item.UserTypeId;
-				    objClsUser.blIsActive = item.IsActive;
-				    objClsUser.blIsLogin = item.IsLogin;
-				    objClsUser.strEmployeeCode = item.EmployeeCode;
+				    objClsUser.LgId = item.Id;
+				    objClsUser.StrFirstName = item.FirstName;
+				    objClsUser.StrSurName = item.SurName;
+				    objClsUser.StrMobileNo = item.MobileNo;
+				    objClsUser.StrEmailID = item.EmailID;
+				    objClsUser.StrUserName = item.UserName;
+				    objClsUser.StrPassword = item.Password.DecryptString();
+				    objClsUser.StrAddress = item.Address;
+				    objClsUser.LgRoleId = item.RoleId;
+				    objClsUser.LgBranchId = item.BranchId;
+				    objClsUser.LgUserTypeId = item.UserTypeId;
+				    objClsUser.BlIsActive = item.IsActive;
+				    objClsUser.BlIsLogin = item.IsLogin;
+				    objClsUser.StrEmployeeCode = item.EmployeeCode;
 				}
 			  }
 		    }
@@ -294,12 +292,12 @@
 			  GetUserByEmailIdResult item = objDataContext.GetUserByEmailId(strEmailId).FirstOrDefault();
 			  if (item != null)
 			  {
-				objClsUser.lgId = item.Id;
-				objClsUser.strEmailID = item.EmailID;
-				objClsUser.strFirstName = item.FirstName;
-				objClsUser.strSurName = item.SurName;
-				objClsUser.strMobileNo = item.MobileNo;
-				objClsUser.strPassword = item.Password;
+				objClsUser.LgId = item.Id;
+				objClsUser.StrEmailID = item.EmailID;
+				objClsUser.StrFirstName = item.FirstName;
+				objClsUser.StrSurName = item.SurName;
+				objClsUser.StrMobileNo = item.MobileNo;
+				objClsUser.StrPassword = item.Password;
 			  }
 		    }
 		}
@@ -321,22 +319,22 @@
 			  GetUserByIdResult item = objDataContext.GetUserById(lgUserId).FirstOrDefault();
 			  if (item != null)
 			  {
-				objClsUser.lgId = item.Id;
-				objClsUser.strFirstName = item.FirstName;
-				objClsUser.strSurName = item.SurName;
-				objClsUser.strMobileNo = item.MobileNo;
-				objClsUser.strEmailID = item.EmailID;
-				objClsUser.strUserName = item.UserName;
-				objClsUser.strPassword = item.Password.DecryptString();
-				objClsUser.strAddress = item.Address;
-				objClsUser.lgRoleId = item.RoleId;
-				objClsUser.lgBranchId = item.BranchId;
-				objClsUser.strBranchName = item.UserBranchName;
-				objClsUser.lgUserTypeId = item.UserTypeId;
-				objClsUser.blIsActive = item.IsActive;
-				objClsUser.blIsLogin = item.IsLogin;
-				objClsUser.strEmployeeCode = item.EmployeeCode;
-				objClsUser.lgVehicleDistributeId = item.VehicleDistributeId;
+				objClsUser.LgId = item.Id;
+				objClsUser.StrFirstName = item.FirstName;
+				objClsUser.StrSurName = item.SurName;
+				objClsUser.StrMobileNo = item.MobileNo;
+				objClsUser.StrEmailID = item.EmailID;
+				objClsUser.StrUserName = item.UserName;
+				objClsUser.StrPassword = item.Password.DecryptString();
+				objClsUser.StrAddress = item.Address;
+				objClsUser.LgRoleId = item.RoleId;
+				objClsUser.LgBranchId = item.BranchId;
+				objClsUser.StrBranchName = item.UserBranchName;
+				objClsUser.LgUserTypeId = item.UserTypeId;
+				objClsUser.BlIsActive = item.IsActive;
+				objClsUser.BlIsLogin = item.IsLogin;
+				objClsUser.StrEmployeeCode = item.EmployeeCode;
+				objClsUser.LgVehicleDistributeId = item.VehicleDistributeId;
 			  }
 		    }
 		}
@@ -376,7 +374,7 @@
 		{
 		    using (objDataContext = GetDataContext())
 		    {
-			  if (objDataContext.User.Where(x => x.Id != lgUserId && x.EmailID == userEmail).Count() > 0)
+			  if (objDataContext.Users.Where(x => x.Id != lgUserId && x.EmailID == userEmail).Count() > 0)
 			  {
 				return true;
 			  }
@@ -397,7 +395,7 @@
 		{
 		    using (objDataContext = GetDataContext())
 		    {
-			  if (objDataContext.User.Where(x => x.Id != lgUserId && x.UserName == userName).Count() > 0)
+			  if (objDataContext.Users.Where(x => x.Id != lgUserId && x.UserName == userName).Count() > 0)
 			  {
 				return true;
 			  }
@@ -418,8 +416,8 @@
 		{
 		    using (objDataContext = GetDataContext())
 		    {
-			  objSave.strPassword = objSave.strPassword.EncryptString();
-			  var result = objDataContext.InsertOrUpdateUser(objSave.lgId, 1, 1, objSave.strFirstName, objSave.strSurName, objSave.strMobileNo, objSave.strEmailID, objSave.strUserName, objSave.strPassword, objSave.strAddress, "EMP/12345", objSave.lgRoleId, objSave.blIsActive, objSave.blIsLogin, _mySession.UserId, PageMaster.User).FirstOrDefault();
+			  objSave.StrPassword = objSave.StrPassword.EncryptString();
+			  var result = objDataContext.InsertOrUpdateUser(objSave.LgId, 1, 1, objSave.StrFirstName, objSave.StrSurName, objSave.StrMobileNo, objSave.StrEmailID, objSave.StrUserName, objSave.StrPassword, objSave.StrAddress, "EMP/12345", objSave.LgRoleId, objSave.BlIsActive, objSave.BlIsLogin, _mySession.UserId, PageMaster.User).FirstOrDefault();
 			  if (result != null)
 			  {
 				return result.InsertedId;
@@ -459,24 +457,26 @@
 		{
 		    using (objDataContext = GetDataContext())
 		    {
-			  User objUser = objDataContext.User.Where(n => n.UserName == strUserName && n.Password == strPassword && n.IsActive == true).FirstOrDefault();
+			  User objUser = objDataContext.Users.Where(n => n.UserName == strUserName && n.Password == strPassword && n.IsActive == true).FirstOrDefault();
 			  if (objUser != null)
 			  {
-				ClsUser objClsUser = new ClsUser();
-				objClsUser.lgId = objUser.Id;
-				objClsUser.lgBranchId = objUser.BranchId;
-				objClsUser.lgUserTypeId = objUser.UserTypeId;
-				objClsUser.strFirstName = objUser.FirstName;
-				objClsUser.strSurName = objUser.SurName;
-				objClsUser.strMobileNo = objUser.MobileNo;
-				objClsUser.strEmailID = objUser.EmailID;
-				objClsUser.strUserName = objUser.UserName;
-				objClsUser.strPassword = objUser.Password.DecryptString();
-				objClsUser.strAddress = objUser.Address;
-				objClsUser.lgRoleId = objUser.RoleId;
-				objClsUser.blIsActive = objUser.IsActive;
-				objClsUser.blIsLogin = objUser.IsLogin;
-				objClsUser.strEmployeeCode = objUser.EmployeeCode;
+				ClsUser objClsUser = new ClsUser
+				{
+				    LgId = objUser.Id,
+				    LgBranchId = objUser.BranchId,
+				    LgUserTypeId = objUser.UserTypeId,
+				    StrFirstName = objUser.FirstName,
+				    StrSurName = objUser.SurName,
+				    StrMobileNo = objUser.MobileNo,
+				    StrEmailID = objUser.EmailID,
+				    StrUserName = objUser.UserName,
+				    StrPassword = objUser.Password.DecryptString(),
+				    StrAddress = objUser.Address,
+				    LgRoleId = objUser.RoleId,
+				    BlIsActive = objUser.IsActive,
+				    BlIsLogin = objUser.IsLogin,
+				    StrEmployeeCode = objUser.EmployeeCode
+				};
 				return objClsUser;
 			  }
 

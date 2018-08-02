@@ -132,6 +132,12 @@
       <LastGenOutput>Common.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="SQL\003-CarFleet-AddFKToFleetColors.sql" />
+    <Content Include="SQL\002-CarFleet-AddFKToFleetMakes.sql" />
+    <Content Include="SQL\001-FleetMakes-RemoveSelfFK.sql" />
+    <Content Include="SQL\004-Tracker-AddFKToCarFleet.sql" />
+    <Content Include="SQL\005-Tracker-AddFKToUser.sql" />
+    <Content Include="SQL\006-Tracker-AddFKTripReason.sql" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Models\CarFleet.dbml">

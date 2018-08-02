@@ -1,18 +1,17 @@
-﻿   using FleetManager.Core.Common;
-    using FleetManager.Core.Extensions;
-    using FleetManager.Data.Models;
-    using FleetManager.Model.Interaction;
-    using FleetManager.Service.Auth;
-    using FleetManager.Service.Interaction;
-    using FleetManagerWeb.Models;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Web.Mvc;
+﻿using FleetManager.Core.Common;
+using FleetManager.Core.Extensions;
+using FleetManager.Data.Models;
+using FleetManager.Model.Interaction;
+using FleetManager.Service.Auth;
+using FleetManager.Service.Interaction;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace FleetManagerWeb.Controllers
 {
-     public class FleetMakesController : BaseController
+    public class FleetMakesController : BaseController
     {
         private readonly IClsFleetMakes _objiClsFleetMakes = null;
 	  private readonly IAlertTextProvider _alertTextProvider;

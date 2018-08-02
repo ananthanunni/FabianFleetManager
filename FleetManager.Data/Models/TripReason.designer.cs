@@ -9,7 +9,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FleetManagerWeb.Models
+namespace FleetManager.Data.Models
 {
 	using System.Data.Linq;
 	using System.Data.Linq.Mapping;
@@ -22,7 +22,7 @@ namespace FleetManagerWeb.Models
 	using System;
 	
 	
-	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="SVLL_ETS")]
+	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="FleetManager")]
 	public partial class TripReasonDataContext : System.Data.Linq.DataContext
 	{
 		
@@ -34,6 +34,12 @@ namespace FleetManagerWeb.Models
     partial void UpdateTripReason(TripReason instance);
     partial void DeleteTripReason(TripReason instance);
     #endregion
+		
+		public TripReasonDataContext() : 
+				base(global::FleetManager.Data.Properties.Settings.Default.FleetManagerConnectionString, mappingSource)
+		{
+			OnCreated();
+		}
 		
 		public TripReasonDataContext(string connection) : 
 				base(connection, mappingSource)
@@ -59,7 +65,7 @@ namespace FleetManagerWeb.Models
 			OnCreated();
 		}
 		
-		public System.Data.Linq.Table<TripReason> TripReason
+		public System.Data.Linq.Table<TripReason> TripReasons
 		{
 			get
 			{
@@ -183,7 +189,7 @@ namespace FleetManagerWeb.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TripReasonName", DbType="NVarChar(100) NOT NULL", CanBeNull=false)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TripReasonName", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
 		public string TripReasonName
 		{
 			get

@@ -1,41 +1,40 @@
-﻿namespace FleetManager.Data.Models
-{
-    using FleetManagerWeb.Models;
-    using System.Collections.Generic;
-    using System.Web.Mvc;
+﻿using System.Collections.Generic;
+using System.Web.Mvc;
 
+namespace FleetManager.Data.Models
+{
     public interface IClsUser
     {
-        ClsUser ChangePassword(long lgUserId, string strUserPwd);
+	  ClsUser ChangePassword(long lgUserId, string strUserPwd);
 
-        DeleteUserResult DeleteUser(string strUserId, long lgDeletedBy);
+	  DeleteUserResult DeleteUser(string strUserId, long lgDeletedBy);
 
-        List<SelectListItem> GetAllUserByBranchForDropDown(long lgBranchId);
+	  List<SelectListItem> GetAllUserByBranchForDropDown(long lgBranchId);
 
-        List<SelectListItem> GetAllUserForDropDown();
+	  List<SelectListItem> GetAllUserForDropDown();
 
-        List<SelectListItem> GetAllUserTypeForDropDown();
+	  List<SelectListItem> GetAllUserTypeForDropDown();
 
-        List<GetBranchManagerByBranchIdResult> GetBranchManagerByBranchId(long lgBranchId);
+	  List<GetBranchManagerByBranchIdResult> GetBranchManagerByBranchId(long lgBranchId);
 
-        List<GetUserAllResult> GetUserAll();
+	  List<GetUserAllResult> GetUserAll();
 
-        ClsUser GetUserByBranchAndUserType(long lgBranchId, long lgUserTypeId);
+	  ClsUser GetUserByBranchAndUserType(long lgBranchId, long lgUserTypeId);
 
-        ClsUser GetUserByEmailId(string strEmailId);
+	  ClsUser GetUserByEmailId(string strEmailId);
 
-        ClsUser GetUserByUserId(long lgUserId);
+	  ClsUser GetUserByUserId(long lgUserId);
 
-        List<GetBranchManagerByBranchIdResult> GetUserIdByUserType();
+	  List<GetBranchManagerByBranchIdResult> GetUserIdByUserType();
 
-        bool IsUserEmailExists(long lgUserId, string userEmail);
+	  bool IsUserEmailExists(long lgUserId, string userEmail);
 
-        bool IsUserExists(long lgUserId, string userName);
+	  bool IsUserExists(long lgUserId, string userName);
 
-        long SaveUser(ClsUser objSave);
+	  long SaveUser(ClsUser objSave);
 
-        List<SearchUserResult> SearchUser(int inRow, int inPage, string strSearch, string strSort);
+	  List<SearchUserResult> SearchUser(int inRow, int inPage, string strSearch, string strSort);
 
-        ClsUser ValidateLogin(string strUserName, string strPassword);
+	  ClsUser ValidateLogin(string strUserName, string strPassword);
     }
 }

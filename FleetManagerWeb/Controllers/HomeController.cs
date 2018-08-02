@@ -3,8 +3,6 @@ using FleetManager.Core.Extensions;
 using FleetManager.Data.Models;
 using FleetManager.Service.Auth;
 using FleetManager.Service.Cookie;
-using FleetManagerWeb.Controllers;
-using FleetManagerWeb.Models;
 using System;
 using System.Web.Mvc;
 
@@ -99,10 +97,10 @@ namespace FleetManagerWeb.Controllers
 		    ClsUser objLogin = _authentication.CurrentUser as ClsUser;
 		    if (GetCookieValue("rememberme") == "true")
 		    {
-			  objLogin.strUserName = GetCookieValue("username");
-			  objLogin.strPassword = GetCookieValue("password");
+			  objLogin.StrUserName = GetCookieValue("username");
+			  objLogin.StrPassword = GetCookieValue("password");
 			  ViewBag.password = GetCookieValue("password");
-			  objLogin.blRememberMe = Convert.ToBoolean(GetCookieValue("rememberme"));
+			  objLogin.BlRememberMe = Convert.ToBoolean(GetCookieValue("rememberme"));
 		    }
 
 		    return View(objLogin);
@@ -119,7 +117,7 @@ namespace FleetManagerWeb.Controllers
 	  {
 		try
 		{
-		    _authentication.LoginUser(objLogin.strUserName, objLogin.strPassword, objLogin.blRememberMe.ToString());
+		    _authentication.LoginUser(objLogin.StrUserName, objLogin.StrPassword, objLogin.BlRememberMe.ToString());
 
 		    return RedirectToAction("Index", "Home");
 		}
@@ -176,14 +174,14 @@ namespace FleetManagerWeb.Controllers
 	  {
 		try
 		{
-		    var objUser = _authentication.CheckCredentials(objLogin.strUserName, objLogin.strPassword.EncryptString()) as ClsUser;
+		    var objUser = _authentication.CheckCredentials(objLogin.StrUserName, objLogin.StrPassword.EncryptString()) as ClsUser;
 		    if (objUser != null)
 		    {
 			  // if (objUser.IsLogin)
 			  // {
 			  //    return Json("3333");
 			  // }
-			  return Json(objUser.strEmailID);
+			  return Json(objUser.StrEmailID);
 		    }
 
 		    return Json("2222");

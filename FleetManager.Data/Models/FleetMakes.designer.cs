@@ -9,7 +9,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FleetManagerWeb.Models
+namespace FleetManager.Data.Models
 {
 	using System.Data.Linq;
 	using System.Data.Linq.Mapping;
@@ -36,7 +36,7 @@ namespace FleetManagerWeb.Models
     #endregion
 		
 		public FleetMakesDataContext() : 
-				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["FleetManagerConnectionString1"].ConnectionString, mappingSource)
+				base(global::FleetManager.Data.Properties.Settings.Default.FleetManagerConnectionString, mappingSource)
 		{
 			OnCreated();
 		}
@@ -140,10 +140,6 @@ namespace FleetManagerWeb.Models
 		
 		private bool _IsDeleted;
 		
-		private EntityRef<FleetMake> _FleetMake2;
-		
-		private EntityRef<FleetMake> _FleetMake1;
-		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -170,8 +166,6 @@ namespace FleetManagerWeb.Models
 		
 		public FleetMake()
 		{
-			this._FleetMake2 = default(EntityRef<FleetMake>);
-			this._FleetMake1 = default(EntityRef<FleetMake>);
 			OnCreated();
 		}
 		
@@ -186,10 +180,6 @@ namespace FleetManagerWeb.Models
 			{
 				if ((this._Id != value))
 				{
-					if (this._FleetMake1.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
 					this.OnIdChanging(value);
 					this.SendPropertyChanging();
 					this._Id = value;
@@ -355,69 +345,6 @@ namespace FleetManagerWeb.Models
 					this._IsDeleted = value;
 					this.SendPropertyChanged("IsDeleted");
 					this.OnIsDeletedChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="FleetMake_FleetMake", Storage="_FleetMake2", ThisKey="Id", OtherKey="Id", IsUnique=true, IsForeignKey=false)]
-		public FleetMake FleetMake2
-		{
-			get
-			{
-				return this._FleetMake2.Entity;
-			}
-			set
-			{
-				FleetMake previousValue = this._FleetMake2.Entity;
-				if (((previousValue != value) 
-							|| (this._FleetMake2.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._FleetMake2.Entity = null;
-						previousValue.FleetMake1 = null;
-					}
-					this._FleetMake2.Entity = value;
-					if ((value != null))
-					{
-						value.FleetMake1 = this;
-					}
-					this.SendPropertyChanged("FleetMake2");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="FleetMake_FleetMake", Storage="_FleetMake1", ThisKey="Id", OtherKey="Id", IsForeignKey=true)]
-		public FleetMake FleetMake1
-		{
-			get
-			{
-				return this._FleetMake1.Entity;
-			}
-			set
-			{
-				FleetMake previousValue = this._FleetMake1.Entity;
-				if (((previousValue != value) 
-							|| (this._FleetMake1.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._FleetMake1.Entity = null;
-						previousValue.FleetMake2 = null;
-					}
-					this._FleetMake1.Entity = value;
-					if ((value != null))
-					{
-						value.FleetMake2 = this;
-						this._Id = value.Id;
-					}
-					else
-					{
-						this._Id = default(long);
-					}
-					this.SendPropertyChanged("FleetMake1");
 				}
 			}
 		}

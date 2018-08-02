@@ -9,7 +9,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FleetManagerWeb.Models
+namespace FleetManager.Data.Models
 {
 	using System.Data.Linq;
 	using System.Data.Linq.Mapping;
@@ -22,7 +22,7 @@ namespace FleetManagerWeb.Models
 	using System;
 	
 	
-	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="SVLL_ETS")]
+	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="FleetManager")]
 	public partial class RoleDataContext : System.Data.Linq.DataContext
 	{
 		
@@ -34,6 +34,12 @@ namespace FleetManagerWeb.Models
     partial void UpdateRole(Role instance);
     partial void DeleteRole(Role instance);
     #endregion
+		
+		public RoleDataContext() : 
+				base(global::FleetManager.Data.Properties.Settings.Default.FleetManagerConnectionString, mappingSource)
+		{
+			OnCreated();
+		}
 		
 		public RoleDataContext(string connection) : 
 				base(connection, mappingSource)
@@ -143,6 +149,8 @@ namespace FleetManagerWeb.Models
 		
 		private bool _IsDeleted;
 		
+		private System.Nullable<bool> _AllowKilometerLimit;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -167,6 +175,8 @@ namespace FleetManagerWeb.Models
     partial void OnDeletedByChanged();
     partial void OnIsDeletedChanging(bool value);
     partial void OnIsDeletedChanged();
+    partial void OnAllowKilometerLimitChanging(System.Nullable<bool> value);
+    partial void OnAllowKilometerLimitChanged();
     #endregion
 		
 		public Role()
@@ -370,6 +380,26 @@ namespace FleetManagerWeb.Models
 					this._IsDeleted = value;
 					this.SendPropertyChanged("IsDeleted");
 					this.OnIsDeletedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AllowKilometerLimit", DbType="Bit")]
+		public System.Nullable<bool> AllowKilometerLimit
+		{
+			get
+			{
+				return this._AllowKilometerLimit;
+			}
+			set
+			{
+				if ((this._AllowKilometerLimit != value))
+				{
+					this.OnAllowKilometerLimitChanging(value);
+					this.SendPropertyChanging();
+					this._AllowKilometerLimit = value;
+					this.SendPropertyChanged("AllowKilometerLimit");
+					this.OnAllowKilometerLimitChanged();
 				}
 			}
 		}

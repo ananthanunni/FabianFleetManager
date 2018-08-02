@@ -32,9 +32,9 @@ namespace FleetManager.Service.Auth
 		ClsUser objClsUser = _clsUserEntity.ValidateLogin(userName, password.EncryptString());
 		if (objClsUser != null)
 		{
-		    _cookieHandler.UpdateCookies(objClsUser.strUserName, objClsUser.strPassword.EncryptString(), objClsUser.lgId.ToString(), objClsUser.strFirstName + " " + objClsUser.strSurName, rememberMe, objClsUser.lgRoleId.ToString(), objClsUser.lgBranchId.ToString(), objClsUser.lgUserTypeId.ToString(), "true");
+		    _cookieHandler.UpdateCookies(objClsUser.StrUserName, objClsUser.StrPassword.EncryptString(), objClsUser.LgId.ToString(), objClsUser.StrFirstName + " " + objClsUser.StrSurName, rememberMe, objClsUser.LgRoleId.ToString(), objClsUser.LgBranchId.ToString(), objClsUser.LgUserTypeId.ToString(), "true");
 
-		    objClsUser.blIsLogin = true;
+		    objClsUser.BlIsLogin = true;
 		    _clsUserEntity.SaveUser(objClsUser);
 		}
 	  }
@@ -44,7 +44,7 @@ namespace FleetManager.Service.Auth
 		var objClsUser = _clsUserEntity.GetUserByUserId(_mySession.UserId);
 		if (objClsUser != null)
 		{
-		    objClsUser.blIsLogin = false;
+		    objClsUser.BlIsLogin = false;
 		    _clsUserEntity.SaveUser(objClsUser);
 		}
 

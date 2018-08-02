@@ -5,7 +5,6 @@ using FleetManager.Model.Interaction;
 using FleetManager.Service.Auth;
 using FleetManager.Service.Interaction;
 using FleetManagerWeb.Controllers;
-using FleetManagerWeb.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,15 +38,15 @@ namespace FleetManagerWeb
 		{
 		    if (blBindDropDownFromDb)
 		    {
-			  objClsUser.lstRole = _objiClsRole.GetAllRoleForDropDown().ToList();
-			  objClsUser.lstBranch = new List<SelectListItem>();
-			  objClsUser.lstUserType = _objiClsUser.GetAllUserTypeForDropDown().ToList();
+			  objClsUser.LstRole = _objiClsRole.GetAllRoleForDropDown().ToList();
+			  objClsUser.LstBranch = new List<SelectListItem>();
+			  objClsUser.LstUserType = _objiClsUser.GetAllUserTypeForDropDown().ToList();
 		    }
 		    else
 		    {
-			  objClsUser.lstRole = new List<SelectListItem>();
-			  objClsUser.lstBranch = new List<SelectListItem>();
-			  objClsUser.lstUserType = new List<SelectListItem>();
+			  objClsUser.LstRole = new List<SelectListItem>();
+			  objClsUser.LstBranch = new List<SelectListItem>();
+			  objClsUser.LstUserType = new List<SelectListItem>();
 		    }
 		}
 		catch (Exception ex)
@@ -142,7 +141,7 @@ namespace FleetManagerWeb
 				    return RedirectToAction("PermissionRedirectPage", "Home");
 				}
 
-				objClsUser.hdniFrame = true;
+				objClsUser.HdniFrame = true;
 			  }
 			  else
 			  {
@@ -153,7 +152,7 @@ namespace FleetManagerWeb
 
 				lgUserId = Request.QueryString.ToString().Decode().LongSafe();
 				objClsUser = _objiClsUser.GetUserByUserId(lgUserId);
-				ViewBag.Password = objClsUser.strPassword;
+				ViewBag.Password = objClsUser.StrPassword;
 			  }
 		    }
 		    else
@@ -247,7 +246,7 @@ namespace FleetManagerWeb
 			  return RedirectToAction("Logout", "Home");
 		    }
 
-		    if (objUser.lgId == 0)
+		    if (objUser.LgId == 0)
 		    {
 			  if (!objPermission.Add_Right)
 			  {
@@ -262,13 +261,13 @@ namespace FleetManagerWeb
 			  }
 		    }
 
-		    if (objUser.hdniFrame)
+		    if (objUser.HdniFrame)
 		    {
 			  ViewData["iFrame"] = "iFrame";
 		    }
 
-		    bool blExists = _objiClsUser.IsUserExists(objUser.lgId, objUser.strUserName);
-		    bool blExists1 = _objiClsUser.IsUserEmailExists(objUser.lgId, objUser.strEmailID);
+		    bool blExists = _objiClsUser.IsUserExists(objUser.LgId, objUser.StrUserName);
+		    bool blExists1 = _objiClsUser.IsUserEmailExists(objUser.LgId, objUser.StrEmailID);
 		    if (blExists)
 		    {
 			  ViewData["Success"] = "0";
@@ -451,37 +450,37 @@ namespace FleetManagerWeb
 		try
 		{
 		    string strErrorMsg = string.Empty;
-		    if (string.IsNullOrEmpty(objUser.strFirstName))
+		    if (string.IsNullOrEmpty(objUser.StrFirstName))
 		    {
 			  strErrorMsg += _alertTextProvider.AlertMessage("First Name", MessageType.InputRequired) + "<br/>";
 		    }
 
-		    if (string.IsNullOrEmpty(objUser.strSurName))
+		    if (string.IsNullOrEmpty(objUser.StrSurName))
 		    {
 			  strErrorMsg += _alertTextProvider.AlertMessage("Surname", MessageType.InputRequired) + "<br/>";
 		    }
 
-		    if (string.IsNullOrEmpty(objUser.strMobileNo))
+		    if (string.IsNullOrEmpty(objUser.StrMobileNo))
 		    {
 			  strErrorMsg += _alertTextProvider.AlertMessage("Mobile No", MessageType.InputRequired) + "<br/>";
 		    }
 
-		    if (string.IsNullOrEmpty(objUser.strEmailID))
+		    if (string.IsNullOrEmpty(objUser.StrEmailID))
 		    {
 			  strErrorMsg += _alertTextProvider.AlertMessage("Email Id", MessageType.InputRequired) + "<br/>";
 		    }
 
-		    if (string.IsNullOrEmpty(objUser.strUserName))
+		    if (string.IsNullOrEmpty(objUser.StrUserName))
 		    {
 			  strErrorMsg += _alertTextProvider.AlertMessage("User Name", MessageType.InputRequired) + "<br/>";
 		    }
 
-		    if (string.IsNullOrEmpty(objUser.strPassword))
+		    if (string.IsNullOrEmpty(objUser.StrPassword))
 		    {
 			  strErrorMsg += _alertTextProvider.AlertMessage("Password", MessageType.InputRequired) + "<br/>";
 		    }
 
-		    if (objUser.lgRoleId == 0)
+		    if (objUser.LgRoleId == 0)
 		    {
 			  strErrorMsg += _alertTextProvider.AlertMessage("Role", MessageType.SelectRequired) + "<br/>";
 		    }

@@ -5,7 +5,6 @@ using FleetManager.Model.Interaction;
 using FleetManager.Service.Auth;
 using FleetManager.Service.Interaction;
 using FleetManagerWeb.Controllers;
-using FleetManagerWeb.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

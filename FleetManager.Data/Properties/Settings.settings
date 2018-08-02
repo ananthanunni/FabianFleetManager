@@ -5,10 +5,18 @@
     <Setting Name="FleetManagerConnectionString1" Type="(Connection string)" Scope="Application">
       <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
 &lt;SerializableConnectionString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
-  &lt;ConnectionString&gt;Data Source=SHIRO\SQLSERVER;Initial Catalog=FleetManager;User ID=sa;Pooling=False;Asynchronous Processing=True;MultipleActiveResultSets=False;Application Name=FleetManager&lt;/ConnectionString&gt;
+  &lt;ConnectionString&gt;Data Source=(local)\sqlexpress2014; Initial Catalog=FleetManager; Asynchronous Processing=True; MultipleActiveResultSets=false; Application Name=FleetManager; Pooling=false; User ID=sa; Password=test&lt;/ConnectionString&gt;
   &lt;ProviderName&gt;System.Data.SqlClient&lt;/ProviderName&gt;
 &lt;/SerializableConnectionString&gt;</DesignTimeValue>
-      <Value Profile="(Default)">Data Source=SHIRO\SQLSERVER;Initial Catalog=FleetManager;User ID=sa;Pooling=False;Asynchronous Processing=True;MultipleActiveResultSets=False;Application Name=FleetManager</Value>
+      <Value Profile="(Default)">Data Source=(local)\sqlexpress2014; Initial Catalog=FleetManager; Asynchronous Processing=True; MultipleActiveResultSets=false; Application Name=FleetManager; Pooling=false; User ID=sa; Password=test</Value>
+    </Setting>
+    <Setting Name="FleetManagerConnectionString" Type="(Connection string)" Scope="Application">
+      <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;SerializableConnectionString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;ConnectionString&gt;Data Source=arhome-main\sqlexpress2014;Initial Catalog=FleetManager;Integrated Security=True&lt;/ConnectionString&gt;
+  &lt;ProviderName&gt;System.Data.SqlClient&lt;/ProviderName&gt;
+&lt;/SerializableConnectionString&gt;</DesignTimeValue>
+      <Value Profile="(Default)">Data Source=arhome-main\sqlexpress2014;Initial Catalog=FleetManager;Integrated Security=True</Value>
     </Setting>
   </Settings>
 </SettingsFile>

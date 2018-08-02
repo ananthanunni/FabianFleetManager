@@ -1,18 +1,17 @@
-   using FleetManager.Core.Common;
-    using FleetManager.Core.Extensions;
-    using FleetManager.Data.Models;
-    using FleetManagerWeb.Models;
-    using iTextSharp.text;
-    using iTextSharp.text.pdf;
-    using System;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.IO;
-    using System.Linq;
-    using System.Web.Hosting;
-    using System.Web.Mvc;
+using FleetManager.Core.Common;
+using FleetManager.Core.Extensions;
+using FleetManager.Data.Models;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.IO;
+using System.Linq;
+using System.Web.Hosting;
+using System.Web.Mvc;
 
- namespace FleetManagerWeb.Controllers
+namespace FleetManagerWeb.Controllers
 {
     public class CommonController : BaseController
     {

@@ -9,7 +9,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FleetManagerWeb.Models
+namespace FleetManager.Data.Models
 {
 	using System.Data.Linq;
 	using System.Data.Linq.Mapping;
@@ -36,7 +36,7 @@ namespace FleetManagerWeb.Models
     #endregion
 		
 		public FleetModelsDataContext() : 
-				base(global::System.Configuration.ConfigurationManager.ConnectionStrings["FleetManagerConnectionString1"].ConnectionString, mappingSource)
+				base(global::FleetManager.Data.Properties.Settings.Default.FleetManagerConnectionString, mappingSource)
 		{
 			OnCreated();
 		}

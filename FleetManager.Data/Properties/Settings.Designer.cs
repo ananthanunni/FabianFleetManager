@@ -26,12 +26,23 @@ namespace FleetManager.Data.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=SHIRO\\SQLSERVER;Initial Catalog=FleetManager;User ID=sa;Pooling=False" +
-            ";Asynchronous Processing=True;MultipleActiveResultSets=False;Application Name=Fl" +
-            "eetManager")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(local)\\sqlexpress2014; Initial Catalog=FleetManager; Asynchronous Pr" +
+            "ocessing=True; MultipleActiveResultSets=false; Application Name=FleetManager; Po" +
+            "oling=false; User ID=sa; Password=test")]
         public string FleetManagerConnectionString1 {
             get {
                 return ((string)(this["FleetManagerConnectionString1"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=arhome-main\\sqlexpress2014;Initial Catalog=FleetManager;Integrated Se" +
+            "curity=True")]
+        public string FleetManagerConnectionString {
+            get {
+                return ((string)(this["FleetManagerConnectionString"]));
             }
         }
     }

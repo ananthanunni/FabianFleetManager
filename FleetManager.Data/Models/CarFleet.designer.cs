@@ -36,7 +36,7 @@ namespace FleetManager.Data.Models
     #endregion
 		
 		public CarFleetDataContext() : 
-				base(global::FleetManager.Data.Properties.Settings.Default.FleetManagerConnectionString1, mappingSource)
+				base(global::FleetManager.Data.Properties.Settings.Default.FleetManagerConnectionString, mappingSource)
 		{
 			OnCreated();
 		}
@@ -148,7 +148,7 @@ namespace FleetManager.Data.Models
 		
 		private string _Desc;
 		
-		private int _Color_Id;
+		private long _Color_Id;
 		
 		private string _Fuel_Type;
 		
@@ -170,7 +170,7 @@ namespace FleetManager.Data.Models
 		
 		private System.Nullable<long> _FleetModels_Id;
 		
-		private System.Nullable<int> _FleetMakes_Id;
+		private long _FleetMakes_Id;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -186,7 +186,7 @@ namespace FleetManager.Data.Models
     partial void OnRegChanged();
     partial void OnDescChanging(string value);
     partial void OnDescChanged();
-    partial void OnColor_IdChanging(int value);
+    partial void OnColor_IdChanging(long value);
     partial void OnColor_IdChanged();
     partial void OnFuel_TypeChanging(string value);
     partial void OnFuel_TypeChanged();
@@ -208,7 +208,7 @@ namespace FleetManager.Data.Models
     partial void OnDeletedOnChanged();
     partial void OnFleetModels_IdChanging(System.Nullable<long> value);
     partial void OnFleetModels_IdChanged();
-    partial void OnFleetMakes_IdChanging(System.Nullable<int> value);
+    partial void OnFleetMakes_IdChanging(long value);
     partial void OnFleetMakes_IdChanged();
     #endregion
 		
@@ -317,8 +317,8 @@ namespace FleetManager.Data.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Color_Id", DbType="Int NOT NULL")]
-		public int Color_Id
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Color_Id", DbType="BigInt NOT NULL")]
+		public long Color_Id
 		{
 			get
 			{
@@ -537,8 +537,8 @@ namespace FleetManager.Data.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FleetMakes_Id", DbType="Int")]
-		public System.Nullable<int> FleetMakes_Id
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_FleetMakes_Id", DbType="BigInt NOT NULL")]
+		public long FleetMakes_Id
 		{
 			get
 			{

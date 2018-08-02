@@ -1,24 +1,22 @@
+using System.Collections.Generic;
+using System.Web.Mvc;
+
 namespace FleetManager.Data.Models
 {
-    using FleetManagerWeb.Models;
-    using System;
-    using System.Collections.Generic;
-    using System.Web.Mvc;
-
     public interface IClsFleetColors
     {
-        DeleteFleetColorsResult DeleteFleetColors(string strFleetColorsList, long lgDeletedBy);
+	  DeleteFleetColorsResult DeleteFleetColors(string strFleetColorsList, long lgDeletedBy);
 
-        List<SelectListItem> GetAllFleetColorsForDropDown();
+	  List<SelectListItem> GetAllFleetColorsForDropDown();
 
-        List<GetFleetColorsAllResult> GetFleetColorsAll();
+	  List<GetFleetColorsAllResult> GetFleetColorsAll();
 
-        ClsFleetColors GetFleetColorsByFleetColorsId(long lgFleetColorsId);
+	  ClsFleetColors GetFleetColorsByFleetColorsId(long lgFleetColorsId);
 
-        bool IsFleetColorsExists(long lgFleetColorsId, string strFleetColorsName);
+	  bool IsFleetColorsExists(long lgFleetColorsId, string strFleetColorsName);
 
-        long SaveFleetColors(ClsFleetColors objSave);
+	  long SaveFleetColors(ClsFleetColors objSave);
 
-        List<SearchFleetColorsResult> SearchFleetColors(int inRow, int inPage, string strSearch, string strSort);
+	  List<SearchFleetColorsResult> SearchFleetColors(int inRow, int inPage, string strSearch, string strSort);
     }
 }

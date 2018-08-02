@@ -9,7 +9,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FleetManagerWeb.Models
+namespace FleetManager.Data.Models
 {
 	using System.Data.Linq;
 	using System.Data.Linq.Mapping;
@@ -34,6 +34,12 @@ namespace FleetManagerWeb.Models
     partial void UpdateTracker(Tracker instance);
     partial void DeleteTracker(Tracker instance);
     #endregion
+		
+		public TrackerDataContext() : 
+				base(global::FleetManager.Data.Properties.Settings.Default.FleetManagerConnectionString, mappingSource)
+		{
+			OnCreated();
+		}
 		
 		public TrackerDataContext(string connection) : 
 				base(connection, mappingSource)
@@ -132,7 +138,7 @@ namespace FleetManagerWeb.Models
 		
 		private int _Id;
 		
-		private System.Nullable<int> _Car_Id;
+		private int _Car_Id;
 		
 		private System.DateTime _Trip_Start;
 		
@@ -142,7 +148,7 @@ namespace FleetManagerWeb.Models
 		
 		private string _Location_End;
 		
-		private System.Nullable<int> _Reason_Id;
+		private System.Nullable<long> _Reason_Id;
 		
 		private string _Reason_Remarks;
 		
@@ -156,7 +162,7 @@ namespace FleetManagerWeb.Models
 		
 		private int _Fuel_End;
 		
-		private int _User_Id;
+		private long _User_Id;
 		
 		private System.DateTime _Entry_Datetime;
 		
@@ -170,13 +176,19 @@ namespace FleetManagerWeb.Models
 		
 		private System.Nullable<int> _Id_1_1;
 		
+		private System.Nullable<bool> _IsDeleted;
+		
+		private System.Nullable<int> _DeletedBy;
+		
+		private System.Nullable<System.DateTime> _DeletedOn;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
     partial void OnCreated();
     partial void OnIdChanging(int value);
     partial void OnIdChanged();
-    partial void OnCar_IdChanging(System.Nullable<int> value);
+    partial void OnCar_IdChanging(int value);
     partial void OnCar_IdChanged();
     partial void OnTrip_StartChanging(System.DateTime value);
     partial void OnTrip_StartChanged();
@@ -186,7 +198,7 @@ namespace FleetManagerWeb.Models
     partial void OnLocation_StartChanged();
     partial void OnLocation_EndChanging(string value);
     partial void OnLocation_EndChanged();
-    partial void OnReason_IdChanging(System.Nullable<int> value);
+    partial void OnReason_IdChanging(System.Nullable<long> value);
     partial void OnReason_IdChanged();
     partial void OnReason_RemarksChanging(string value);
     partial void OnReason_RemarksChanged();
@@ -200,7 +212,7 @@ namespace FleetManagerWeb.Models
     partial void OnFuel_StartChanged();
     partial void OnFuel_EndChanging(int value);
     partial void OnFuel_EndChanged();
-    partial void OnUser_IdChanging(int value);
+    partial void OnUser_IdChanging(long value);
     partial void OnUser_IdChanged();
     partial void OnEntry_DatetimeChanging(System.DateTime value);
     partial void OnEntry_DatetimeChanged();
@@ -214,6 +226,12 @@ namespace FleetManagerWeb.Models
     partial void OnId_1Changed();
     partial void OnId_1_1Changing(System.Nullable<int> value);
     partial void OnId_1_1Changed();
+    partial void OnIsDeletedChanging(System.Nullable<bool> value);
+    partial void OnIsDeletedChanged();
+    partial void OnDeletedByChanging(System.Nullable<int> value);
+    partial void OnDeletedByChanged();
+    partial void OnDeletedOnChanging(System.Nullable<System.DateTime> value);
+    partial void OnDeletedOnChanged();
     #endregion
 		
 		public Tracker()
@@ -241,8 +259,8 @@ namespace FleetManagerWeb.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Car_Id", DbType="Int")]
-		public System.Nullable<int> Car_Id
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Car_Id", DbType="Int NOT NULL")]
+		public int Car_Id
 		{
 			get
 			{
@@ -341,8 +359,8 @@ namespace FleetManagerWeb.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Reason_Id", DbType="Int")]
-		public System.Nullable<int> Reason_Id
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Reason_Id", DbType="BigInt")]
+		public System.Nullable<long> Reason_Id
 		{
 			get
 			{
@@ -481,8 +499,8 @@ namespace FleetManagerWeb.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_User_Id", DbType="Int NOT NULL")]
-		public int User_Id
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_User_Id", DbType="BigInt NOT NULL")]
+		public long User_Id
 		{
 			get
 			{
@@ -617,6 +635,66 @@ namespace FleetManagerWeb.Models
 					this._Id_1_1 = value;
 					this.SendPropertyChanged("Id_1_1");
 					this.OnId_1_1Changed();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsDeleted", DbType="Bit")]
+		public System.Nullable<bool> IsDeleted
+		{
+			get
+			{
+				return this._IsDeleted;
+			}
+			set
+			{
+				if ((this._IsDeleted != value))
+				{
+					this.OnIsDeletedChanging(value);
+					this.SendPropertyChanging();
+					this._IsDeleted = value;
+					this.SendPropertyChanged("IsDeleted");
+					this.OnIsDeletedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DeletedBy", DbType="Int")]
+		public System.Nullable<int> DeletedBy
+		{
+			get
+			{
+				return this._DeletedBy;
+			}
+			set
+			{
+				if ((this._DeletedBy != value))
+				{
+					this.OnDeletedByChanging(value);
+					this.SendPropertyChanging();
+					this._DeletedBy = value;
+					this.SendPropertyChanged("DeletedBy");
+					this.OnDeletedByChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DeletedOn", DbType="DateTime")]
+		public System.Nullable<System.DateTime> DeletedOn
+		{
+			get
+			{
+				return this._DeletedOn;
+			}
+			set
+			{
+				if ((this._DeletedOn != value))
+				{
+					this.OnDeletedOnChanging(value);
+					this.SendPropertyChanging();
+					this._DeletedOn = value;
+					this.SendPropertyChanged("DeletedOn");
+					this.OnDeletedOnChanged();
 				}
 			}
 		}

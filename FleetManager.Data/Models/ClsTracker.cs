@@ -1,14 +1,12 @@
-﻿namespace FleetManager.Data.Models
-{
-    using FleetManager.Core.Common;
-    using FleetManager.Core.Extensions;
-    using FleetManager.Data.Models;
-    using FleetManagerWeb.Models;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Transactions;
+﻿using FleetManager.Core.Common;
+using FleetManager.Core.Extensions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Transactions;
 
+namespace FleetManager.Data.Models
+{
     public partial class ClsTracker : DataContextEntity<TrackerDataContext>, IClsTracker
     {
 	  public ClsTracker()

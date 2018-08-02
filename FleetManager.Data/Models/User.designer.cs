@@ -9,7 +9,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FleetManagerWeb.Models
+namespace FleetManager.Data.Models
 {
 	using System.Data.Linq;
 	using System.Data.Linq.Mapping;
@@ -22,7 +22,7 @@ namespace FleetManagerWeb.Models
 	using System;
 	
 	
-	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="SVLL_ETS")]
+	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="FleetManager")]
 	public partial class UserDataContext : System.Data.Linq.DataContext
 	{
 		
@@ -34,6 +34,12 @@ namespace FleetManagerWeb.Models
     partial void UpdateUser(User instance);
     partial void DeleteUser(User instance);
     #endregion
+		
+		public UserDataContext() : 
+				base(global::FleetManager.Data.Properties.Settings.Default.FleetManagerConnectionString, mappingSource)
+		{
+			OnCreated();
+		}
 		
 		public UserDataContext(string connection) : 
 				base(connection, mappingSource)
@@ -59,7 +65,7 @@ namespace FleetManagerWeb.Models
 			OnCreated();
 		}
 		
-		public System.Data.Linq.Table<User> User
+		public System.Data.Linq.Table<User> Users
 		{
 			get
 			{

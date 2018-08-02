@@ -1,8 +1,9 @@
-﻿<?xml version="1.0" encoding="utf-8"?><Database Name="SVLL_ETS" Class="FleetColorsDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="FleetManager" Class="FleetColorsDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=arhome-main\sqlexpress2014;Initial Catalog=FleetManager;Integrated Security=True" SettingsObjectName="FleetManager.Data.Properties.Settings" SettingsPropertyName="FleetManagerConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="dbo.FleetColors" Member="FleetColors">
-    <Type Name="FleetColors">
+    <Type Name="FleetColor">
       <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="FleetColorsName" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="FleetColorsName" Type="System.String" DbType="NVarChar(10) NOT NULL" CanBeNull="false" />
       <Column Name="CreatedOn" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Column Name="CreatedBy" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
       <Column Name="UpdatedOn" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />

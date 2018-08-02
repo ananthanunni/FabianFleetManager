@@ -1,0 +1,6 @@
+﻿BEGIN TRAN;
+	ALTER TABLE [Tracker] ALTER COLUMN [Reason_Id] BIGINT NULL
+
+	ALTER TABLE [Tracker] ADD CONSTRAINT
+		FK_Tracker_TripReason FOREIGN KEY (Reason_Id) REFERENCES [TripReason](Id)
+COMMIT;
