@@ -17,15 +17,8 @@
       <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
       <Column Name="DeletedOn" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
       <Association Name="Company_CompanyUser" Member="CompanyUsers" ThisKey="Id" OtherKey="Company_Id" Type="CompanyUser" />
-    </Type>
-  </Table>
-  <Table Name="dbo.CompanyUser" Member="CompanyUsers">
-    <Type Name="CompanyUser">
-      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="Company_Id" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
-      <Column Name="User_Id" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
-      <Association Name="Company_CompanyUser" Member="Company" ThisKey="Company_Id" OtherKey="Id" Type="Company" IsForeignKey="true" />
-      <Association Name="User_CompanyUser" Member="User" ThisKey="User_Id" OtherKey="Id" Type="User" IsForeignKey="true" />
+      <Association Name="Company_CompanyGroup" Member="CompanyGroups" ThisKey="Id" OtherKey="Company_Id" Type="CompanyGroup" />
+      <Association Name="Company_CompanyGroupModulePermission" Member="CompanyGroupModulePermissions" ThisKey="Id" OtherKey="CompanyGroup_Id" Type="CompanyGroupModulePermission" />
     </Type>
   </Table>
   <Table Name="dbo.[User]" Member="Users">
@@ -52,6 +45,57 @@
       <Column Name="DeletedBy" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
       <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Association Name="User_CompanyUser" Member="CompanyUsers" ThisKey="Id" OtherKey="User_Id" Type="CompanyUser" />
+    </Type>
+  </Table>
+  <Table Name="dbo.CompanyUser" Member="CompanyUsers">
+    <Type Name="CompanyUser">
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Company_Id" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="User_Id" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="IsAdmin" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Association Name="Company_CompanyUser" Member="Company" ThisKey="Company_Id" OtherKey="Id" Type="Company" IsForeignKey="true" />
+      <Association Name="User_CompanyUser" Member="User" ThisKey="User_Id" OtherKey="Id" Type="User" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.CompanyGroup" Member="CompanyGroups">
+    <Type Name="CompanyGroup">
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="GroupName" Type="System.String" DbType="NVarChar(30)" CanBeNull="true" />
+      <Column Name="Description" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="Company_Id" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="DeletedOn" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
+      <Association Name="Company_CompanyGroup" Member="Company" ThisKey="Company_Id" OtherKey="Id" Type="Company" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.CompanyGroupModulePermission" Member="CompanyGroupModulePermissions">
+    <Type Name="CompanyGroupModulePermission">
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="CompanyGroup_Id" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="Module_Id" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="View_Right" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="Add_Right" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="Edit_Right" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="Delete_Right" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="DeletedOn" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
+      <Association Name="Company_CompanyGroupModulePermission" Member="Company" ThisKey="CompanyGroup_Id" OtherKey="Id" Type="Company" IsForeignKey="true" />
+      <Association Name="Module_CompanyGroupModulePermission" Member="Module" ThisKey="Module_Id" OtherKey="Id" Type="Module" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Module" Member="Modules">
+    <Type Name="Module">
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ModuleName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Sequence" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CreatedOn" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="CreatedBy" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="UpdatedOn" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="UpdatedBy" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="DeletedOn" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="DeletedBy" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="Module_CompanyGroupModulePermission" Member="CompanyGroupModulePermissions" ThisKey="Id" OtherKey="Module_Id" Type="CompanyGroupModulePermission" />
     </Type>
   </Table>
 </Database>

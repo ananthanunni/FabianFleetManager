@@ -2,7 +2,8 @@
 (
 	[Id] BIGINT IDENTITY(1,1) PRIMARY KEY,
 	[Company_Id] BIGINT NOT NULL,
-	[User_Id] BIGINT NOT NULL
+	[User_Id] BIGINT NOT NULL,
+	[IsAdmin] BIT
 )
 
 ALTER TABLE [CompanyUser]

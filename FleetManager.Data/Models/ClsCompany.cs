@@ -11,7 +11,7 @@ namespace FleetManager.Data.Models
     {
 	  public ClsCompany(CompanyDataContext context = null) : base()
 	  {
-		
+
 	  }
 
 	  public long Id { get; set; }
@@ -91,7 +91,7 @@ namespace FleetManager.Data.Models
 
 	  public void Delete(int id)
 	  {
-		using(var tran=new TransactionScope())
+		using (var tran = new TransactionScope())
 		{
 		    using (objDataContext = GetDataContext())
 		    {
@@ -110,7 +110,7 @@ namespace FleetManager.Data.Models
 
 	  public bool AssignUserToCompany(int companyId, int userId)
 	  {
-		using(var tran=new TransactionScope())
+		using (var tran = new TransactionScope())
 		{
 		    using (objDataContext = GetDataContext())
 		    {
@@ -119,7 +119,8 @@ namespace FleetManager.Data.Models
 			  objDataContext.CompanyUsers.InsertOnSubmit(new CompanyUser
 			  {
 				Company_Id = companyId,
-				User_Id = userId
+				User_Id = userId,
+				IsAdmin = true
 			  });
 		    }
 
@@ -146,6 +147,6 @@ namespace FleetManager.Data.Models
 		}
 
 		return true;
-	  }
+	  }	  
     }
 }

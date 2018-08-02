@@ -33,12 +33,21 @@ namespace FleetManager.Data.Models
     partial void InsertCompany(Company instance);
     partial void UpdateCompany(Company instance);
     partial void DeleteCompany(Company instance);
-    partial void InsertCompanyUser(CompanyUser instance);
-    partial void UpdateCompanyUser(CompanyUser instance);
-    partial void DeleteCompanyUser(CompanyUser instance);
     partial void InsertUser(User instance);
     partial void UpdateUser(User instance);
     partial void DeleteUser(User instance);
+    partial void InsertCompanyUser(CompanyUser instance);
+    partial void UpdateCompanyUser(CompanyUser instance);
+    partial void DeleteCompanyUser(CompanyUser instance);
+    partial void InsertCompanyGroup(CompanyGroup instance);
+    partial void UpdateCompanyGroup(CompanyGroup instance);
+    partial void DeleteCompanyGroup(CompanyGroup instance);
+    partial void InsertCompanyGroupModulePermission(CompanyGroupModulePermission instance);
+    partial void UpdateCompanyGroupModulePermission(CompanyGroupModulePermission instance);
+    partial void DeleteCompanyGroupModulePermission(CompanyGroupModulePermission instance);
+    partial void InsertModule(Module instance);
+    partial void UpdateModule(Module instance);
+    partial void DeleteModule(Module instance);
     #endregion
 		
 		public CompanyDataContext() : 
@@ -79,6 +88,14 @@ namespace FleetManager.Data.Models
 			}
 		}
 		
+		public System.Data.Linq.Table<User> Users
+		{
+			get
+			{
+				return this.GetTable<User>();
+			}
+		}
+		
 		public System.Data.Linq.Table<CompanyUser> CompanyUsers
 		{
 			get
@@ -87,11 +104,27 @@ namespace FleetManager.Data.Models
 			}
 		}
 		
-		public System.Data.Linq.Table<User> Users
+		public System.Data.Linq.Table<CompanyGroup> CompanyGroups
 		{
 			get
 			{
-				return this.GetTable<User>();
+				return this.GetTable<CompanyGroup>();
+			}
+		}
+		
+		public System.Data.Linq.Table<CompanyGroupModulePermission> CompanyGroupModulePermissions
+		{
+			get
+			{
+				return this.GetTable<CompanyGroupModulePermission>();
+			}
+		}
+		
+		public System.Data.Linq.Table<Module> Modules
+		{
+			get
+			{
+				return this.GetTable<Module>();
 			}
 		}
 	}
@@ -132,6 +165,10 @@ namespace FleetManager.Data.Models
 		
 		private EntitySet<CompanyUser> _CompanyUsers;
 		
+		private EntitySet<CompanyGroup> _CompanyGroups;
+		
+		private EntitySet<CompanyGroupModulePermission> _CompanyGroupModulePermissions;
+		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -169,6 +206,8 @@ namespace FleetManager.Data.Models
 		public Company()
 		{
 			this._CompanyUsers = new EntitySet<CompanyUser>(new Action<CompanyUser>(this.attach_CompanyUsers), new Action<CompanyUser>(this.detach_CompanyUsers));
+			this._CompanyGroups = new EntitySet<CompanyGroup>(new Action<CompanyGroup>(this.attach_CompanyGroups), new Action<CompanyGroup>(this.detach_CompanyGroups));
+			this._CompanyGroupModulePermissions = new EntitySet<CompanyGroupModulePermission>(new Action<CompanyGroupModulePermission>(this.attach_CompanyGroupModulePermissions), new Action<CompanyGroupModulePermission>(this.detach_CompanyGroupModulePermissions));
 			OnCreated();
 		}
 		
@@ -465,6 +504,32 @@ namespace FleetManager.Data.Models
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Company_CompanyGroup", Storage="_CompanyGroups", ThisKey="Id", OtherKey="Company_Id")]
+		public EntitySet<CompanyGroup> CompanyGroups
+		{
+			get
+			{
+				return this._CompanyGroups;
+			}
+			set
+			{
+				this._CompanyGroups.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Company_CompanyGroupModulePermission", Storage="_CompanyGroupModulePermissions", ThisKey="Id", OtherKey="CompanyGroup_Id")]
+		public EntitySet<CompanyGroupModulePermission> CompanyGroupModulePermissions
+		{
+			get
+			{
+				return this._CompanyGroupModulePermissions;
+			}
+			set
+			{
+				this._CompanyGroupModulePermissions.Assign(value);
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -496,197 +561,29 @@ namespace FleetManager.Data.Models
 			this.SendPropertyChanging();
 			entity.Company = null;
 		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.CompanyUser")]
-	public partial class CompanyUser : INotifyPropertyChanging, INotifyPropertyChanged
-	{
 		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private long _Id;
-		
-		private long _Company_Id;
-		
-		private long _User_Id;
-		
-		private EntityRef<Company> _Company;
-		
-		private EntityRef<User> _User;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIdChanging(long value);
-    partial void OnIdChanged();
-    partial void OnCompany_IdChanging(long value);
-    partial void OnCompany_IdChanged();
-    partial void OnUser_IdChanging(long value);
-    partial void OnUser_IdChanged();
-    #endregion
-		
-		public CompanyUser()
+		private void attach_CompanyGroups(CompanyGroup entity)
 		{
-			this._Company = default(EntityRef<Company>);
-			this._User = default(EntityRef<User>);
-			OnCreated();
+			this.SendPropertyChanging();
+			entity.Company = this;
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="BigInt NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public long Id
+		private void detach_CompanyGroups(CompanyGroup entity)
 		{
-			get
-			{
-				return this._Id;
-			}
-			set
-			{
-				if ((this._Id != value))
-				{
-					this.OnIdChanging(value);
-					this.SendPropertyChanging();
-					this._Id = value;
-					this.SendPropertyChanged("Id");
-					this.OnIdChanged();
-				}
-			}
+			this.SendPropertyChanging();
+			entity.Company = null;
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Company_Id", DbType="BigInt NOT NULL")]
-		public long Company_Id
+		private void attach_CompanyGroupModulePermissions(CompanyGroupModulePermission entity)
 		{
-			get
-			{
-				return this._Company_Id;
-			}
-			set
-			{
-				if ((this._Company_Id != value))
-				{
-					if (this._Company.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnCompany_IdChanging(value);
-					this.SendPropertyChanging();
-					this._Company_Id = value;
-					this.SendPropertyChanged("Company_Id");
-					this.OnCompany_IdChanged();
-				}
-			}
+			this.SendPropertyChanging();
+			entity.Company = this;
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_User_Id", DbType="BigInt NOT NULL")]
-		public long User_Id
+		private void detach_CompanyGroupModulePermissions(CompanyGroupModulePermission entity)
 		{
-			get
-			{
-				return this._User_Id;
-			}
-			set
-			{
-				if ((this._User_Id != value))
-				{
-					if (this._User.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnUser_IdChanging(value);
-					this.SendPropertyChanging();
-					this._User_Id = value;
-					this.SendPropertyChanged("User_Id");
-					this.OnUser_IdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Company_CompanyUser", Storage="_Company", ThisKey="Company_Id", OtherKey="Id", IsForeignKey=true)]
-		public Company Company
-		{
-			get
-			{
-				return this._Company.Entity;
-			}
-			set
-			{
-				Company previousValue = this._Company.Entity;
-				if (((previousValue != value) 
-							|| (this._Company.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Company.Entity = null;
-						previousValue.CompanyUsers.Remove(this);
-					}
-					this._Company.Entity = value;
-					if ((value != null))
-					{
-						value.CompanyUsers.Add(this);
-						this._Company_Id = value.Id;
-					}
-					else
-					{
-						this._Company_Id = default(long);
-					}
-					this.SendPropertyChanged("Company");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_CompanyUser", Storage="_User", ThisKey="User_Id", OtherKey="Id", IsForeignKey=true)]
-		public User User
-		{
-			get
-			{
-				return this._User.Entity;
-			}
-			set
-			{
-				User previousValue = this._User.Entity;
-				if (((previousValue != value) 
-							|| (this._User.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._User.Entity = null;
-						previousValue.CompanyUsers.Remove(this);
-					}
-					this._User.Entity = value;
-					if ((value != null))
-					{
-						value.CompanyUsers.Add(this);
-						this._User_Id = value.Id;
-					}
-					else
-					{
-						this._User_Id = default(long);
-					}
-					this.SendPropertyChanged("User");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
+			this.SendPropertyChanging();
+			entity.Company = null;
 		}
 	}
 	
@@ -1257,6 +1154,1087 @@ namespace FleetManager.Data.Models
 		{
 			this.SendPropertyChanging();
 			entity.User = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.CompanyUser")]
+	public partial class CompanyUser : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private long _Id;
+		
+		private long _Company_Id;
+		
+		private long _User_Id;
+		
+		private System.Nullable<bool> _IsAdmin;
+		
+		private EntityRef<Company> _Company;
+		
+		private EntityRef<User> _User;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(long value);
+    partial void OnIdChanged();
+    partial void OnCompany_IdChanging(long value);
+    partial void OnCompany_IdChanged();
+    partial void OnUser_IdChanging(long value);
+    partial void OnUser_IdChanged();
+    partial void OnIsAdminChanging(System.Nullable<bool> value);
+    partial void OnIsAdminChanged();
+    #endregion
+		
+		public CompanyUser()
+		{
+			this._Company = default(EntityRef<Company>);
+			this._User = default(EntityRef<User>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="BigInt NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public long Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Company_Id", DbType="BigInt NOT NULL")]
+		public long Company_Id
+		{
+			get
+			{
+				return this._Company_Id;
+			}
+			set
+			{
+				if ((this._Company_Id != value))
+				{
+					if (this._Company.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnCompany_IdChanging(value);
+					this.SendPropertyChanging();
+					this._Company_Id = value;
+					this.SendPropertyChanged("Company_Id");
+					this.OnCompany_IdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_User_Id", DbType="BigInt NOT NULL")]
+		public long User_Id
+		{
+			get
+			{
+				return this._User_Id;
+			}
+			set
+			{
+				if ((this._User_Id != value))
+				{
+					if (this._User.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnUser_IdChanging(value);
+					this.SendPropertyChanging();
+					this._User_Id = value;
+					this.SendPropertyChanged("User_Id");
+					this.OnUser_IdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsAdmin", DbType="Bit")]
+		public System.Nullable<bool> IsAdmin
+		{
+			get
+			{
+				return this._IsAdmin;
+			}
+			set
+			{
+				if ((this._IsAdmin != value))
+				{
+					this.OnIsAdminChanging(value);
+					this.SendPropertyChanging();
+					this._IsAdmin = value;
+					this.SendPropertyChanged("IsAdmin");
+					this.OnIsAdminChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Company_CompanyUser", Storage="_Company", ThisKey="Company_Id", OtherKey="Id", IsForeignKey=true)]
+		public Company Company
+		{
+			get
+			{
+				return this._Company.Entity;
+			}
+			set
+			{
+				Company previousValue = this._Company.Entity;
+				if (((previousValue != value) 
+							|| (this._Company.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Company.Entity = null;
+						previousValue.CompanyUsers.Remove(this);
+					}
+					this._Company.Entity = value;
+					if ((value != null))
+					{
+						value.CompanyUsers.Add(this);
+						this._Company_Id = value.Id;
+					}
+					else
+					{
+						this._Company_Id = default(long);
+					}
+					this.SendPropertyChanged("Company");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_CompanyUser", Storage="_User", ThisKey="User_Id", OtherKey="Id", IsForeignKey=true)]
+		public User User
+		{
+			get
+			{
+				return this._User.Entity;
+			}
+			set
+			{
+				User previousValue = this._User.Entity;
+				if (((previousValue != value) 
+							|| (this._User.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._User.Entity = null;
+						previousValue.CompanyUsers.Remove(this);
+					}
+					this._User.Entity = value;
+					if ((value != null))
+					{
+						value.CompanyUsers.Add(this);
+						this._User_Id = value.Id;
+					}
+					else
+					{
+						this._User_Id = default(long);
+					}
+					this.SendPropertyChanged("User");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.CompanyGroup")]
+	public partial class CompanyGroup : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private long _Id;
+		
+		private string _GroupName;
+		
+		private string _Description;
+		
+		private long _Company_Id;
+		
+		private System.Nullable<bool> _IsDeleted;
+		
+		private System.Nullable<System.DateTime> _DeletedOn;
+		
+		private EntityRef<Company> _Company;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(long value);
+    partial void OnIdChanged();
+    partial void OnGroupNameChanging(string value);
+    partial void OnGroupNameChanged();
+    partial void OnDescriptionChanging(string value);
+    partial void OnDescriptionChanged();
+    partial void OnCompany_IdChanging(long value);
+    partial void OnCompany_IdChanged();
+    partial void OnIsDeletedChanging(System.Nullable<bool> value);
+    partial void OnIsDeletedChanged();
+    partial void OnDeletedOnChanging(System.Nullable<System.DateTime> value);
+    partial void OnDeletedOnChanged();
+    #endregion
+		
+		public CompanyGroup()
+		{
+			this._Company = default(EntityRef<Company>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="BigInt NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public long Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_GroupName", DbType="NVarChar(30)")]
+		public string GroupName
+		{
+			get
+			{
+				return this._GroupName;
+			}
+			set
+			{
+				if ((this._GroupName != value))
+				{
+					this.OnGroupNameChanging(value);
+					this.SendPropertyChanging();
+					this._GroupName = value;
+					this.SendPropertyChanged("GroupName");
+					this.OnGroupNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="NVarChar(100)")]
+		public string Description
+		{
+			get
+			{
+				return this._Description;
+			}
+			set
+			{
+				if ((this._Description != value))
+				{
+					this.OnDescriptionChanging(value);
+					this.SendPropertyChanging();
+					this._Description = value;
+					this.SendPropertyChanged("Description");
+					this.OnDescriptionChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Company_Id", DbType="BigInt NOT NULL")]
+		public long Company_Id
+		{
+			get
+			{
+				return this._Company_Id;
+			}
+			set
+			{
+				if ((this._Company_Id != value))
+				{
+					if (this._Company.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnCompany_IdChanging(value);
+					this.SendPropertyChanging();
+					this._Company_Id = value;
+					this.SendPropertyChanged("Company_Id");
+					this.OnCompany_IdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsDeleted", DbType="Bit")]
+		public System.Nullable<bool> IsDeleted
+		{
+			get
+			{
+				return this._IsDeleted;
+			}
+			set
+			{
+				if ((this._IsDeleted != value))
+				{
+					this.OnIsDeletedChanging(value);
+					this.SendPropertyChanging();
+					this._IsDeleted = value;
+					this.SendPropertyChanged("IsDeleted");
+					this.OnIsDeletedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DeletedOn", DbType="DateTime2")]
+		public System.Nullable<System.DateTime> DeletedOn
+		{
+			get
+			{
+				return this._DeletedOn;
+			}
+			set
+			{
+				if ((this._DeletedOn != value))
+				{
+					this.OnDeletedOnChanging(value);
+					this.SendPropertyChanging();
+					this._DeletedOn = value;
+					this.SendPropertyChanged("DeletedOn");
+					this.OnDeletedOnChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Company_CompanyGroup", Storage="_Company", ThisKey="Company_Id", OtherKey="Id", IsForeignKey=true)]
+		public Company Company
+		{
+			get
+			{
+				return this._Company.Entity;
+			}
+			set
+			{
+				Company previousValue = this._Company.Entity;
+				if (((previousValue != value) 
+							|| (this._Company.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Company.Entity = null;
+						previousValue.CompanyGroups.Remove(this);
+					}
+					this._Company.Entity = value;
+					if ((value != null))
+					{
+						value.CompanyGroups.Add(this);
+						this._Company_Id = value.Id;
+					}
+					else
+					{
+						this._Company_Id = default(long);
+					}
+					this.SendPropertyChanged("Company");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.CompanyGroupModulePermission")]
+	public partial class CompanyGroupModulePermission : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private long _Id;
+		
+		private long _CompanyGroup_Id;
+		
+		private long _Module_Id;
+		
+		private System.Nullable<bool> _View_Right;
+		
+		private System.Nullable<bool> _Add_Right;
+		
+		private System.Nullable<bool> _Edit_Right;
+		
+		private System.Nullable<bool> _Delete_Right;
+		
+		private System.Nullable<bool> _IsDeleted;
+		
+		private System.Nullable<System.DateTime> _DeletedOn;
+		
+		private EntityRef<Company> _Company;
+		
+		private EntityRef<Module> _Module;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(long value);
+    partial void OnIdChanged();
+    partial void OnCompanyGroup_IdChanging(long value);
+    partial void OnCompanyGroup_IdChanged();
+    partial void OnModule_IdChanging(long value);
+    partial void OnModule_IdChanged();
+    partial void OnView_RightChanging(System.Nullable<bool> value);
+    partial void OnView_RightChanged();
+    partial void OnAdd_RightChanging(System.Nullable<bool> value);
+    partial void OnAdd_RightChanged();
+    partial void OnEdit_RightChanging(System.Nullable<bool> value);
+    partial void OnEdit_RightChanged();
+    partial void OnDelete_RightChanging(System.Nullable<bool> value);
+    partial void OnDelete_RightChanged();
+    partial void OnIsDeletedChanging(System.Nullable<bool> value);
+    partial void OnIsDeletedChanged();
+    partial void OnDeletedOnChanging(System.Nullable<System.DateTime> value);
+    partial void OnDeletedOnChanged();
+    #endregion
+		
+		public CompanyGroupModulePermission()
+		{
+			this._Company = default(EntityRef<Company>);
+			this._Module = default(EntityRef<Module>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="BigInt NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public long Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CompanyGroup_Id", DbType="BigInt NOT NULL")]
+		public long CompanyGroup_Id
+		{
+			get
+			{
+				return this._CompanyGroup_Id;
+			}
+			set
+			{
+				if ((this._CompanyGroup_Id != value))
+				{
+					if (this._Company.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnCompanyGroup_IdChanging(value);
+					this.SendPropertyChanging();
+					this._CompanyGroup_Id = value;
+					this.SendPropertyChanged("CompanyGroup_Id");
+					this.OnCompanyGroup_IdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Module_Id", DbType="BigInt NOT NULL")]
+		public long Module_Id
+		{
+			get
+			{
+				return this._Module_Id;
+			}
+			set
+			{
+				if ((this._Module_Id != value))
+				{
+					if (this._Module.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnModule_IdChanging(value);
+					this.SendPropertyChanging();
+					this._Module_Id = value;
+					this.SendPropertyChanged("Module_Id");
+					this.OnModule_IdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_View_Right", DbType="Bit")]
+		public System.Nullable<bool> View_Right
+		{
+			get
+			{
+				return this._View_Right;
+			}
+			set
+			{
+				if ((this._View_Right != value))
+				{
+					this.OnView_RightChanging(value);
+					this.SendPropertyChanging();
+					this._View_Right = value;
+					this.SendPropertyChanged("View_Right");
+					this.OnView_RightChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Add_Right", DbType="Bit")]
+		public System.Nullable<bool> Add_Right
+		{
+			get
+			{
+				return this._Add_Right;
+			}
+			set
+			{
+				if ((this._Add_Right != value))
+				{
+					this.OnAdd_RightChanging(value);
+					this.SendPropertyChanging();
+					this._Add_Right = value;
+					this.SendPropertyChanged("Add_Right");
+					this.OnAdd_RightChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Edit_Right", DbType="Bit")]
+		public System.Nullable<bool> Edit_Right
+		{
+			get
+			{
+				return this._Edit_Right;
+			}
+			set
+			{
+				if ((this._Edit_Right != value))
+				{
+					this.OnEdit_RightChanging(value);
+					this.SendPropertyChanging();
+					this._Edit_Right = value;
+					this.SendPropertyChanged("Edit_Right");
+					this.OnEdit_RightChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Delete_Right", DbType="Bit")]
+		public System.Nullable<bool> Delete_Right
+		{
+			get
+			{
+				return this._Delete_Right;
+			}
+			set
+			{
+				if ((this._Delete_Right != value))
+				{
+					this.OnDelete_RightChanging(value);
+					this.SendPropertyChanging();
+					this._Delete_Right = value;
+					this.SendPropertyChanged("Delete_Right");
+					this.OnDelete_RightChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsDeleted", DbType="Bit")]
+		public System.Nullable<bool> IsDeleted
+		{
+			get
+			{
+				return this._IsDeleted;
+			}
+			set
+			{
+				if ((this._IsDeleted != value))
+				{
+					this.OnIsDeletedChanging(value);
+					this.SendPropertyChanging();
+					this._IsDeleted = value;
+					this.SendPropertyChanged("IsDeleted");
+					this.OnIsDeletedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DeletedOn", DbType="DateTime2")]
+		public System.Nullable<System.DateTime> DeletedOn
+		{
+			get
+			{
+				return this._DeletedOn;
+			}
+			set
+			{
+				if ((this._DeletedOn != value))
+				{
+					this.OnDeletedOnChanging(value);
+					this.SendPropertyChanging();
+					this._DeletedOn = value;
+					this.SendPropertyChanged("DeletedOn");
+					this.OnDeletedOnChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Company_CompanyGroupModulePermission", Storage="_Company", ThisKey="CompanyGroup_Id", OtherKey="Id", IsForeignKey=true)]
+		public Company Company
+		{
+			get
+			{
+				return this._Company.Entity;
+			}
+			set
+			{
+				Company previousValue = this._Company.Entity;
+				if (((previousValue != value) 
+							|| (this._Company.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Company.Entity = null;
+						previousValue.CompanyGroupModulePermissions.Remove(this);
+					}
+					this._Company.Entity = value;
+					if ((value != null))
+					{
+						value.CompanyGroupModulePermissions.Add(this);
+						this._CompanyGroup_Id = value.Id;
+					}
+					else
+					{
+						this._CompanyGroup_Id = default(long);
+					}
+					this.SendPropertyChanged("Company");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Module_CompanyGroupModulePermission", Storage="_Module", ThisKey="Module_Id", OtherKey="Id", IsForeignKey=true)]
+		public Module Module
+		{
+			get
+			{
+				return this._Module.Entity;
+			}
+			set
+			{
+				Module previousValue = this._Module.Entity;
+				if (((previousValue != value) 
+							|| (this._Module.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Module.Entity = null;
+						previousValue.CompanyGroupModulePermissions.Remove(this);
+					}
+					this._Module.Entity = value;
+					if ((value != null))
+					{
+						value.CompanyGroupModulePermissions.Add(this);
+						this._Module_Id = value.Id;
+					}
+					else
+					{
+						this._Module_Id = default(long);
+					}
+					this.SendPropertyChanged("Module");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Module")]
+	public partial class Module : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private long _Id;
+		
+		private string _ModuleName;
+		
+		private int _Sequence;
+		
+		private System.DateTime _CreatedOn;
+		
+		private long _CreatedBy;
+		
+		private System.Nullable<System.DateTime> _UpdatedOn;
+		
+		private System.Nullable<long> _UpdatedBy;
+		
+		private System.Nullable<System.DateTime> _DeletedOn;
+		
+		private System.Nullable<long> _DeletedBy;
+		
+		private bool _IsDeleted;
+		
+		private EntitySet<CompanyGroupModulePermission> _CompanyGroupModulePermissions;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(long value);
+    partial void OnIdChanged();
+    partial void OnModuleNameChanging(string value);
+    partial void OnModuleNameChanged();
+    partial void OnSequenceChanging(int value);
+    partial void OnSequenceChanged();
+    partial void OnCreatedOnChanging(System.DateTime value);
+    partial void OnCreatedOnChanged();
+    partial void OnCreatedByChanging(long value);
+    partial void OnCreatedByChanged();
+    partial void OnUpdatedOnChanging(System.Nullable<System.DateTime> value);
+    partial void OnUpdatedOnChanged();
+    partial void OnUpdatedByChanging(System.Nullable<long> value);
+    partial void OnUpdatedByChanged();
+    partial void OnDeletedOnChanging(System.Nullable<System.DateTime> value);
+    partial void OnDeletedOnChanged();
+    partial void OnDeletedByChanging(System.Nullable<long> value);
+    partial void OnDeletedByChanged();
+    partial void OnIsDeletedChanging(bool value);
+    partial void OnIsDeletedChanged();
+    #endregion
+		
+		public Module()
+		{
+			this._CompanyGroupModulePermissions = new EntitySet<CompanyGroupModulePermission>(new Action<CompanyGroupModulePermission>(this.attach_CompanyGroupModulePermissions), new Action<CompanyGroupModulePermission>(this.detach_CompanyGroupModulePermissions));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="BigInt NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public long Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ModuleName", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string ModuleName
+		{
+			get
+			{
+				return this._ModuleName;
+			}
+			set
+			{
+				if ((this._ModuleName != value))
+				{
+					this.OnModuleNameChanging(value);
+					this.SendPropertyChanging();
+					this._ModuleName = value;
+					this.SendPropertyChanged("ModuleName");
+					this.OnModuleNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Sequence", DbType="Int NOT NULL")]
+		public int Sequence
+		{
+			get
+			{
+				return this._Sequence;
+			}
+			set
+			{
+				if ((this._Sequence != value))
+				{
+					this.OnSequenceChanging(value);
+					this.SendPropertyChanging();
+					this._Sequence = value;
+					this.SendPropertyChanged("Sequence");
+					this.OnSequenceChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreatedOn", DbType="DateTime NOT NULL")]
+		public System.DateTime CreatedOn
+		{
+			get
+			{
+				return this._CreatedOn;
+			}
+			set
+			{
+				if ((this._CreatedOn != value))
+				{
+					this.OnCreatedOnChanging(value);
+					this.SendPropertyChanging();
+					this._CreatedOn = value;
+					this.SendPropertyChanged("CreatedOn");
+					this.OnCreatedOnChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreatedBy", DbType="BigInt NOT NULL")]
+		public long CreatedBy
+		{
+			get
+			{
+				return this._CreatedBy;
+			}
+			set
+			{
+				if ((this._CreatedBy != value))
+				{
+					this.OnCreatedByChanging(value);
+					this.SendPropertyChanging();
+					this._CreatedBy = value;
+					this.SendPropertyChanged("CreatedBy");
+					this.OnCreatedByChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UpdatedOn", DbType="DateTime")]
+		public System.Nullable<System.DateTime> UpdatedOn
+		{
+			get
+			{
+				return this._UpdatedOn;
+			}
+			set
+			{
+				if ((this._UpdatedOn != value))
+				{
+					this.OnUpdatedOnChanging(value);
+					this.SendPropertyChanging();
+					this._UpdatedOn = value;
+					this.SendPropertyChanged("UpdatedOn");
+					this.OnUpdatedOnChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UpdatedBy", DbType="BigInt")]
+		public System.Nullable<long> UpdatedBy
+		{
+			get
+			{
+				return this._UpdatedBy;
+			}
+			set
+			{
+				if ((this._UpdatedBy != value))
+				{
+					this.OnUpdatedByChanging(value);
+					this.SendPropertyChanging();
+					this._UpdatedBy = value;
+					this.SendPropertyChanged("UpdatedBy");
+					this.OnUpdatedByChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DeletedOn", DbType="DateTime")]
+		public System.Nullable<System.DateTime> DeletedOn
+		{
+			get
+			{
+				return this._DeletedOn;
+			}
+			set
+			{
+				if ((this._DeletedOn != value))
+				{
+					this.OnDeletedOnChanging(value);
+					this.SendPropertyChanging();
+					this._DeletedOn = value;
+					this.SendPropertyChanged("DeletedOn");
+					this.OnDeletedOnChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DeletedBy", DbType="BigInt")]
+		public System.Nullable<long> DeletedBy
+		{
+			get
+			{
+				return this._DeletedBy;
+			}
+			set
+			{
+				if ((this._DeletedBy != value))
+				{
+					this.OnDeletedByChanging(value);
+					this.SendPropertyChanging();
+					this._DeletedBy = value;
+					this.SendPropertyChanged("DeletedBy");
+					this.OnDeletedByChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsDeleted", DbType="Bit NOT NULL")]
+		public bool IsDeleted
+		{
+			get
+			{
+				return this._IsDeleted;
+			}
+			set
+			{
+				if ((this._IsDeleted != value))
+				{
+					this.OnIsDeletedChanging(value);
+					this.SendPropertyChanging();
+					this._IsDeleted = value;
+					this.SendPropertyChanged("IsDeleted");
+					this.OnIsDeletedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Module_CompanyGroupModulePermission", Storage="_CompanyGroupModulePermissions", ThisKey="Id", OtherKey="Module_Id")]
+		public EntitySet<CompanyGroupModulePermission> CompanyGroupModulePermissions
+		{
+			get
+			{
+				return this._CompanyGroupModulePermissions;
+			}
+			set
+			{
+				this._CompanyGroupModulePermissions.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_CompanyGroupModulePermissions(CompanyGroupModulePermission entity)
+		{
+			this.SendPropertyChanging();
+			entity.Module = this;
+		}
+		
+		private void detach_CompanyGroupModulePermissions(CompanyGroupModulePermission entity)
+		{
+			this.SendPropertyChanging();
+			entity.Module = null;
 		}
 	}
 }

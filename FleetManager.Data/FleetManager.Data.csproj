@@ -147,6 +147,8 @@
     <Content Include="SQL\006-Tracker-AddFKTripReason.sql" />
     <Content Include="SQL\007-Company-CreateTable.sql" />
     <Content Include="SQL\008-CompanyUser-CreateTable.sql" />
+    <Content Include="SQL\009-CompanyGroup-CreateTable.sql" />
+    <Content Include="SQL\010-CompanyGroupModulePermission-CreateTable.sql" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Models\CarFleet.dbml">
