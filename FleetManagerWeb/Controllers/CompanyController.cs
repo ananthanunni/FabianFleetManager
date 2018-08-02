@@ -25,6 +25,13 @@ namespace FleetManagerWeb.Controllers
 		_mySession = mySession;
 	  }
 
+	  protected override void OnException(ExceptionContext filterContext)
+	  {
+		base.OnException(filterContext);
+		if (filterContext.Exception is UnauthorizedAccessException)
+		    filterContext.Result = new HttpUnauthorizedResult(filterContext.Exception.Message);
+	  }
+
 	  [HttpGet]
 	  public ActionResult Get() => Json(_companyService.Get(), JsonRequestBehavior.AllowGet);
 
@@ -39,6 +46,21 @@ namespace FleetManagerWeb.Controllers
 	  {
 		viewModel.Id = id;
 		return Json(_companyService.Save(viewModel));
+	  }
+
+	  // NON REST METHODS
+	  // POST AssignAdmin?companyId?{int}&userId={userId}
+	  [HttpPost]
+	  public ActionResult AssignAdmin(int companyId, int userId)
+	  {
+		return Json(_companyService.AssignUserToCompany(companyId, userId));
+	  }
+
+	  [HttpPost]
+	  // POST UnAssignAdmin?companyId?{int}&userId={userId}
+	  public ActionResult UnAssignAdmin(int companyId,int userId)
+	  {
+		return Json(_companyService.UnAssignAdmin(companyId, userId));
 	  }
     }
 }

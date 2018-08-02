@@ -19,10 +19,13 @@ namespace FleetManager.Data.Models
 	  string Phone { get; set; }
 	  string ShortName { get; set; }
 	  int? VAT { get; set; }
+	  ICollection<CompanyUser> CompanyUsers { get; set; }
 
 	  void Delete(int id);
 	  IClsCompany Get(int id);
 	  IEnumerable<IClsCompany> GetAll();
 	  IClsCompany Save(IClsCompany companyVm);
+	  bool AssignUserToCompany(int companyId, int userId);
+	  bool UnAssignUserToCompany(int companyId, int userId);
     }
 }

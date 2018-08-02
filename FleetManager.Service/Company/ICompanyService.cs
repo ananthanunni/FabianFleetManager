@@ -9,5 +9,7 @@ namespace FleetManager.Service.Company
 	  IEnumerable<IClsCompany> Get();
 	  IClsCompany Get(int id);
 	  IClsCompany Save(IClsCompany company);
+	  bool AssignUserToCompany(int companyId, int userId);
+	  bool UnAssignAdmin(int companyId, int userId);
     }
 }

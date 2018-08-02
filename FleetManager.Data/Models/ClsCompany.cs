@@ -11,7 +11,7 @@ namespace FleetManager.Data.Models
     {
 	  public ClsCompany(CompanyDataContext context = null) : base()
 	  {
-
+		
 	  }
 
 	  public long Id { get; set; }
@@ -41,6 +41,8 @@ namespace FleetManager.Data.Models
 	  public bool? IsDeleted { get; set; }
 
 	  public DateTime? DeletedOn { get; set; }
+
+	  public ICollection<CompanyUser> CompanyUsers { get; set; }
 
 	  public IEnumerable<IClsCompany> GetAll()
 	  {
@@ -104,6 +106,46 @@ namespace FleetManager.Data.Models
 
 		    tran.Complete();
 		}
+	  }
+
+	  public bool AssignUserToCompany(int companyId, int userId)
+	  {
+		using(var tran=new TransactionScope())
+		{
+		    using (objDataContext = GetDataContext())
+		    {
+			  var company = objDataContext.Companies.Single(t => t.Id == companyId);
+
+			  objDataContext.CompanyUsers.InsertOnSubmit(new CompanyUser
+			  {
+				Company_Id = companyId,
+				User_Id = userId
+			  });
+		    }
+
+		    tran.Complete();
+		}
+
+		return true;
+	  }
+
+	  public bool UnAssignUserToCompany(int companyId, int userId)
+	  {
+		using (var tran = new TransactionScope())
+		{
+		    using (objDataContext = GetDataContext())
+		    {
+			  var companyUser = objDataContext.CompanyUsers.SingleOrDefault(t => t.Company_Id == companyId && t.User_Id == userId);
+
+			  if (companyUser == null) return false;
+
+			  objDataContext.CompanyUsers.DeleteOnSubmit(companyUser);
+		    }
+
+		    tran.Complete();
+		}
+
+		return true;
 	  }
     }
 }

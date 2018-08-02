@@ -11,12 +11,16 @@ namespace FleetManager.Service.Company
     public class CompanyService : ICompanyService
     {
 	  private readonly IClsCompany _company;
+	  private readonly IClsRole _role;
 	  private readonly IMySession _mySession;
+	  private readonly IClsUser _user;
 
-	  public CompanyService(IClsCompany company,IMySession mySession)
+	  public CompanyService(IClsCompany company, IClsRole role,IMySession mySession,IClsUser user)
 	  {
 		_company = company;
+		_role = role;
 		_mySession = mySession;
+		_user = user;
 	  }
 
 	  public IEnumerable<IClsCompany> Get()
@@ -30,13 +34,52 @@ namespace FleetManager.Service.Company
 	  }
 
 	  public IClsCompany Save(IClsCompany company)
-	  {		
+	  {
+		if (!IsSysAdmin())
+		    throw new UnauthorizedAccessException("You are not authorized to create/edit company information.");
+
 		return _company.Save(company);
 	  }
 
 	  public void Delete(int id)
 	  {
+		if (!IsSysAdmin())
+		    throw new UnauthorizedAccessException("You are not authorized to delete company.");
+
 		_company.Delete(id);
+	  }
+
+	  public bool AssignUserToCompany(int companyId, int userId)
+	  {
+		if (!IsSysAdmin())
+		    throw new UnauthorizedAccessException("You are not authorized to assign admins to company.");
+
+		if (!IsValidUser(userId))
+		    throw new InvalidOperationException("Invalid user.");
+
+		return _company.AssignUserToCompany(companyId, userId);
+	  }
+
+	  public bool UnAssignAdmin(int companyId, int userId)
+	  {
+		if (!IsSysAdmin())
+		    throw new UnauthorizedAccessException("You are not authorized to unassign admins to company.");
+
+		if (!IsValidUser(userId))
+		    throw new InvalidOperationException("Invalid user.");
+
+		return _company.UnAssignUserToCompany(companyId, userId);
+	  }
+
+	  private bool IsSysAdmin()
+	  {
+		return _role.GetRoleByRoleId(_mySession.RoleId).strRoleName.Equals("SYSADMIN");
+	  }
+
+	  private bool IsValidUser(int userId)
+	  {
+		var user = _user.GetUserByUserId(userId);
+		return user != null && user.BlIsActive;
 	  }
     }
 }
