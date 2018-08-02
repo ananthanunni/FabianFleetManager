@@ -12,5 +12,6 @@ namespace FleetManager.Service.Company
 	  bool AssignUserAsCompanyAdmin(int companyId, int userId);
 	  bool UnAssignUserAsCompanyAdmin(int companyId, int userId);
 	  long CreateGroup(int companyId, string groupName, string description);
+	  bool SetCompanyModulePermission(int companyGroupId, int moduleId, string right, bool flag);
     }
 }

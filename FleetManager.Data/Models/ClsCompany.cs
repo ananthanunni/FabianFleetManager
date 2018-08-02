@@ -48,7 +48,7 @@ namespace FleetManager.Data.Models
 	  {
 		using (objDataContext = GetDataContext())
 		{
-		    return objDataContext.Companies.ToList().Select(t => TranslateTypes<Company, ClsCompany>(t));
+		    return objDataContext.Companies.Where(t => t.IsDeleted != true).ToList().Select(t => TranslateTypes<Company, ClsCompany>(t));
 		}
 	  }
 
@@ -56,7 +56,7 @@ namespace FleetManager.Data.Models
 	  {
 		using (objDataContext = GetDataContext())
 		{
-		    var entity = objDataContext.Companies.SingleOrDefault(t => t.Id == id);
+		    var entity = objDataContext.Companies.SingleOrDefault(t => t.IsDeleted != true && t.Id == id);
 
 		    if (entity == null) return null;
 
@@ -162,7 +162,7 @@ namespace FleetManager.Data.Models
 			  {
 				Company_Id = companyId,
 				Description = description,
-				GroupName = groupName
+				GroupName = groupName			
 			  };
 
 			  objDataContext.CompanyGroups.InsertOnSubmit(newGroup);
@@ -171,6 +171,58 @@ namespace FleetManager.Data.Models
 			  tran.Complete();
 
 			  return newGroup.Id;
+		    }
+		}
+	  }
+
+	  public bool SetCompanyModulePermission(int companyGroupId, int moduleId, string right, bool flag)
+	  {
+		using (var tran = new TransactionScope())
+		{
+		    using (objDataContext = GetDataContext())
+		    {
+			  var permission = objDataContext.CompanyGroupModulePermissions.Single(t => t.IsDeleted != null && t.CompanyGroup_Id == companyGroupId && t.Module_Id == moduleId);
+
+			  if (permission == null)
+			  {
+				var companyGroup = objDataContext.CompanyGroups.Single(t => t.Id == companyGroupId && t.IsDeleted != true);
+
+				permission = new CompanyGroupModulePermission
+				{
+				    CompanyGroup_Id=companyGroupId,
+				    Module_Id=moduleId
+				};
+
+				objDataContext.CompanyGroups.InsertOnSubmit(companyGroup);
+			  }
+
+			  // TODO: REFACTOR LATER WITH VIEWMODEL BASED IMPLEMENTATION. CURRENT IMPLEMENTATION ALLOWS ONLY ONE CHANGE AT A TIME. VERY IMPORTANT TO CHANGE LATER.
+			  switch (right.ToUpper())
+			  {
+				case "VIEW":
+				    permission.View_Right = flag;
+				    break;
+
+				case "ADD":
+				    permission.Add_Right = flag;
+				    break;
+
+				case "EDIT":
+				    permission.Edit_Right = flag;
+				    break;
+
+				case "DELETE":
+				    permission.Delete_Right = flag;
+				    break;
+
+				default:
+				    throw new ArgumentException("Use any of the four - VIEW, ADD, EDIT, DELETE", nameof(right));
+			  }
+
+			  objDataContext.SubmitChanges();
+			  tran.Complete();
+
+			  return true;
 		    }
 		}
 	  }

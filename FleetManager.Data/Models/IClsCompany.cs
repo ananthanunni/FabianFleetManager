@@ -28,5 +28,6 @@ namespace FleetManager.Data.Models
 	  bool AssignUserToCompany(int companyId, int userId, bool assignAsAdmin=false);
 	  bool UnAssignUserToCompany(int companyId, int userId);
 	  long CreateGroup(int companyId, string groupName, string description);
+	  bool SetCompanyModulePermission(int companyGroupId, int moduleId, string right, bool flat);
     }
 }

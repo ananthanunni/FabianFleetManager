@@ -71,6 +71,27 @@ namespace FleetManager.Service.Company
 		return _company.UnAssignUserToCompany(companyId, userId);
 	  }
 
+	  public long CreateGroup(int companyId, string groupName, string description)
+	  {
+		if (!IsCompanyAdmin(companyId))
+		    throw new UnauthorizedAccessException("You are not authorized to create company groups.");
+
+		var company = _company.Get(companyId);
+
+		if (company == null)
+		    throw new InvalidOperationException("Invalid company");
+
+		return _company.CreateGroup(companyId, groupName,description);
+	  }
+
+	  public bool SetCompanyModulePermission(int companyGroupId, int moduleId, string right, bool flag)
+	  {
+		if(!IsCompanyAdmin(companyGroupId))
+		    throw new UnauthorizedAccessException("You are not authorized to create company groups.");
+
+		return _company.SetCompanyModulePermission(companyGroupId, moduleId, right, flag);
+	  }
+
 	  private bool IsSysAdmin()
 	  {
 		return (_role.GetRoleByRoleId(_mySession.RoleId) as ClsRole).strRoleName.Equals("SYSADMIN");
@@ -82,14 +103,15 @@ namespace FleetManager.Service.Company
 		return user != null && user.BlIsActive;
 	  }
 
-	  public long CreateGroup(int companyId, string groupName, string description)
+	  private bool IsCompanyAdmin(int companyId)
 	  {
+		if (IsValidUser(_mySession.UserId)) return false;
+
 		var company = _company.Get(companyId);
 
-		if (company == null)
-		    throw new InvalidOperationException("Invalid company");
+		if (company == null) return false;
 
-		return _company.CreateGroup(companyId, groupName,description);
+		return company.CompanyUsers.Any(t => t.Company.Id == companyId && t.IsAdmin == true && t.User_Id==_mySession.UserId);
 	  }
     }
 }
