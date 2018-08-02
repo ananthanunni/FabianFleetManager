@@ -4,66 +4,37 @@ using FleetManager.Data.Models;
 using FleetManager.Model.Interaction;
 using FleetManager.Service.Auth;
 using FleetManager.Service.Interaction;
-using FleetManagerWeb.Controllers;
 using FleetManagerWeb.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 
-namespace FleetManagerWeb
+namespace FleetManagerWeb.Controllers
 {
-    public class UserController : BaseController
+    public class FleetColorsController : BaseController
     {
-	  /// <summary>   Zero-based index of the cls role. </summary>
-	  private readonly IClsRole _objiClsRole = null;
+	  private readonly IClsFleetColors _objiClsFleetColors = null;
 	  private readonly IAlertTextProvider _alertTextProvider;
-	  private readonly IMySession _mySession;
 	  private readonly IPermissionChecker _permissionChecker;
+	  private readonly IMySession _mySession;
 
-	  /// <summary>   Zero-based index of the cls user. </summary>
-	  private readonly IClsUser _objiClsUser = null;
-
-	  public UserController(IClsUser objIClsUser, IClsRole objIClsRole, IAlertTextProvider alertTextProvider, IMySession mySession, IPermissionChecker permissionChecker)
+	  public FleetColorsController(IClsFleetColors objIClsFleetColors, IAlertTextProvider alertTextProvider, IPermissionChecker permissionChecker, IMySession mySession)
 	  {
-		_objiClsUser = objIClsUser;
-		_objiClsRole = objIClsRole;
+		_objiClsFleetColors = objIClsFleetColors;
 		_alertTextProvider = alertTextProvider;
-		_mySession = mySession;
 		_permissionChecker = permissionChecker;
+		_mySession = mySession;
 	  }
 
-	  public void BindDropDownListForUser(ClsUser objClsUser, bool blBindDropDownFromDb)
+	  public ActionResult BindFleetColorsGrid(string sidx, string sord, int page, int rows, string filters, string search)
 	  {
 		try
 		{
-		    if (blBindDropDownFromDb)
+		    List<SearchFleetColorsResult> lstFleetColors = _objiClsFleetColors.SearchFleetColors(rows, page, search, sidx + " " + sord);
+		    if (lstFleetColors != null)
 		    {
-			  objClsUser.lstRole = _objiClsRole.GetAllRoleForDropDown().ToList();
-			  objClsUser.lstBranch = new List<SelectListItem>();
-			  objClsUser.lstUserType = _objiClsUser.GetAllUserTypeForDropDown().ToList();
-		    }
-		    else
-		    {
-			  objClsUser.lstRole = new List<SelectListItem>();
-			  objClsUser.lstBranch = new List<SelectListItem>();
-			  objClsUser.lstUserType = new List<SelectListItem>();
-		    }
-		}
-		catch (Exception ex)
-		{
-		    Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User);
-		}
-	  }
-
-	  public ActionResult BindUserGrid(string sidx, string sord, int page, int rows, string filters, string search)
-	  {
-		try
-		{
-		    List<SearchUserResult> lstUser = _objiClsUser.SearchUser(rows, page, search, sidx + " " + sord);
-		    if (lstUser != null)
-		    {
-			  return FillGrid(page, rows, lstUser);
+			  return FillGridFleetColors(page, rows, lstFleetColors);
 		    }
 		    else
 		    {
@@ -72,67 +43,67 @@ namespace FleetManagerWeb
 		}
 		catch (Exception ex)
 		{
-		    Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, _mySession.UserId);
+		    Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetColors, _mySession.UserId);
 		    return Json(string.Empty);
 		}
 	  }
 
-	  public JsonResult DeleteUser(string strUserId)
+	  public JsonResult DeleteFleetColors(string strFleetColorsId)
 	  {
 		try
 		{
-		    string[] strUser = strUserId.Split(',');
-		    strUserId = string.Empty;
-		    foreach (var item in strUser)
+		    string[] strFleetColors = strFleetColorsId.Split(',');
+		    strFleetColorsId = string.Empty;
+		    foreach (var item in strFleetColors)
 		    {
-			  strUserId += item.Decode() + ",";
+			  strFleetColorsId += item.Decode() + ",";
 		    }
 
-		    strUserId = strUserId.Substring(0, strUserId.Length - 1);
-		    DeleteUserResult result = _objiClsUser.DeleteUser(strUserId, _mySession.UserId);
+		    strFleetColorsId = strFleetColorsId.Substring(0, strFleetColorsId.Length - 1);
+		    DeleteFleetColorsResult result = _objiClsFleetColors.DeleteFleetColors(strFleetColorsId, _mySession.UserId);
 		    if (result != null && result.TotalReference == 0)
 		    {
-			  return Json(_alertTextProvider.AlertMessage("User", MessageType.DeleteSuccess));
+			  return Json(_alertTextProvider.AlertMessage("Fleet Colors", MessageType.DeleteSuccess));
 		    }
 		    else if (result != null && result.TotalReference > 0)
 		    {
-			  return Json(_alertTextProvider.AlertMessage("User", MessageType.DeletePartial, result.Name));
+			  return Json(_alertTextProvider.AlertMessage("Fleet Colors", MessageType.DeletePartial, result.Name));
 		    }
 
-		    return Json(_alertTextProvider.AlertMessage("User", MessageType.DeleteFail));
+		    return Json(_alertTextProvider.AlertMessage("Fleet Colors", MessageType.DeleteFail));
 		}
 		catch (Exception ex)
 		{
-		    Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, _mySession.UserId);
-		    return Json(_alertTextProvider.AlertMessage("User", MessageType.DeleteFail));
+		    Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetColors, _mySession.UserId);
+		    return Json(_alertTextProvider.AlertMessage("Fleet Colors", MessageType.DeleteFail));
 		}
 	  }
 
-	  public JsonResult GetUser()
+	  public JsonResult GetFleetColors()
 	  {
 		try
 		{
-		    return Json(_objiClsUser.GetAllUserForDropDown(), JsonRequestBehavior.AllowGet);
+		    return Json(_objiClsFleetColors.GetAllFleetColorsForDropDown(), JsonRequestBehavior.AllowGet);
 		}
 		catch (Exception ex)
 		{
-		    Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User);
+		    Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetColors, _mySession.UserId);
 		    return Json(string.Empty, JsonRequestBehavior.AllowGet);
 		}
 	  }
 
-	  public new ActionResult User()
+	  public ActionResult FleetColors()
 	  {
 		try
 		{
-		    GetPagePermissionResult objPermission = _permissionChecker.CheckPagePermission(PageMaster.User);
+		    var objPermission = _permissionChecker.CheckPagePermission(PageMaster.FleetColors);
 		    if (!objPermission.IsActive)
 		    {
 			  return RedirectToAction("Logout", "Home");
 		    }
 
-		    ClsUser objClsUser = _objiClsUser as ClsUser;
-		    long lgUserId = 0;
+		    ClsFleetColors objClsFleetColors = _objiClsFleetColors as ClsFleetColors;
+		    long lgFleetColorsId = 0;
 		    if (Request.QueryString.Count > 0)
 		    {
 			  if (Request.QueryString["iFrame"] != null)
@@ -142,7 +113,8 @@ namespace FleetManagerWeb
 				    return RedirectToAction("PermissionRedirectPage", "Home");
 				}
 
-				objClsUser.hdniFrame = true;
+				objClsFleetColors.hdniFrame = true;
+				ViewData["iFrame"] = "iFrame";
 			  }
 			  else
 			  {
@@ -151,9 +123,8 @@ namespace FleetManagerWeb
 				    return RedirectToAction("PermissionRedirectPage", "Home");
 				}
 
-				lgUserId = Request.QueryString.ToString().Decode().LongSafe();
-				objClsUser = _objiClsUser.GetUserByUserId(lgUserId);
-				ViewBag.Password = objClsUser.strPassword;
+				lgFleetColorsId = Request.QueryString.ToString().Decode().LongSafe();
+				objClsFleetColors = _objiClsFleetColors.GetFleetColorsByFleetColorsId(lgFleetColorsId);
 			  }
 		    }
 		    else
@@ -225,29 +196,27 @@ namespace FleetManagerWeb
 		    ViewData["TripReasonAccess"] = blTripReasonAccess;
 		    #endregion
 
-		    BindDropDownListForUser(objClsUser, true);
-		    return View(objClsUser);
+		    return View(objClsFleetColors);
 		}
 		catch (Exception ex)
 		{
-		    Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, _mySession.UserId);
+		    Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetColors, _mySession.UserId);
 		    return View();
 		}
 	  }
 
 	  [HttpPost]
-	  public new ActionResult User(ClsUser objUser)
+	  public ActionResult FleetColors(ClsFleetColors objFleetColors)
 	  {
 		try
 		{
-		    ////bool blEmailFlag = false;
-		    GetPagePermissionResult objPermission = _permissionChecker.CheckPagePermission(PageMaster.User);
+		    var objPermission = _permissionChecker.CheckPagePermission(PageMaster.FleetColors);
 		    if (!objPermission.IsActive)
 		    {
 			  return RedirectToAction("Logout", "Home");
 		    }
 
-		    if (objUser.lgId == 0)
+		    if (objFleetColors.lgId == 0)
 		    {
 			  if (!objPermission.Add_Right)
 			  {
@@ -262,26 +231,20 @@ namespace FleetManagerWeb
 			  }
 		    }
 
-		    if (objUser.hdniFrame)
+		    if (objFleetColors.hdniFrame)
 		    {
 			  ViewData["iFrame"] = "iFrame";
 		    }
 
-		    bool blExists = _objiClsUser.IsUserExists(objUser.lgId, objUser.strUserName);
-		    bool blExists1 = _objiClsUser.IsUserEmailExists(objUser.lgId, objUser.strEmailID);
+		    bool blExists = _objiClsFleetColors.IsFleetColorsExists(objFleetColors.lgId, objFleetColors.strFleetColorsName);
 		    if (blExists)
 		    {
 			  ViewData["Success"] = "0";
-			  ViewData["Message"] = _alertTextProvider.AlertMessage("User", MessageType.AlreadyExists);
-		    }
-		    else if (blExists1)
-		    {
-			  ViewData["Success"] = "0";
-			  ViewData["Message"] = _alertTextProvider.AlertMessage("Email Address", MessageType.AlreadyExists);
+			  ViewData["Message"] = _alertTextProvider.AlertMessage("Fleet Colors", MessageType.AlreadyExists);
 		    }
 		    else
 		    {
-			  string strErrorMsg = ValidateUser(objUser);
+			  string strErrorMsg = ValidateFleetColors(objFleetColors);
 			  if (!string.IsNullOrEmpty(strErrorMsg))
 			  {
 				ViewData["Success"] = "0";
@@ -289,39 +252,37 @@ namespace FleetManagerWeb
 			  }
 			  else
 			  {
-				long resultId = _objiClsUser.SaveUser(objUser);
-				if (resultId > 0)
+				objFleetColors.lgId = _objiClsFleetColors.SaveFleetColors(objFleetColors);
+				if (objFleetColors.lgId > 0)
 				{
 				    ViewData["Success"] = "1";
-				    ViewData["Message"] = _alertTextProvider.AlertMessage("User", MessageType.Success);
-				    BindDropDownListForUser(objUser, false);
-				    return View(objUser);
+				    ViewData["Message"] = _alertTextProvider.AlertMessage("Fleet Colors", MessageType.Success);
+				    return View(objFleetColors);
 				}
 				else
 				{
 				    ViewData["Success"] = "0";
-				    ViewData["Message"] = _alertTextProvider.AlertMessage("User", MessageType.Fail);
+				    ViewData["Message"] = _alertTextProvider.AlertMessage("Fleet Colors", MessageType.Fail);
 				}
 			  }
 		    }
 
-		    BindDropDownListForUser(objUser, true);
-		    return View(objUser);
+		    return View(objFleetColors);
 		}
 		catch (Exception ex)
 		{
 		    ViewData["Success"] = "0";
-		    ViewData["Message"] = _alertTextProvider.AlertMessage("User", MessageType.Fail);
-		    Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, _mySession.UserId);
-		    return View(objUser);
+		    ViewData["Message"] = _alertTextProvider.AlertMessage("Fleet Colors", MessageType.Fail);
+		    Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetColors, _mySession.UserId);
+		    return View(objFleetColors);
 		}
 	  }
 
-	  public ActionResult UserView()
+	  public ActionResult FleetColorsView()
 	  {
 		try
 		{
-		    GetPagePermissionResult objPermission = _permissionChecker.CheckPagePermission(PageMaster.User);
+		    var objPermission = _permissionChecker.CheckPagePermission(PageMaster.FleetColors);
 		    if (!objPermission.IsActive)
 		    {
 			  return RedirectToAction("Logout", "Home");
@@ -402,95 +363,54 @@ namespace FleetManagerWeb
 		}
 		catch (Exception ex)
 		{
-		    Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, _mySession.UserId);
+		    Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetColors, _mySession.UserId);
 		    return View();
 		}
 	  }
 
-	  private ActionResult FillGrid(int page, int rows, List<SearchUserResult> lstUser)
+	  private ActionResult FillGridFleetColors(int page, int rows, List<SearchFleetColorsResult> lstFleetColors)
 	  {
 		try
 		{
 		    int pageSize = rows;
-		    int totalRecords = lstUser != null && lstUser.Count > 0 ? lstUser[0].Total : 0;
+		    int totalRecords = lstFleetColors != null && lstFleetColors.Count > 0 ? lstFleetColors[0].Total : 0;
 		    int totalPages = (int)Math.Ceiling((float)totalRecords / (float)pageSize);
-		    var pagedUserCol = lstUser;
 		    var jsonData = new
 		    {
 			  total = totalPages,
 			  page,
 			  records = totalRecords,
-			  rows = (from objUser in pagedUserCol
+			  rows = (from objFleetColors in lstFleetColors
 				    select new
 				    {
-					  id = objUser.Id.ToString().Encode(),
-					  EmployeeCode = objUser.EmployeeCode,
-					  FirstName = objUser.FirstName,
-					  SurName = objUser.SurName,
-					  MobileNo = objUser.MobileNo,
-					  EmailID = objUser.EmailID,
-					  UserName = objUser.UserName,
-					  Address = objUser.Address,
-					  RoleName = objUser.RoleName,
-					  BranchName = objUser.BranchName,
-					  UserTypeName = objUser.UserTypeName,
-					  IsActive = objUser.IsActive ? "Active" : "Inactive"
+					  FleetColorsName = objFleetColors.FleetColorsName,
+					  Id = objFleetColors.Id.ToString().Encode()
 				    }).ToArray()
 		    };
 		    return Json(jsonData, JsonRequestBehavior.AllowGet);
 		}
 		catch (Exception ex)
 		{
-		    Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User);
+		    Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetColors, _mySession.UserId);
 		    return Json(string.Empty, JsonRequestBehavior.AllowGet);
 		}
 	  }
 
-	  private string ValidateUser(ClsUser objUser)
+	  private string ValidateFleetColors(ClsFleetColors objFleetColors)
 	  {
 		try
 		{
 		    string strErrorMsg = string.Empty;
-		    if (string.IsNullOrEmpty(objUser.strFirstName))
+		    if (string.IsNullOrEmpty(objFleetColors.strFleetColorsName))
 		    {
-			  strErrorMsg += _alertTextProvider.AlertMessage("First Name", MessageType.InputRequired) + "<br/>";
-		    }
-
-		    if (string.IsNullOrEmpty(objUser.strSurName))
-		    {
-			  strErrorMsg += _alertTextProvider.AlertMessage("Surname", MessageType.InputRequired) + "<br/>";
-		    }
-
-		    if (string.IsNullOrEmpty(objUser.strMobileNo))
-		    {
-			  strErrorMsg += _alertTextProvider.AlertMessage("Mobile No", MessageType.InputRequired) + "<br/>";
-		    }
-
-		    if (string.IsNullOrEmpty(objUser.strEmailID))
-		    {
-			  strErrorMsg += _alertTextProvider.AlertMessage("Email Id", MessageType.InputRequired) + "<br/>";
-		    }
-
-		    if (string.IsNullOrEmpty(objUser.strUserName))
-		    {
-			  strErrorMsg += _alertTextProvider.AlertMessage("User Name", MessageType.InputRequired) + "<br/>";
-		    }
-
-		    if (string.IsNullOrEmpty(objUser.strPassword))
-		    {
-			  strErrorMsg += _alertTextProvider.AlertMessage("Password", MessageType.InputRequired) + "<br/>";
-		    }
-
-		    if (objUser.lgRoleId == 0)
-		    {
-			  strErrorMsg += _alertTextProvider.AlertMessage("Role", MessageType.SelectRequired) + "<br/>";
+			  strErrorMsg += _alertTextProvider.AlertMessage("Fleet Colors Name", MessageType.InputRequired) + "<br/>";
 		    }
 
 		    return strErrorMsg;
 		}
 		catch (Exception ex)
 		{
-		    Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.User, _mySession.UserId);
+		    Logger.Write(ex, System.Reflection.MethodBase.GetCurrentMethod().Name, PageMaster.FleetColors, _mySession.UserId);
 		    return string.Empty;
 		}
 	  }

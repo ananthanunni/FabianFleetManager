@@ -1,6 +1,4 @@
-namespace FleetManagerWeb.Controllers
-{
-    using FleetManager.Core.Common;
+   using FleetManager.Core.Common;
     using FleetManager.Core.Extensions;
     using FleetManager.Data.Models;
     using FleetManagerWeb.Models;
@@ -14,6 +12,8 @@ namespace FleetManagerWeb.Controllers
     using System.Web.Hosting;
     using System.Web.Mvc;
 
+ namespace FleetManagerWeb.Controllers
+{
     public class CommonController : BaseController
     {
 	  private readonly int inNoOfRows = 9999;
