@@ -4,6 +4,7 @@ using FleetManager.Data.Models;
 using FleetManager.Model.Interaction;
 using FleetManager.Service.Auth;
 using FleetManager.Service.Interaction;
+using FleetManager.Service.User;
 using FleetManagerWeb.Controllers;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace FleetManagerWeb
     public class UserController : BaseController
     {
 	  /// <summary>   Zero-based index of the cls role. </summary>
-	  private readonly IClsRole _objiClsRole = null;
+	  private readonly IUserService _userService = null;
 	  private readonly IAlertTextProvider _alertTextProvider;
 	  private readonly IMySession _mySession;
 	  private readonly IPermissionChecker _permissionChecker;
@@ -23,10 +24,9 @@ namespace FleetManagerWeb
 	  /// <summary>   Zero-based index of the cls user. </summary>
 	  private readonly IClsUser _objiClsUser = null;
 
-	  public UserController(IClsUser objIClsUser, IClsRole objIClsRole, IAlertTextProvider alertTextProvider, IMySession mySession, IPermissionChecker permissionChecker)
+	  public UserController(IUserService userService, IAlertTextProvider alertTextProvider, IMySession mySession, IPermissionChecker permissionChecker)
 	  {
-		_objiClsUser = objIClsUser;
-		_objiClsRole = objIClsRole;
+		_userService = userService;
 		_alertTextProvider = alertTextProvider;
 		_mySession = mySession;
 		_permissionChecker = permissionChecker;
@@ -38,7 +38,7 @@ namespace FleetManagerWeb
 		{
 		    if (blBindDropDownFromDb)
 		    {
-			  objClsUser.LstRole = _objiClsRole.GetAllRoleForDropDown().ToList();
+			  objClsUser.LstRole = _userService.GetAllRoleForDropDown().ToList();
 			  objClsUser.LstBranch = new List<SelectListItem>();
 			  objClsUser.LstUserType = _objiClsUser.GetAllUserTypeForDropDown().ToList();
 		    }

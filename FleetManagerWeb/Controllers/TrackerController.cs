@@ -4,6 +4,8 @@ using FleetManager.Data.Models;
 using FleetManager.Model.Interaction;
 using FleetManager.Service.Auth;
 using FleetManager.Service.Interaction;
+using FleetManager.Service.Tracking;
+using FleetManager.Service.User;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,14 +15,14 @@ namespace FleetManagerWeb.Controllers
 {
     public class TrackerController : BaseController
     {
-	  private readonly IClsTracker _objiClsTracker = null;
+	  private readonly ITrackerService _trackerService = null;
 	  private readonly IAlertTextProvider _alertTextProvider;
 	  private readonly IMySession _mySession;
 	  private readonly IPermissionChecker _permissionChecker;
 
-	  public TrackerController(IClsTracker objIClsTracker, IAlertTextProvider alertTextProvider, IMySession mySession, IPermissionChecker permissionChecker)
+	  public TrackerController(ITrackerService trackerService, IAlertTextProvider alertTextProvider, IMySession mySession, IPermissionChecker permissionChecker)
 	  {
-		_objiClsTracker = objIClsTracker;
+		_trackerService = trackerService;
 		_alertTextProvider = alertTextProvider;
 		_mySession = mySession;
 		_permissionChecker = permissionChecker;
@@ -30,7 +32,7 @@ namespace FleetManagerWeb.Controllers
 	  {
 		try
 		{
-		    List<SearchTrackerResult> lstTracker = _objiClsTracker.SearchTracker(rows, page, search, sidx + " " + sord, tripstartdate, tripenddate, locationstart, locationend);
+		    List<SearchTrackerResult> lstTracker = _trackerService.SearchTracker(rows, page, search, sidx + " " + sord, tripstartdate, tripenddate, locationstart, locationend);
 		    if (lstTracker != null)
 		    {
 			  return FillGridTracker(page, rows, lstTracker);
@@ -78,7 +80,7 @@ namespace FleetManagerWeb.Controllers
 			  return RedirectToAction("Logout", "Home");
 		    }
 
-		    ClsTracker objClsTracker = _objiClsTracker as ClsTracker;
+		    ClsTracker objClsTracker = _trackerService as ClsTracker;
 		    long lgTrackerId = 0;
 		    if (Request.QueryString.Count > 0)
 		    {
@@ -100,7 +102,7 @@ namespace FleetManagerWeb.Controllers
 				}
 
 				lgTrackerId = Request.QueryString.ToString().Decode().LongSafe();
-				objClsTracker = _objiClsTracker.GetTrackerByTrackerId(lgTrackerId);
+				objClsTracker = _trackerService.GetTrackerByTrackerId(lgTrackerId) as ClsTracker;
 			  }
 		    }
 		    else
@@ -220,7 +222,7 @@ namespace FleetManagerWeb.Controllers
 		    }
 		    else
 		    {
-			  objTracker.inId = _objiClsTracker.SaveTracker(objTracker);
+			  objTracker.inId = _trackerService.SaveTracker(objTracker);
 			  if (objTracker.inId > 0)
 			  {
 				ViewData["Success"] = "1";

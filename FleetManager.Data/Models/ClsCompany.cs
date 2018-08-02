@@ -48,7 +48,7 @@ namespace FleetManager.Data.Models
 	  {
 		using (objDataContext = GetDataContext())
 		{
-		    return objDataContext.Companies.ToList().Select(t => Convert<Company, ClsCompany>(t));
+		    return objDataContext.Companies.ToList().Select(t => TranslateTypes<Company, ClsCompany>(t));
 		}
 	  }
 
@@ -60,7 +60,7 @@ namespace FleetManager.Data.Models
 
 		    if (entity == null) return null;
 
-		    return Convert<Company, ClsCompany>(entity);
+		    return TranslateTypes<Company, ClsCompany>(entity);
 		}
 	  }
 
@@ -68,7 +68,7 @@ namespace FleetManager.Data.Models
 	  {
 		using (var tran = new TransactionScope())
 		{
-		    var company = Convert<IClsCompany, Company>(companyVm);
+		    var company = TranslateTypes<IClsCompany, Company>(companyVm);
 		    using (objDataContext = GetDataContext())
 		    {
 			  if (companyVm.Id == default(long))
@@ -85,7 +85,7 @@ namespace FleetManager.Data.Models
 
 		    tran.Complete();
 
-		    return Convert<Company, ClsCompany>(company);
+		    return TranslateTypes<Company, ClsCompany>(company);
 		}
 	  }
 

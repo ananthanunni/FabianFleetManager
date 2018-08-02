@@ -4,6 +4,7 @@ using FleetManager.Data.Models;
 using FleetManager.Model.Interaction;
 using FleetManager.Service.Auth;
 using FleetManager.Service.Interaction;
+using FleetManager.Service.User;
 using FleetManagerWeb.Controllers;
 using System;
 using System.Collections.Generic;
@@ -15,14 +16,14 @@ namespace FleetManagerWeb
     public class RoleController : BaseController
     {
 	  /// <summary>   Zero-based index of the cls role. </summary>
-	  private readonly IClsRole _objiClsRole = null;
+	  private readonly IUserService _userService = null;
 	  private readonly IAlertTextProvider _alertTextProvider;
 	  private readonly IPermissionChecker _permissionChecker;
 	  private readonly IMySession _mySession;
 
-	  public RoleController(IClsRole objIClsRole, IAlertTextProvider alertTextProvider, IPermissionChecker permissionChecker, IMySession mySession)
+	  public RoleController(IUserService useService, IAlertTextProvider alertTextProvider, IPermissionChecker permissionChecker, IMySession mySession)
 	  {
-		_objiClsRole = objIClsRole;
+		_userService = useService;
 		_alertTextProvider = alertTextProvider;
 		_permissionChecker = permissionChecker;
 		_mySession = mySession;
@@ -32,7 +33,7 @@ namespace FleetManagerWeb
 	  {
 		try
 		{
-		    List<SearchRoleResult> lstRole = _objiClsRole.SearchRole(rows, page, search, sidx + " " + sord);
+		    List<SearchRoleResult> lstRole = _userService.SearchRole(rows, page, search, sidx + " " + sord);
 		    if (lstRole != null)
 		    {
 			  return FillGrid(page, rows, lstRole);
@@ -82,7 +83,7 @@ namespace FleetManagerWeb
 		    }
 
 		    strRoleId = strRoleId.Substring(0, strRoleId.Length - 1);
-		    DeleteRoleResult result = _objiClsRole.DeleteRole(strRoleId, _mySession.UserId);
+		    DeleteRoleResult result = _userService.DeleteRole(strRoleId, _mySession.UserId);
 		    if (result != null && result.TotalReference == 0)
 		    {
 			  return Json(_alertTextProvider.AlertMessage("Role", MessageType.DeleteSuccess));
@@ -105,7 +106,7 @@ namespace FleetManagerWeb
 	  {
 		try
 		{
-		    return Json(_objiClsRole.GetAllRoleForDropDown(), JsonRequestBehavior.AllowGet);
+		    return Json(_userService.GetAllRoleForDropDown(), JsonRequestBehavior.AllowGet);
 		}
 		catch (Exception ex)
 		{
@@ -124,7 +125,7 @@ namespace FleetManagerWeb
 			  return RedirectToAction("Logout", "Home");
 		    }
 
-		    ClsRole objClsRole = _objiClsRole as ClsRole;
+		    ClsRole objClsRole = _userService as ClsRole;
 		    long lgRoleId = 0;
 		    if (Request.QueryString.Count > 0)
 		    {
@@ -145,7 +146,7 @@ namespace FleetManagerWeb
 				}
 
 				lgRoleId = Request.QueryString.ToString().Decode().LongSafe();
-				objClsRole = _objiClsRole.GetRoleByRoleId(lgRoleId);
+				objClsRole = _userService.GetRoleByRoleId(lgRoleId) as ClsRole;
 			  }
 		    }
 		    else
@@ -252,7 +253,7 @@ namespace FleetManagerWeb
 			  ViewData["iFrame"] = "iFrame";
 		    }
 
-		    bool blExists = _objiClsRole.IsRoleExists(objRole.lgId, objRole.strRoleName);
+		    bool blExists = _userService.IsRoleExists(objRole.lgId, objRole.strRoleName);
 		    if (blExists)
 		    {
 			  ViewData["Success"] = "0";
@@ -268,7 +269,7 @@ namespace FleetManagerWeb
 			  }
 			  else
 			  {
-				long resultId = _objiClsRole.SaveRole(objRole);
+				long resultId = _userService.SaveRole(objRole);
 				if (resultId > 0)
 				{
 				    ViewData["Success"] = "1";

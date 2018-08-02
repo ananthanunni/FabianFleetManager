@@ -1,6 +1,9 @@
 using FleetManager.Core.Common;
 using FleetManager.Core.Extensions;
 using FleetManager.Data.Models;
+using FleetManager.Service.Fleet;
+using FleetManager.Service.Tracking;
+using FleetManager.Service.User;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using System;
@@ -16,27 +19,18 @@ namespace FleetManagerWeb.Controllers
     public class CommonController : BaseController
     {
 	  private readonly int inNoOfRows = 9999;
-
-	  private readonly IClsRole _objiClsRole = null;
-	  private readonly IClsUser _objiClsUser = null;
-	  private readonly IClsFleetMakes _objiClsFleetMakes = null;
-	  private readonly IClsFleetModels _objiClsFleetModels = null;
-	  private readonly IClsFleetColors _objiClsFleetColors = null;
-	  private readonly IClsTripReason _objiClsTripReason = null;
-	  private readonly IClsTracker _objiClsTracker = null;
+	  
+	  private readonly ITrackerService _trackerService = null;
 	  private readonly IMySession _mySession;
+	  private readonly IFleetService _fleetService;
+	  private readonly IUserService _userService;
 
-	  public CommonController(IClsUser objIClsUser, IClsRole objIClsRole, IClsFleetMakes objIClsFleetMakes, IClsFleetModels objIClsFleetModels, IClsFleetColors objIClsFleetColors, IClsTripReason objIClsTripReason, IClsTracker objIClsTracker,
-		IMySession mySession)
+	  public CommonController(IFleetService fleetService, IUserService userService, ITrackerService trackerService,IMySession mySession)
 	  {
-		_objiClsUser = objIClsUser;
-		_objiClsRole = objIClsRole;
-		_objiClsFleetMakes = objIClsFleetMakes;
-		_objiClsFleetModels = objIClsFleetModels;
-		_objiClsFleetColors = objIClsFleetColors;
-		_objiClsTripReason = objIClsTripReason;
-		_objiClsTracker = objIClsTracker;
+		_trackerService = trackerService;
 		_mySession = mySession;
+		_fleetService = fleetService;
+		_userService = userService;
 	  }
 
 	  public ActionResult ExportToCSVPDF(bool blCSVPDF, string strTableName, string strSearchValue)
@@ -47,7 +41,7 @@ namespace FleetManagerWeb.Controllers
 
 		    if (strTableName.ToLower() == "user")
 		    {
-			  List<SearchUserResult> lstClsUser = _objiClsUser.SearchUser(inNoOfRows, 1, strSearchValue, "FirstName");
+			  List<SearchUserResult> lstClsUser = _userService.SearchUser(inNoOfRows, 1, strSearchValue, "FirstName");
 			  if (lstClsUser != null)
 			  {
 				dt = Extension.ListToDataTable(lstClsUser);
@@ -55,7 +49,7 @@ namespace FleetManagerWeb.Controllers
 		    }
 		    else if (strTableName.ToLower() == "role")
 		    {
-			  List<SearchRoleResult> lstRole = _objiClsRole.SearchRole(inNoOfRows, 1, strSearchValue, "RoleName");
+			  List<SearchRoleResult> lstRole = _userService.SearchRole(inNoOfRows, 1, strSearchValue, "RoleName");
 			  if (lstRole != null)
 			  {
 				dt = Extension.ListToDataTable(lstRole);
@@ -63,7 +57,7 @@ namespace FleetManagerWeb.Controllers
 		    }
 		    else if (strTableName.ToLower() == "fleetmakes")
 		    {
-			  List<SearchFleetMakesResult> lstFleetMakes = _objiClsFleetMakes.SearchFleetMakes(inNoOfRows, 1, strSearchValue, "FleetMakesName");
+			  List<SearchFleetMakesResult> lstFleetMakes = _fleetService.SearchFleetMakes(inNoOfRows, 1, strSearchValue, "FleetMakesName");
 			  if (lstFleetMakes != null)
 			  {
 				dt = Extension.ListToDataTable(lstFleetMakes);
@@ -71,7 +65,7 @@ namespace FleetManagerWeb.Controllers
 		    }
 		    else if (strTableName.ToLower() == "fleetmodels")
 		    {
-			  List<SearchFleetModelsResult> lstFleetModels = _objiClsFleetModels.SearchFleetModels(inNoOfRows, 1, strSearchValue, "FleetModelsName");
+			  List<SearchFleetModelsResult> lstFleetModels = _fleetService.SearchFleetModels(inNoOfRows, 1, strSearchValue, "FleetModelsName");
 			  if (lstFleetModels != null)
 			  {
 				dt = Extension.ListToDataTable(lstFleetModels);
@@ -79,7 +73,7 @@ namespace FleetManagerWeb.Controllers
 		    }
 		    else if (strTableName.ToLower() == "fleetcolors")
 		    {
-			  List<SearchFleetColorsResult> lstFleetColors = _objiClsFleetColors.SearchFleetColors(inNoOfRows, 1, strSearchValue, "FleetColorsName");
+			  List<SearchFleetColorsResult> lstFleetColors = _fleetService.SearchFleetColors(inNoOfRows, 1, strSearchValue, "FleetColorsName");
 			  if (lstFleetColors != null)
 			  {
 				dt = Extension.ListToDataTable(lstFleetColors);
@@ -87,7 +81,7 @@ namespace FleetManagerWeb.Controllers
 		    }
 		    else if (strTableName.ToLower() == "tripreason")
 		    {
-			  List<SearchTripReasonResult> lstTripReason = _objiClsTripReason.SearchTripReason(inNoOfRows, 1, strSearchValue, "TripReasonName");
+			  List<SearchTripReasonResult> lstTripReason = _trackerService.SearchTripReason(inNoOfRows, 1, strSearchValue, "TripReasonName");
 			  if (lstTripReason != null)
 			  {
 				dt = Extension.ListToDataTable(lstTripReason);
@@ -95,7 +89,7 @@ namespace FleetManagerWeb.Controllers
 		    }
 		    else if (strTableName.ToLower() == "tracker")
 		    {
-			  List<SearchTrackerResult> lstTracker = _objiClsTracker.SearchTracker(inNoOfRows, 1, strSearchValue, "TripStartDate", string.Empty, string.Empty, string.Empty, string.Empty);
+			  List<SearchTrackerResult> lstTracker = _trackerService.SearchTracker(inNoOfRows, 1, strSearchValue, "TripStartDate", string.Empty, string.Empty, string.Empty, string.Empty);
 			  if (lstTracker != null)
 			  {
 				dt = Extension.ListToDataTable(lstTracker);

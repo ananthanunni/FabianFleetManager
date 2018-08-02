@@ -9,11 +9,11 @@ namespace FleetManager.Data.Models
 
 	  List<SelectListItem> GetAllRoleForDropDown();
 
-	  ClsRole GetRoleByRoleId(long lgRoleId);
+	  IClsRole GetRoleByRoleId(long lgRoleId);
 
 	  bool IsRoleExists(long lgRoleId, string strRoleName);
 
-	  long SaveRole(ClsRole objSave);
+	  long SaveRole(IClsRole objSave);
 
 	  List<SearchRoleResult> SearchRole(int inRow, int inPage, string strSearch, string strSort);
     }

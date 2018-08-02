@@ -3,6 +3,7 @@ using FleetManager.Core.Extensions;
 using FleetManager.Data.Models;
 using FleetManager.Model.Interaction;
 using FleetManager.Service.Auth;
+using FleetManager.Service.Fleet;
 using FleetManager.Service.Interaction;
 using System;
 using System.Collections.Generic;
@@ -13,14 +14,14 @@ namespace FleetManagerWeb.Controllers
 {
     public class FleetMakesController : BaseController
     {
-        private readonly IClsFleetMakes _objiClsFleetMakes = null;
+	  private readonly IFleetService _fleetService;
 	  private readonly IAlertTextProvider _alertTextProvider;
 	  private readonly IMySession _mySession;
 	  private readonly IPermissionChecker _permissionChecker;
 
-	  public FleetMakesController(IClsFleetMakes objIClsFleetMakes, IAlertTextProvider alertTextProvider, IMySession mySession,IPermissionChecker permissionChecker)
+	  public FleetMakesController(IFleetService fleetService, IAlertTextProvider alertTextProvider, IMySession mySession,IPermissionChecker permissionChecker)
         {
-            _objiClsFleetMakes = objIClsFleetMakes;
+		_fleetService = fleetService;
 		_alertTextProvider = alertTextProvider;
 		_mySession = mySession;
 		_permissionChecker = permissionChecker;
@@ -30,7 +31,7 @@ namespace FleetManagerWeb.Controllers
         {
             try
             {
-                List<SearchFleetMakesResult> lstFleetMakes = _objiClsFleetMakes.SearchFleetMakes(rows, page, search, sidx + " " + sord);
+                List<SearchFleetMakesResult> lstFleetMakes = _fleetService.SearchFleetMakes(rows, page, search, sidx + " " + sord);
                 if (lstFleetMakes != null)
                 {
                     return FillGridFleetMakes(page, rows, lstFleetMakes);
@@ -59,7 +60,7 @@ namespace FleetManagerWeb.Controllers
                 }
 
                 strFleetMakesId = strFleetMakesId.Substring(0, strFleetMakesId.Length - 1);
-                DeleteFleetMakesResult result = _objiClsFleetMakes.DeleteFleetMakes(strFleetMakesId, _mySession.UserId);
+                DeleteFleetMakesResult result = _fleetService.DeleteFleetMakes(strFleetMakesId, _mySession.UserId);
                 if (result != null && result.TotalReference == 0)
                 {
                     return Json(_alertTextProvider.AlertMessage("Fleet Makes", MessageType.DeleteSuccess));
@@ -82,7 +83,7 @@ namespace FleetManagerWeb.Controllers
         {
             try
             {
-                return Json(_objiClsFleetMakes.GetAllFleetMakesForDropDown(), JsonRequestBehavior.AllowGet);
+                return Json(_fleetService.GetAllFleetMakesForDropDown(), JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
@@ -101,7 +102,7 @@ namespace FleetManagerWeb.Controllers
                     return RedirectToAction("Logout", "Home");
                 }
 
-                ClsFleetMakes objClsFleetMakes = _objiClsFleetMakes as ClsFleetMakes;
+                ClsFleetMakes objClsFleetMakes = DependencyResolver.Current.GetService<IClsFleetMakes>() as ClsFleetMakes;
                 long lgFleetMakesId = 0;
                 if (Request.QueryString.Count > 0)
                 {
@@ -123,7 +124,7 @@ namespace FleetManagerWeb.Controllers
                         }
 
                         lgFleetMakesId = Request.QueryString.ToString().Decode().LongSafe();
-                        objClsFleetMakes = _objiClsFleetMakes.GetFleetMakesByFleetMakesId(lgFleetMakesId);
+                        objClsFleetMakes = _fleetService.GetFleetMakesByFleetMakesId(lgFleetMakesId) as ClsFleetMakes;
                     }
                 }
                 else
@@ -235,7 +236,7 @@ namespace FleetManagerWeb.Controllers
                     ViewData["iFrame"] = "iFrame";
                 }
 
-                bool blExists = _objiClsFleetMakes.IsFleetMakesExists(objFleetMakes.lgId, objFleetMakes.strFleetMakesName);
+                bool blExists = _fleetService.IsFleetMakesExists(objFleetMakes.lgId, objFleetMakes.strFleetMakesName);
                 if (blExists)
                 {
                     ViewData["Success"] = "0";
@@ -251,7 +252,7 @@ namespace FleetManagerWeb.Controllers
                     }
                     else
                     {
-                        objFleetMakes.lgId = _objiClsFleetMakes.SaveFleetMakes(objFleetMakes);
+                        objFleetMakes.lgId = _fleetService.SaveFleetMakes(objFleetMakes);
                         if (objFleetMakes.lgId > 0)
                         {
                             ViewData["Success"] = "1";

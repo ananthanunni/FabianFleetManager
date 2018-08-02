@@ -3,6 +3,7 @@ using FleetManager.Core.Extensions;
 using FleetManager.Data.Models;
 using FleetManager.Model.Interaction;
 using FleetManager.Service.Auth;
+using FleetManager.Service.Fleet;
 using FleetManager.Service.Interaction;
 using System;
 using System.Collections.Generic;
@@ -13,21 +14,14 @@ namespace FleetManagerWeb.Controllers
 {
     public class CarFleetController : BaseController
     {
-	  private readonly IClsCarFleet _objiClsCarFleet = null;
-	  private readonly IClsFleetColors _objiClsFleetColors = null;
-	  private readonly IClsFleetMakes _objiClsFleetMakes = null;
-	  private readonly IClsFleetModels _objiClsFleetModels = null;
+	  private readonly IFleetService _fleetService = null;
 	  private readonly IAlertTextProvider _alertTextProvider;
 	  private readonly IMySession _mySession;
 	  private readonly IPermissionChecker _permissionChecker;
 
-	  public CarFleetController(IClsCarFleet objIClsCarFleet, IClsFleetColors objiClsFleetColors, IClsFleetMakes objiClsFleetMakes, IClsFleetModels objiClsFleetModels,
-		IAlertTextProvider alertTextProvider, IMySession mySession, IPermissionChecker permissionChecker)
+	  public CarFleetController(IFleetService fleetService, IAlertTextProvider alertTextProvider, IMySession mySession, IPermissionChecker permissionChecker)
 	  {
-		_objiClsCarFleet = objIClsCarFleet;
-		_objiClsFleetColors = objiClsFleetColors;
-		_objiClsFleetMakes = objiClsFleetMakes;
-		_objiClsFleetModels = objiClsFleetModels;
+		_fleetService = fleetService;
 
 		_alertTextProvider = alertTextProvider;
 		_mySession = mySession;
@@ -40,9 +34,9 @@ namespace FleetManagerWeb.Controllers
 		{
 		    if (blBindDropDownFromDb)
 		    {
-			  objClsCarFleet.lstFleetColors = _objiClsFleetColors.GetAllFleetColorsForDropDown().ToList();
-			  objClsCarFleet.lstFleetMakes = _objiClsFleetMakes.GetAllFleetMakesForDropDown().ToList();
-			  objClsCarFleet.lstFleetModels = _objiClsFleetModels.GetAllFleetModelsForDropDown().ToList();
+			  objClsCarFleet.lstFleetColors = _fleetService.GetAllFleetColorsForDropDown().ToList();
+			  objClsCarFleet.lstFleetMakes = _fleetService.GetAllFleetMakesForDropDown().ToList();
+			  objClsCarFleet.lstFleetModels = _fleetService.GetAllFleetModelsForDropDown().ToList();
 
 		    }
 		    else
@@ -62,7 +56,7 @@ namespace FleetManagerWeb.Controllers
 	  {
 		try
 		{
-		    List<SearchCarFleetResult> lstCarFleet = _objiClsCarFleet.SearchCarFleet(rows, page, search, sidx + " " + sord, tripstartdate, tripenddate);
+		    List<SearchCarFleetResult> lstCarFleet = _fleetService.SearchCarFleet(rows, page, search, sidx + " " + sord, tripstartdate, tripenddate);
 		    if (lstCarFleet != null)
 		    {
 			  return FillGridCarFleet(page, rows, lstCarFleet);
@@ -91,7 +85,7 @@ namespace FleetManagerWeb.Controllers
 		    }
 
 		    strCarFleetId = strCarFleetId.Substring(0, strCarFleetId.Length - 1);
-		    DeleteCarFleetResult result = _objiClsCarFleet.DeleteCarFleet(strCarFleetId, _mySession.UserId);
+		    DeleteCarFleetResult result = _fleetService.DeleteCarFleet(strCarFleetId, _mySession.UserId);
 		    if (result != null && result.TotalReference == 0)
 		    {
 			  return Json(_alertTextProvider.AlertMessage("User", MessageType.DeleteSuccess));
@@ -122,7 +116,7 @@ namespace FleetManagerWeb.Controllers
 			  return RedirectToAction("Logout", "Home");
 		    }
 
-		    ClsCarFleet objClsCarFleet = _objiClsCarFleet as ClsCarFleet;
+		    ClsCarFleet objClsCarFleet = _fleetService as ClsCarFleet;
 		    long lgCarFleetId = 0;
 		    if (Request.QueryString.Count > 0)
 		    {
@@ -144,7 +138,7 @@ namespace FleetManagerWeb.Controllers
 				}
 
 				lgCarFleetId = Request.QueryString.ToString().Decode().LongSafe();
-				objClsCarFleet = _objiClsCarFleet.GetCarFleetByCarFleetId(lgCarFleetId);
+				objClsCarFleet = _fleetService.GetCarFleetByCarFleetId(lgCarFleetId);
 			  }
 		    }
 		    else
@@ -269,7 +263,7 @@ namespace FleetManagerWeb.Controllers
 			  }
 			  else
 			  {
-				objCarFleet.inId = _objiClsCarFleet.SaveCarFleet(objCarFleet);
+				objCarFleet.inId = _fleetService.SaveCarFleet(objCarFleet);
 				if (objCarFleet.inId > 0)
 				{
 				    ViewData["Success"] = "1";

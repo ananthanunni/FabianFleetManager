@@ -3,6 +3,7 @@ using FleetManager.Core.Extensions;
 using FleetManager.Data.Models;
 using FleetManager.Model.Interaction;
 using FleetManager.Service.Auth;
+using FleetManager.Service.Fleet;
 using FleetManager.Service.Interaction;
 using System;
 using System.Collections.Generic;
@@ -13,14 +14,14 @@ namespace FleetManagerWeb.Controllers
 {
     public class FleetModelsController : BaseController
     {
-	  private readonly IClsFleetModels _objiClsFleetModels = null;
+	  private readonly IFleetService _fleetService;
 	  private readonly IAlertTextProvider _alertTextProvider;
 	  private readonly IMySession _mySession;
 	  private readonly IPermissionChecker _permissionChecker;
 
-	  public FleetModelsController(IClsFleetModels objIClsFleetModels, IAlertTextProvider alertTextProvider, IMySession mySession, IPermissionChecker permssionChecker)
+	  public FleetModelsController(IFleetService fleetService, IAlertTextProvider alertTextProvider, IMySession mySession, IPermissionChecker permssionChecker)
 	  {
-		_objiClsFleetModels = objIClsFleetModels;
+		_fleetService = fleetService;
 		_alertTextProvider = alertTextProvider;
 		_mySession = mySession;
 		_permissionChecker = permssionChecker;
@@ -30,7 +31,7 @@ namespace FleetManagerWeb.Controllers
 	  {
 		try
 		{
-		    List<SearchFleetModelsResult> lstFleetModels = _objiClsFleetModels.SearchFleetModels(rows, page, search, sidx + " " + sord);
+		    List<SearchFleetModelsResult> lstFleetModels = _fleetService.SearchFleetModels(rows, page, search, sidx + " " + sord);
 		    if (lstFleetModels != null)
 		    {
 			  return FillGridFleetModels(page, rows, lstFleetModels);
@@ -59,7 +60,7 @@ namespace FleetManagerWeb.Controllers
 		    }
 
 		    strFleetModelsId = strFleetModelsId.Substring(0, strFleetModelsId.Length - 1);
-		    DeleteFleetModelsResult result = _objiClsFleetModels.DeleteFleetModels(strFleetModelsId, _mySession.UserId);
+		    DeleteFleetModelsResult result = _fleetService.DeleteFleetModels(strFleetModelsId, _mySession.UserId);
 		    if (result != null && result.TotalReference == 0)
 		    {
 			  return Json(_alertTextProvider.AlertMessage("Fleet Models", MessageType.DeleteSuccess));
@@ -82,7 +83,7 @@ namespace FleetManagerWeb.Controllers
 	  {
 		try
 		{
-		    return Json(_objiClsFleetModels.GetAllFleetModelsForDropDown(), JsonRequestBehavior.AllowGet);
+		    return Json(_fleetService.GetAllFleetModelsForDropDown(), JsonRequestBehavior.AllowGet);
 		}
 		catch (Exception ex)
 		{
@@ -101,7 +102,7 @@ namespace FleetManagerWeb.Controllers
 			  return RedirectToAction("Logout", "Home");
 		    }
 
-		    ClsFleetModels objClsFleetModels = _objiClsFleetModels as ClsFleetModels;
+		    ClsFleetModels objClsFleetModels = DependencyResolver.Current.GetService<IClsFleetModels>() as ClsFleetModels;
 		    long lgFleetModelsId = 0;
 		    if (Request.QueryString.Count > 0)
 		    {
@@ -123,7 +124,7 @@ namespace FleetManagerWeb.Controllers
 				}
 
 				lgFleetModelsId = Request.QueryString.ToString().Decode().LongSafe();
-				objClsFleetModels = _objiClsFleetModels.GetFleetModelsByFleetModelsId(lgFleetModelsId);
+				objClsFleetModels = _fleetService.GetFleetModelsByFleetModelsId(lgFleetModelsId) as ClsFleetModels;
 			  }
 		    }
 		    else
@@ -235,7 +236,7 @@ namespace FleetManagerWeb.Controllers
 			  ViewData["iFrame"] = "iFrame";
 		    }
 
-		    bool blExists = _objiClsFleetModels.IsFleetModelsExists(objFleetModels.lgId, objFleetModels.strFleetModelsName);
+		    bool blExists = _fleetService.IsFleetModelsExists(objFleetModels.lgId, objFleetModels.strFleetModelsName);
 		    if (blExists)
 		    {
 			  ViewData["Success"] = "0";
@@ -251,7 +252,7 @@ namespace FleetManagerWeb.Controllers
 			  }
 			  else
 			  {
-				objFleetModels.lgId = _objiClsFleetModels.SaveFleetModels(objFleetModels);
+				objFleetModels.lgId = _fleetService.SaveFleetModels(objFleetModels);
 				if (objFleetModels.lgId > 0)
 				{
 				    ViewData["Success"] = "1";

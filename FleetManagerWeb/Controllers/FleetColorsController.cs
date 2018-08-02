@@ -3,6 +3,7 @@ using FleetManager.Core.Extensions;
 using FleetManager.Data.Models;
 using FleetManager.Model.Interaction;
 using FleetManager.Service.Auth;
+using FleetManager.Service.Fleet;
 using FleetManager.Service.Interaction;
 using System;
 using System.Collections.Generic;
@@ -13,14 +14,14 @@ namespace FleetManagerWeb.Controllers
 {
     public class FleetColorsController : BaseController
     {
-	  private readonly IClsFleetColors _objiClsFleetColors = null;
+	  private readonly IFleetService _fleetService;
 	  private readonly IAlertTextProvider _alertTextProvider;
 	  private readonly IPermissionChecker _permissionChecker;
 	  private readonly IMySession _mySession;
 
-	  public FleetColorsController(IClsFleetColors objIClsFleetColors, IAlertTextProvider alertTextProvider, IPermissionChecker permissionChecker, IMySession mySession)
+	  public FleetColorsController(IFleetService fleetService, IAlertTextProvider alertTextProvider, IPermissionChecker permissionChecker, IMySession mySession)
 	  {
-		_objiClsFleetColors = objIClsFleetColors;
+		_fleetService = fleetService;
 		_alertTextProvider = alertTextProvider;
 		_permissionChecker = permissionChecker;
 		_mySession = mySession;
@@ -30,7 +31,7 @@ namespace FleetManagerWeb.Controllers
 	  {
 		try
 		{
-		    List<SearchFleetColorsResult> lstFleetColors = _objiClsFleetColors.SearchFleetColors(rows, page, search, sidx + " " + sord);
+		    List<SearchFleetColorsResult> lstFleetColors = _fleetService.SearchFleetColors(rows, page, search, sidx + " " + sord);
 		    if (lstFleetColors != null)
 		    {
 			  return FillGridFleetColors(page, rows, lstFleetColors);
@@ -59,7 +60,7 @@ namespace FleetManagerWeb.Controllers
 		    }
 
 		    strFleetColorsId = strFleetColorsId.Substring(0, strFleetColorsId.Length - 1);
-		    DeleteFleetColorsResult result = _objiClsFleetColors.DeleteFleetColors(strFleetColorsId, _mySession.UserId);
+		    DeleteFleetColorsResult result = _fleetService.DeleteFleetColors(strFleetColorsId, _mySession.UserId);
 		    if (result != null && result.TotalReference == 0)
 		    {
 			  return Json(_alertTextProvider.AlertMessage("Fleet Colors", MessageType.DeleteSuccess));
@@ -82,7 +83,7 @@ namespace FleetManagerWeb.Controllers
 	  {
 		try
 		{
-		    return Json(_objiClsFleetColors.GetAllFleetColorsForDropDown(), JsonRequestBehavior.AllowGet);
+		    return Json(_fleetService.GetAllFleetColorsForDropDown(), JsonRequestBehavior.AllowGet);
 		}
 		catch (Exception ex)
 		{
@@ -101,7 +102,7 @@ namespace FleetManagerWeb.Controllers
 			  return RedirectToAction("Logout", "Home");
 		    }
 
-		    ClsFleetColors objClsFleetColors = _objiClsFleetColors as ClsFleetColors;
+		    ClsFleetColors objClsFleetColors = DependencyResolver.Current.GetService<IClsFleetColors>() as ClsFleetColors;
 		    long lgFleetColorsId = 0;
 		    if (Request.QueryString.Count > 0)
 		    {
@@ -123,7 +124,7 @@ namespace FleetManagerWeb.Controllers
 				}
 
 				lgFleetColorsId = Request.QueryString.ToString().Decode().LongSafe();
-				objClsFleetColors = _objiClsFleetColors.GetFleetColorsByFleetColorsId(lgFleetColorsId);
+				objClsFleetColors = (ClsFleetColors)_fleetService.GetFleetColorsByFleetColorsId(lgFleetColorsId);
 			  }
 		    }
 		    else
@@ -235,7 +236,7 @@ namespace FleetManagerWeb.Controllers
 			  ViewData["iFrame"] = "iFrame";
 		    }
 
-		    bool blExists = _objiClsFleetColors.IsFleetColorsExists(objFleetColors.lgId, objFleetColors.strFleetColorsName);
+		    bool blExists = _fleetService.IsFleetColorsExists(objFleetColors.lgId, objFleetColors.strFleetColorsName);
 		    if (blExists)
 		    {
 			  ViewData["Success"] = "0";
@@ -251,7 +252,7 @@ namespace FleetManagerWeb.Controllers
 			  }
 			  else
 			  {
-				objFleetColors.lgId = _objiClsFleetColors.SaveFleetColors(objFleetColors);
+				objFleetColors.lgId = _fleetService.SaveFleetColors(objFleetColors);
 				if (objFleetColors.lgId > 0)
 				{
 				    ViewData["Success"] = "1";

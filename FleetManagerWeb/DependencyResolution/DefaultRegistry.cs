@@ -117,6 +117,9 @@ namespace FleetManagerWeb.DependencyResolution {
 		ForSingletonOf<FleetManager.Service.Configuration.IAppConfiguration>().Use<FleetManager.Service.Configuration.AppConfiguration>();
 
 		For<FleetManager.Service.Company.ICompanyService>().Use<FleetManager.Service.Company.CompanyService>();
+		For<FleetManager.Service.Fleet.IFleetService>().Use<FleetManager.Service.Fleet.IFleetService>();
+		For<FleetManager.Service.User.IUserService>().Use<FleetManager.Service.User.UserService>();
+		For<FleetManager.Service.Tracking.ITrackerService>().Use<FleetManager.Service.Tracking.TrackerService>();
 	  }
     }
 }

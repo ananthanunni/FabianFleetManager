@@ -31,7 +31,7 @@ namespace FleetManager.Data.Models
 		return null;
 	  }
 
-	  protected virtual TOut Convert<TIn,TOut>(TIn value)
+	  protected virtual TOut TranslateTypes<TIn,TOut>(TIn value)
 		where TIn:class
 		where TOut:class
 	  {

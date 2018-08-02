@@ -4,6 +4,7 @@ using FleetManager.Data.Models;
 using FleetManager.Model.Interaction;
 using FleetManager.Service.Auth;
 using FleetManager.Service.Interaction;
+using FleetManager.Service.Tracking;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,14 +14,14 @@ namespace FleetManagerWeb.Controllers
 {
     public class TripReasonController : BaseController
     {
-	  private readonly IClsTripReason _objiClsTripReason = null;
+	  private readonly ITrackerService _trackerService = null;
 	  private readonly IAlertTextProvider _alertTextProvider;
 	  private readonly IPermissionChecker _permissionChecker;
 	  private readonly IMySession _mySession;
 
-	  public TripReasonController(IClsTripReason objIClsTripReason, IAlertTextProvider alertTextProvider, IPermissionChecker permissionChecker, IMySession mySession)
+	  public TripReasonController(ITrackerService objIClsTripReason, IAlertTextProvider alertTextProvider, IPermissionChecker permissionChecker, IMySession mySession)
 	  {
-		_objiClsTripReason = objIClsTripReason;
+		_trackerService = objIClsTripReason;
 		_alertTextProvider = alertTextProvider;
 		_permissionChecker = permissionChecker;
 		_mySession = mySession;
@@ -30,7 +31,7 @@ namespace FleetManagerWeb.Controllers
 	  {
 		try
 		{
-		    List<SearchTripReasonResult> lstTripReason = _objiClsTripReason.SearchTripReason(rows, page, search, sidx + " " + sord);
+		    List<SearchTripReasonResult> lstTripReason = _trackerService.SearchTripReason(rows, page, search, sidx + " " + sord);
 		    if (lstTripReason != null)
 		    {
 			  return FillGridTripReason(page, rows, lstTripReason);
@@ -59,7 +60,7 @@ namespace FleetManagerWeb.Controllers
 		    }
 
 		    strTripReasonId = strTripReasonId.Substring(0, strTripReasonId.Length - 1);
-		    DeleteTripReasonResult result = _objiClsTripReason.DeleteTripReason(strTripReasonId, _mySession.UserId);
+		    DeleteTripReasonResult result = _trackerService.DeleteTripReason(strTripReasonId, _mySession.UserId);
 		    if (result != null && result.TotalReference == 0)
 		    {
 			  return Json(_alertTextProvider.AlertMessage("Trip Reason", MessageType.DeleteSuccess));
@@ -82,7 +83,7 @@ namespace FleetManagerWeb.Controllers
 	  {
 		try
 		{
-		    return Json(_objiClsTripReason.GetAllTripReasonForDropDown(), JsonRequestBehavior.AllowGet);
+		    return Json(_trackerService.GetAllTripReasonForDropDown(), JsonRequestBehavior.AllowGet);
 		}
 		catch (Exception ex)
 		{
@@ -101,7 +102,7 @@ namespace FleetManagerWeb.Controllers
 			  return RedirectToAction("Logout", "Home");
 		    }
 
-		    ClsTripReason objClsTripReason = _objiClsTripReason as ClsTripReason;
+		    ClsTripReason objClsTripReason = DependencyResolver.Current.GetService<IClsTripReason>() as ClsTripReason;
 		    long lgTripReasonId = 0;
 		    if (Request.QueryString.Count > 0)
 		    {
@@ -123,7 +124,7 @@ namespace FleetManagerWeb.Controllers
 				}
 
 				lgTripReasonId = Request.QueryString.ToString().Decode().LongSafe();
-				objClsTripReason = _objiClsTripReason.GetTripReasonByTripReasonId(lgTripReasonId);
+				objClsTripReason = _trackerService.GetTripReasonByTripReasonId(lgTripReasonId) as ClsTripReason;
 			  }
 		    }
 		    else
@@ -235,7 +236,7 @@ namespace FleetManagerWeb.Controllers
 			  ViewData["iFrame"] = "iFrame";
 		    }
 
-		    bool blExists = _objiClsTripReason.IsTripReasonExists(objTripReason.lgId, objTripReason.strTripReasonName);
+		    bool blExists = _trackerService.IsTripReasonExists(objTripReason.lgId, objTripReason.strTripReasonName);
 		    if (blExists)
 		    {
 			  ViewData["Success"] = "0";
@@ -251,7 +252,7 @@ namespace FleetManagerWeb.Controllers
 			  }
 			  else
 			  {
-				objTripReason.lgId = _objiClsTripReason.SaveTripReason(objTripReason);
+				objTripReason.lgId = _trackerService.SaveTripReason(objTripReason);
 				if (objTripReason.lgId > 0)
 				{
 				    ViewData["Success"] = "1";
