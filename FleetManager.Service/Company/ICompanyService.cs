@@ -9,7 +9,8 @@ namespace FleetManager.Service.Company
 	  IEnumerable<IClsCompany> Get();
 	  IClsCompany Get(int id);
 	  IClsCompany Save(IClsCompany company);
-	  bool AssignUserToCompany(int companyId, int userId);
-	  bool UnAssignAdmin(int companyId, int userId);
+	  bool AssignUserAsCompanyAdmin(int companyId, int userId);
+	  bool UnAssignUserAsCompanyAdmin(int companyId, int userId);
+	  long CreateGroup(int companyId, string groupName, string description);
     }
 }

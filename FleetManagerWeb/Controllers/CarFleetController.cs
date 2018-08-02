@@ -138,7 +138,7 @@ namespace FleetManagerWeb.Controllers
 				}
 
 				lgCarFleetId = Request.QueryString.ToString().Decode().LongSafe();
-				objClsCarFleet = _fleetService.GetCarFleetByCarFleetId(lgCarFleetId);
+				objClsCarFleet = _fleetService.GetCarFleetByCarFleetId(lgCarFleetId) as ClsCarFleet;
 			  }
 		    }
 		    else

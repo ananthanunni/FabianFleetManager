@@ -48,19 +48,33 @@ namespace FleetManagerWeb.Controllers
 		return Json(_companyService.Save(viewModel));
 	  }
 
+	  [HttpDelete]
+	  public ActionResult Delete(int id)
+	  {
+		_companyService.Delete(id);
+		return Json(true);
+	  }
+
 	  // NON REST METHODS
 	  // POST AssignAdmin?companyId?{int}&userId={userId}
 	  [HttpPost]
 	  public ActionResult AssignAdmin(int companyId, int userId)
 	  {
-		return Json(_companyService.AssignUserToCompany(companyId, userId));
+		return Json(_companyService.AssignUserAsCompanyAdmin(companyId, userId));
 	  }
 
 	  [HttpPost]
 	  // POST UnAssignAdmin?companyId?{int}&userId={userId}
-	  public ActionResult UnAssignAdmin(int companyId,int userId)
+	  public ActionResult UnAssignAdmin(int companyId, int userId)
 	  {
-		return Json(_companyService.UnAssignAdmin(companyId, userId));
+		return Json(_companyService.UnAssignUserAsCompanyAdmin(companyId, userId));
+	  }
+
+	  [HttpPost]
+	  //POST CreateGroup?companyId={int}&groupName={string}&description={string}
+	  public ActionResult CreateGroup(int companyId,string groupName, string description)
+	  {
+		return Json(_companyService.CreateGroup(companyId, groupName,description));
 	  }
     }
 }

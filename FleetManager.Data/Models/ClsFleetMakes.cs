@@ -37,6 +37,7 @@ namespace FleetManager.Data.Models
 				result = this.objDataContext.DeleteFleetMakes(strFleetMakesIdList, lgDeletedBy, PageMaster.FleetMakes).ToList().FirstOrDefault();
 			  }
 
+			  objDataContext.SubmitChanges();
 			  scope.Complete();
 		    }
 		}
@@ -150,6 +151,7 @@ namespace FleetManager.Data.Models
 				}
 			  }
 
+			  objDataContext.SubmitChanges();
 			  scope.Complete();
 		    }
 

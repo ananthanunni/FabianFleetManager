@@ -104,6 +104,7 @@
                         }
                     }
 
+			  objDataContext.SubmitChanges();
                     scope.Complete();
                 }
 

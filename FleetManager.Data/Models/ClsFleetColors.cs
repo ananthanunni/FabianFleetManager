@@ -37,6 +37,7 @@ namespace FleetManager.Data.Models
 				result = this.objDataContext.DeleteFleetColors(strFleetColorsIdList, lgDeletedBy, PageMaster.FleetColors).ToList().FirstOrDefault();
 			  }
 
+			  objDataContext.SubmitChanges();
 			  scope.Complete();
 		    }
 		}
@@ -150,6 +151,7 @@ namespace FleetManager.Data.Models
 				}
 			  }
 
+			  objDataContext.SubmitChanges();
 			  scope.Complete();
 		    }
 

@@ -14,7 +14,6 @@ namespace FleetManager.Service.Fleet
 	  private readonly IClsFleetColors _fleetColors;
 	  private readonly IClsFleetMakes _fleetMakes;
 	  private readonly IClsFleetModels _models;
-	  private readonly IClsFleetColors fleetColors;
 
 	  public FleetService(IClsCarFleet carFleet, IClsFleetColors fleetColors, IClsFleetMakes fleetMakes, IClsFleetModels models)
 	  {

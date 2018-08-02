@@ -109,10 +109,11 @@ namespace FleetManager.Data.Models
 		return objClsTracker;
 	  }
 
-	  public int SaveTracker(ClsTracker objSave)
+	  public int SaveTracker(IClsTracker input)
 	  {
 		try
 		{
+		    var objSave = input as ClsTracker;
 		    using (TransactionScope scope = new TransactionScope())
 		    {
 			  using (this.objDataContext = GetDataContext())
@@ -124,6 +125,7 @@ namespace FleetManager.Data.Models
 				}
 			  }
 
+			  objDataContext.SubmitChanges();
 			  scope.Complete();
 		    }
 

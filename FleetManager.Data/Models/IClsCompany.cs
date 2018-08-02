@@ -25,7 +25,8 @@ namespace FleetManager.Data.Models
 	  IClsCompany Get(int id);
 	  IEnumerable<IClsCompany> GetAll();
 	  IClsCompany Save(IClsCompany companyVm);
-	  bool AssignUserToCompany(int companyId, int userId);
+	  bool AssignUserToCompany(int companyId, int userId, bool assignAsAdmin=false);
 	  bool UnAssignUserToCompany(int companyId, int userId);
+	  long CreateGroup(int companyId, string groupName, string description);
     }
 }

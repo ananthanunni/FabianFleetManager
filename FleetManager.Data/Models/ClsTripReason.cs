@@ -37,6 +37,7 @@ namespace FleetManager.Data.Models
 				result = this.objDataContext.DeleteTripReason(strTripReasonIdList, lgDeletedBy, PageMaster.TripReason).ToList().FirstOrDefault();
 			  }
 
+			  objDataContext.SubmitChanges();
 			  scope.Complete();
 		    }
 		}
@@ -91,7 +92,7 @@ namespace FleetManager.Data.Models
 		}
 	  }
 
-	  public ClsTripReason GetTripReasonByTripReasonId(long lgTripReasonId)
+	  public IClsTripReason GetTripReasonByTripReasonId(long lgTripReasonId)
 	  {
 		ClsTripReason objClsTripReason = new ClsTripReason();
 		try
@@ -135,10 +136,11 @@ namespace FleetManager.Data.Models
 		}
 	  }
 
-	  public long SaveTripReason(ClsTripReason objSave)
+	  public long SaveTripReason(IClsTripReason input)
 	  {
 		try
 		{
+		    var objSave = input as ClsTripReason;
 		    using (TransactionScope scope = new TransactionScope())
 		    {
 			  using (this.objDataContext = GetDataContext())
@@ -150,6 +152,7 @@ namespace FleetManager.Data.Models
 				}
 			  }
 
+			  objDataContext.SubmitChanges();
 			  scope.Complete();
 		    }
 

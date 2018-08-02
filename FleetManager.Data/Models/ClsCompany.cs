@@ -81,9 +81,10 @@ namespace FleetManager.Data.Models
 				var companyEntity = objDataContext.Companies.Single(t => t.Id == companyVm.Id);
 				companyEntity = company;
 			  }
-		    }
 
-		    tran.Complete();
+			  objDataContext.SubmitChanges();
+			  tran.Complete();
+		    }
 
 		    return TranslateTypes<Company, ClsCompany>(company);
 		}
@@ -102,13 +103,14 @@ namespace FleetManager.Data.Models
 				entity.DeletedOn = DateTime.Now;
 				entity.IsDeleted = true;
 			  }
-		    }
 
-		    tran.Complete();
+			  objDataContext.SubmitChanges();
+			  tran.Complete();
+		    }
 		}
 	  }
 
-	  public bool AssignUserToCompany(int companyId, int userId)
+	  public bool AssignUserToCompany(int companyId, int userId, bool assignAsAdmin = false)
 	  {
 		using (var tran = new TransactionScope())
 		{
@@ -120,11 +122,12 @@ namespace FleetManager.Data.Models
 			  {
 				Company_Id = companyId,
 				User_Id = userId,
-				IsAdmin = true
+				IsAdmin = assignAsAdmin
 			  });
+			  objDataContext.SubmitChanges();
+			  tran.Complete();
 		    }
 
-		    tran.Complete();
 		}
 
 		return true;
@@ -141,12 +144,35 @@ namespace FleetManager.Data.Models
 			  if (companyUser == null) return false;
 
 			  objDataContext.CompanyUsers.DeleteOnSubmit(companyUser);
-		    }
 
-		    tran.Complete();
+			  tran.Complete();
+		    }
 		}
 
 		return true;
-	  }	  
+	  }
+
+	  public long CreateGroup(int companyId, string groupName, string description)
+	  {
+		using (var tran = new TransactionScope())
+		{
+		    using (objDataContext = GetDataContext())
+		    {
+			  var newGroup = new CompanyGroup
+			  {
+				Company_Id = companyId,
+				Description = description,
+				GroupName = groupName
+			  };
+
+			  objDataContext.CompanyGroups.InsertOnSubmit(newGroup);
+
+			  objDataContext.SubmitChanges();
+			  tran.Complete();
+
+			  return newGroup.Id;
+		    }
+		}
+	  }
     }
 }

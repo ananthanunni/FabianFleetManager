@@ -82,7 +82,7 @@ namespace FleetManager.Data.Models
 		return lstRole;
 	  }
 
-	  public ClsRole GetRoleByRoleId(long lgRoleId)
+	  public IClsRole GetRoleByRoleId(long lgRoleId)
 	  {
 		ClsRole objClsRole = new ClsRole();
 		try
@@ -129,7 +129,7 @@ namespace FleetManager.Data.Models
 		}
 	  }
 
-	  public long SaveRole(ClsRole objSave)
+	  public long SaveRole(IClsRole input)
 	  {
 		try
 		{
@@ -138,6 +138,7 @@ namespace FleetManager.Data.Models
 		    {
 			  using (this.objDataContext = GetDataContext())
 			  {
+				var objSave = input as ClsRole;
 				var result = this.objDataContext.InsertOrUpdateRole(objSave.lgId, objSave.strRoleName, objSave.strDescription, objSave.blAllowKilometerLimit, _mySession.UserId, PageMaster.Role, objSave.blAllowDispatchBackDateEntry).FirstOrDefault();
 				if (result != null)
 				{
@@ -150,6 +151,7 @@ namespace FleetManager.Data.Models
 				}
 			  }
 
+			  objDataContext.SubmitChanges();
 			  scope.Complete();
 		    }
 
@@ -161,7 +163,7 @@ namespace FleetManager.Data.Models
 		    return 0;
 		}
 	  }
-
+	  
 	  public List<SearchRoleResult> SearchRole(int inRow, int inPage, string strSearch, string strSort)
 	  {
 		try
