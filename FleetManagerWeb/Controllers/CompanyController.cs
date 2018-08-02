@@ -90,5 +90,12 @@ namespace FleetManagerWeb.Controllers
 	  {
 		return Json(_companyService.SetCompanyModulePermission(companyGroupId, moduleId, right, flag));
 	  }
+
+	  [HttpPost]
+	  // POST AddUserToGroup?groupId={int}&userId={int}
+	  public ActionResult AddUserToGroup(int groupId,int userId)
+	  {
+		return Json(_companyService.AddUserToGroup(groupId, userId));
+	  }
     }
 }

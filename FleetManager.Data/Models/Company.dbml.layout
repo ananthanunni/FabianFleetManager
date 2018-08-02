@@ -60,5 +60,25 @@
         <classShapeMoniker Id="0f837c03-e88a-42b9-a32c-9caa3da04aa2" />
       </nodes>
     </associationConnector>
+    <classShape Id="d3e79b73-9d62-4df5-8d44-e301cde47070" absoluteBounds="8.75, 4.5, 2, 1.7708968098958331">
+      <DataClassMoniker Name="/CompanyDataContext/CompanyGroupCompanyUser" />
+      <nestedChildShapes>
+        <elementListCompartment Id="bc24e0f5-a215-4af0-9776-11864f85dd99" absoluteBounds="8.765, 4.96, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(4.375 : 6.10500325520833); (8.75 : 6.10500325520833)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/CompanyDataContext/CompanyGroup/CompanyGroup_CompanyGroupCompanyUser" />
+      <nodes>
+        <classShapeMoniker Id="1efa44c3-c4af-44e0-9a33-fe1054bad482" />
+        <classShapeMoniker Id="d3e79b73-9d62-4df5-8d44-e301cde47070" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(9.4375 : 3.07859537760417); (9.4375 : 4.5)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/CompanyDataContext/CompanyUser/CompanyUser_CompanyGroupCompanyUser" />
+      <nodes>
+        <classShapeMoniker Id="d03d849e-c98f-4cc1-bde0-4156497e404a" />
+        <classShapeMoniker Id="d3e79b73-9d62-4df5-8d44-e301cde47070" />
+      </nodes>
+    </associationConnector>
   </nestedChildShapes>
 </ordesignerObjectsDiagram>

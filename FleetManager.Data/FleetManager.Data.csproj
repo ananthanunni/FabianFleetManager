@@ -149,6 +149,7 @@
     <Content Include="SQL\008-CompanyUser-CreateTable.sql" />
     <Content Include="SQL\009-CompanyGroup-CreateTable.sql" />
     <Content Include="SQL\010-CompanyGroupModulePermission-CreateTable.sql" />
+    <Content Include="SQL\011-CompanyGroupCompanyUser-CreateTable.sql" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Models\CarFleet.dbml">

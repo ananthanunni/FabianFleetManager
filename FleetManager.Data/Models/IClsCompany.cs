@@ -31,5 +31,6 @@ namespace FleetManager.Data.Models
 	  bool SetCompanyModulePermission(int companyGroupId, int moduleId, string right, bool flat);
 	  IClsCompany GetCompanyByGroup(int groupId);
 	  bool DeleteGroup(int groupId);
+	  bool AddUserToGroup(int groupId, int userId);
     }
 }

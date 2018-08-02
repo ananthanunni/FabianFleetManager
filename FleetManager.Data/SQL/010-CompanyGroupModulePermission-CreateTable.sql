@@ -14,7 +14,7 @@ CREATE TABLE [CompanyGroupModulePermission]
 )
 
 ALTER TABLE [CompanyGroupModulePermission]
-	ADD CONSTRAINT FK_CompanyGroupModulePermission_CompanyGroup FOREIGN KEY ([CompanyGroup_Id]) REFERENCES [Company]([Id])
+	ADD CONSTRAINT FK_CompanyGroupModulePermission_CompanyGroup FOREIGN KEY ([CompanyGroup_Id]) REFERENCES [CompanyGroup]([Id])
 
 ALTER TABLE [CompanyGroupModulePermission]
 	ADD CONSTRAINT FK_CompanyGroupModulePermission_Module FOREIGN KEY ([Module_Id]) REFERENCES [Module]([Id])

@@ -14,5 +14,6 @@ namespace FleetManager.Service.Company
 	  long CreateGroup(int companyId, string groupName, string description);
 	  bool SetCompanyModulePermission(int companyGroupId, int moduleId, string right, bool flag);
 	  bool DeleteGroup(int id);
+	  bool AddUserToGroup(int groupId, int userId);
     }
 }

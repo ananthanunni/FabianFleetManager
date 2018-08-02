@@ -27,6 +27,7 @@
       <Column Name="Company_Id" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
       <Column Name="User_Id" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
       <Column Name="IsAdmin" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Association Name="CompanyUser_CompanyGroupCompanyUser" Member="CompanyGroupCompanyUsers" ThisKey="Id" OtherKey="CompanyUser_Id" Type="CompanyGroupCompanyUser" />
       <Association Name="Company_CompanyUser" Member="Company" ThisKey="Company_Id" OtherKey="Id" Type="Company" IsForeignKey="true" />
     </Type>
   </Table>
@@ -38,6 +39,7 @@
       <Column Name="Company_Id" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
       <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
       <Column Name="DeletedOn" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
+      <Association Name="CompanyGroup_CompanyGroupCompanyUser" Member="CompanyGroupCompanyUsers" ThisKey="Id" OtherKey="CompanyGroup_Id" Type="CompanyGroupCompanyUser" />
       <Association Name="Company_CompanyGroup" Member="Company" ThisKey="Company_Id" OtherKey="Id" Type="Company" IsForeignKey="true" />
     </Type>
   </Table>
@@ -69,6 +71,17 @@
       <Column Name="DeletedBy" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
       <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Association Name="Module_CompanyGroupModulePermission" Member="CompanyGroupModulePermissions" ThisKey="Id" OtherKey="Module_Id" Type="CompanyGroupModulePermission" />
+    </Type>
+  </Table>
+  <Table Name="dbo.CompanyGroupCompanyUser" Member="CompanyGroupCompanyUsers">
+    <Type Name="CompanyGroupCompanyUser">
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="CompanyGroup_Id" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="CompanyUser_Id" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="DeletedOn" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
+      <Association Name="CompanyGroup_CompanyGroupCompanyUser" Member="CompanyGroup" ThisKey="CompanyGroup_Id" OtherKey="Id" Type="CompanyGroup" IsForeignKey="true" />
+      <Association Name="CompanyUser_CompanyGroupCompanyUser" Member="CompanyUser" ThisKey="CompanyUser_Id" OtherKey="Id" Type="CompanyUser" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

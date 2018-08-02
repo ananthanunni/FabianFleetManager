@@ -259,5 +259,31 @@ namespace FleetManager.Data.Models
 		    }
 		}
 	  }
+
+	  public bool AddUserToGroup(int groupId, int userId)
+	  {
+		using (var tran = new TransactionScope())
+		{
+		    using (objDataContext = GetDataContext())
+		    {			  
+			  var companyUser = objDataContext.CompanyUsers.Single(t => t.User_Id == userId);
+
+			  if (companyUser == null)
+				throw new InvalidOperationException("This user does not belong to the company. Add first.");
+
+			  objDataContext.CompanyGroupCompanyUsers.InsertOnSubmit(new CompanyGroupCompanyUser
+			  {
+				CompanyGroup_Id = groupId,
+				CompanyUser = companyUser
+			  });
+
+			  objDataContext.SubmitChanges();
+
+			  tran.Complete();
+
+			  return true;
+		    }
+		}
+	  }
     }
 }

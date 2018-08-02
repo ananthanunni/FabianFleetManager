@@ -105,6 +105,20 @@ namespace FleetManager.Service.Company
 		return _company.DeleteGroup(groupId);
 	  }
 
+	  public bool AddUserToGroup(int groupId, int userId)
+	  {
+		var company = _company.GetCompanyByGroup(groupId);
+
+		if (company == null)
+		    throw new InvalidOperationException("Invalid group.");
+
+		if (!IsCompanyAdmin((int)company.Id))
+		    throw new UnauthorizedAccessException("You are not authorized to assign users into group.");
+
+		return _company.AddUserToGroup(groupId, userId);
+
+	  }
+
 	  private bool IsSysAdmin()
 	  {
 		return (_role.GetRoleByRoleId(_mySession.RoleId) as ClsRole).strRoleName.Equals("SYSADMIN");
