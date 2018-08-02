@@ -17,6 +17,9 @@
 
 namespace FleetManagerWeb.DependencyResolution {
     using System;
+    using System.Data;
+    using System.Data.Common;
+    using System.Transactions;
     using StructureMap.Configuration.DSL;
     using StructureMap.Graph;
 
@@ -98,6 +101,10 @@ namespace FleetManagerWeb.DependencyResolution {
 		For<FleetManager.Data.Models.UserDataContext>().Use(ctx =>
 		    new FleetManager.Data.Models.UserDataContext(ctx.GetInstance<FleetManager.Core.Configuration.IConfiguration>().ConnectionString)
 		).Transient();
+
+		For<FleetManager.Data.Models.CompanyDataContext>().Use(ctx =>
+		new FleetManager.Data.Models.CompanyDataContext(ctx.GetInstance<FleetManager.Core.Configuration.IConfiguration>().ConnectionString)
+		).Transient();
 	  }
 
 	  private void RegisterServices()
@@ -108,6 +115,8 @@ namespace FleetManagerWeb.DependencyResolution {
 		For<FleetManager.Service.Cookie.ICookieHandler>().Use<FleetManager.Service.Cookie.CookieHandler>();
 		For<FleetManager.Service.Auth.IAuthentication>().Use<FleetManager.Service.Auth.Authentication>();
 		ForSingletonOf<FleetManager.Service.Configuration.IAppConfiguration>().Use<FleetManager.Service.Configuration.AppConfiguration>();
+
+		For<FleetManager.Service.Company.ICompanyService>().Use<FleetManager.Service.Company.CompanyService>();
 	  }
     }
 }

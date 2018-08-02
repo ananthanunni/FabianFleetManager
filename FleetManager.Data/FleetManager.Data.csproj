@@ -66,6 +66,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Include="Models\Company.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Company.dbml</DependentUpon>
+    </Compile>
     <Compile Include="Models\DataContextEntity.cs" />
     <Compile Include="Models\FleetColors.designer.cs">
       <DependentUpon>FleetColors.dbml</DependentUpon>
@@ -83,6 +88,8 @@
       <AutoGen>True</AutoGen>
     </Compile>
     <Compile Include="Models\IClsCarFleet.cs" />
+    <Compile Include="Models\ClsCompany.cs" />
+    <Compile Include="Models\IClsCompany.cs" />
     <Compile Include="Models\IClsFleetColors.cs" />
     <Compile Include="Models\IClsFleetMakes.cs" />
     <Compile Include="Models\IClsFleetModels.cs" />
@@ -138,6 +145,8 @@
     <Content Include="SQL\004-Tracker-AddFKToCarFleet.sql" />
     <Content Include="SQL\005-Tracker-AddFKToUser.sql" />
     <Content Include="SQL\006-Tracker-AddFKTripReason.sql" />
+    <Content Include="SQL\007-Company-CreateTable.sql" />
+    <Content Include="SQL\008-CompanyUser-CreateTable.sql" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Models\CarFleet.dbml">
@@ -162,6 +171,14 @@
       <LastGenOutput>FleetColors.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </Content>
+    <None Include="Models\Company.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>Company.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Models\Company.dbml.layout">
+      <DependentUpon>Company.dbml</DependentUpon>
+    </None>
     <None Include="Models\FleetColors.dbml.layout">
       <DependentUpon>FleetColors.dbml</DependentUpon>
     </None>

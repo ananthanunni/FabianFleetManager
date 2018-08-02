@@ -47,6 +47,8 @@
     <Compile Include="Auth\IAuthentication.cs" />
     <Compile Include="Auth\PermissionChecker.cs" />
     <Compile Include="Auth\IPermissionChecker.cs" />
+    <Compile Include="Company\CompanyService.cs" />
+    <Compile Include="Company\ICompanyService.cs" />
     <Compile Include="Configuration\AppConfiguration.cs" />
     <Compile Include="Configuration\IAppConfiguration.cs" />
     <Compile Include="Converter\DateFormatConverter.cs" />
