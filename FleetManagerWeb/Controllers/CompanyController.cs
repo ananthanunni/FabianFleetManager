@@ -77,6 +77,13 @@ namespace FleetManagerWeb.Controllers
 		return Json(_companyService.CreateGroup(companyId, groupName,description));
 	  }
 
+	  [HttpDelete]
+	  // DELETE DeleteGroup/{int}
+	  public ActionResult DeleteGroup(int id)
+	  {
+		return Json(_companyService.DeleteGroup(id));
+	  }
+
 	  [HttpPost]
 	  // POST SetCompanyModulePermission?companyGroupId={int}&moduleId={int}&right=[VIEW|ADD|EDIT|DELETE]&status={bool}
 	  public ActionResult SetCompanyModulePermission(int companyGroupId,int moduleId,string right,bool flag)

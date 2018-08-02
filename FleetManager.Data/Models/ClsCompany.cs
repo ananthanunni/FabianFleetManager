@@ -162,7 +162,7 @@ namespace FleetManager.Data.Models
 			  {
 				Company_Id = companyId,
 				Description = description,
-				GroupName = groupName			
+				GroupName = groupName
 			  };
 
 			  objDataContext.CompanyGroups.InsertOnSubmit(newGroup);
@@ -189,8 +189,8 @@ namespace FleetManager.Data.Models
 
 				permission = new CompanyGroupModulePermission
 				{
-				    CompanyGroup_Id=companyGroupId,
-				    Module_Id=moduleId
+				    CompanyGroup_Id = companyGroupId,
+				    Module_Id = moduleId
 				};
 
 				objDataContext.CompanyGroups.InsertOnSubmit(companyGroup);
@@ -220,6 +220,39 @@ namespace FleetManager.Data.Models
 			  }
 
 			  objDataContext.SubmitChanges();
+			  tran.Complete();
+
+			  return true;
+		    }
+		}
+	  }
+
+	  public IClsCompany GetCompanyByGroup(int groupId)
+	  {
+		using (objDataContext = GetDataContext())
+		{
+		    var companyGroup = objDataContext.CompanyGroups.FirstOrDefault(t => t.IsDeleted != null && t.Id == groupId);
+
+		    if (companyGroup != null)
+			  return TranslateTypes<Company, ClsCompany>(companyGroup.Company);
+
+		    return null;
+		}
+	  }
+
+	  public bool DeleteGroup(int groupId)
+	  {
+		using (var tran = new TransactionScope())
+		{
+		    using (objDataContext = GetDataContext())
+		    {
+			  var group = objDataContext.CompanyGroups.Single(t => t.Id == groupId);
+
+			  group.IsDeleted = true;
+			  group.DeletedOn = DateTime.Now;
+
+			  objDataContext.SubmitChanges();
+
 			  tran.Complete();
 
 			  return true;

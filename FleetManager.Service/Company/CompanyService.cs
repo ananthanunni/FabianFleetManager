@@ -92,6 +92,19 @@ namespace FleetManager.Service.Company
 		return _company.SetCompanyModulePermission(companyGroupId, moduleId, right, flag);
 	  }
 
+	  public bool DeleteGroup(int groupId)
+	  {
+		var company = _company.GetCompanyByGroup(groupId);
+
+		if (company == null)
+		    throw new InvalidOperationException("Invalid group.");
+
+		if (!IsCompanyAdmin((int)company.Id))
+		    throw new UnauthorizedAccessException("You are not authorized to delete group.");
+
+		return _company.DeleteGroup(groupId);
+	  }
+
 	  private bool IsSysAdmin()
 	  {
 		return (_role.GetRoleByRoleId(_mySession.RoleId) as ClsRole).strRoleName.Equals("SYSADMIN");
